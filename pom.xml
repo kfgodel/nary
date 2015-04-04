@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ar.com.kfgodel</groupId>
   <artifactId>nary</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <name>Nary</name>
   <description>Small project that captures the concept of N-Ary an element that can reference 0, 1 or N elements</description>
   
@@ -257,6 +257,19 @@ of a fixed location is recommended. -->
     </dependency>
 
   </dependencies>
-  
-  
+
+
+  <distributionManagement>
+    <repository>
+      <id>kfgodel_mosquito</id>
+      <name>Internal Releases</name>
+      <url>http://kfgodel.info:8081/nexus/content/repositories/releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>kfgodel_mosquito</id>
+      <name>Internal Snapshots</name>
+      <url>http://kfgodel.info:8081/nexus/content/repositories/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+
 </project>
