@@ -273,6 +273,11 @@ public class NaryFromNative<T> implements Nary<T> {
     }
 
     @Override
+    public boolean isAbsent() throws MoreThanOneElementException {
+        return !isPresent();
+    }
+
+    @Override
     public void ifPresent(Consumer<? super T> consumer) {
         asNativeOptional().ifPresent(consumer);
     }

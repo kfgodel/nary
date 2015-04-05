@@ -47,6 +47,13 @@ public interface Nary<T> extends Stream<T>, Optional<T> {
     public boolean isPresent() throws MoreThanOneElementException;
 
     /**
+     * Negation of isPresent(). Facility method
+     * @return true if there's no value to get
+     * @throws MoreThanOneElementException If there's more than one value to get as Optional
+     */
+    boolean isAbsent() throws MoreThanOneElementException;
+
+    /**
      * If the only value is present, invoke the specified consumer with the value,
      * otherwise do nothing.
      * This Nary as Stream is consumed.
