@@ -42,17 +42,25 @@ public class NaryTest extends JavaSpec<NaryTestContext> {
                 });
             });
 
-            it("can behave as a stream",()->{
+            it("can behave as a stream", () -> {
                 NaryFromNative<Integer> nary = NaryFromNative.create(Stream.of(1, 2, 3));
 
                 assertThat(nary.collect(Collectors.toList()))
-                        .isEqualTo(Arrays.asList(1,2,3));
+                        .isEqualTo(Arrays.asList(1, 2, 3));
             });
 
             it("can behave as an optional",()->{
                 NaryFromNative<Integer> nary = NaryFromNative.create(Optional.of(1));
 
                 assertThat(nary.isPresent()).isTrue();
+            });
+
+            it("can behave as an iterable",()->{
+                NaryFromNative<Integer> nary = NaryFromNative.create(Stream.of(1, 2, 3));
+
+                for (Integer number : nary) {
+                    assertThat(number).isLessThan(4);
+                }
             });
 
             describe("created from a stream", () -> {

@@ -4,6 +4,7 @@ import ar.com.kfgodel.nary.exceptions.MoreThanOneElementException;
 import ar.com.kfgodel.optionals.Optional;
 
 import java.util.NoSuchElementException;
+import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -22,7 +23,23 @@ import java.util.stream.Stream;
  *
  * Created by kfgodel on 06/11/14.
  */
-public interface Nary<T> extends Stream<T>, Optional<T> {
+public interface Nary<T> extends Stream<T>, Optional<T>, Iterable<T> {
+
+    /**
+     * Solves conflict between Iterable and Stream
+     */
+    @Override
+    default Spliterator<T> spliterator(){
+        return Iterable.super.spliterator();
+    }
+
+    /**
+     * Solves conflict between Iterable and Stream
+     */
+    @Override
+    default void forEach(Consumer<? super T> action){
+        Iterable.super.forEach(action);
+    }
 
     /**
      * If only one value is present in this {@code Nary}, returns the value,
