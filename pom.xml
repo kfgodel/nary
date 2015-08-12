@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ar.com.kfgodel</groupId>
   <artifactId>nary</artifactId>
-  <version>1.0</version>
+  <version>1.0.1-SNAPSHOT</version>
   <name>Nary</name>
   <description>Small project that captures the concept of N-Ary an element that can reference 0, 1 or N elements</description>
   
