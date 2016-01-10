@@ -2,6 +2,8 @@ package ar.com.kfgodel.nary;
 
 import ar.com.dgarcia.javaspec.api.JavaSpec;
 import ar.com.dgarcia.javaspec.api.JavaSpecRunner;
+import ar.com.dgarcia.javaspec.api.Variable;
+import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.exceptions.MoreThanOneElementException;
 import ar.com.kfgodel.nary.impl.NaryFromNative;
 import org.assertj.core.api.Assertions;
@@ -30,33 +32,48 @@ public class NaryTest extends JavaSpec<NaryTestContext> {
             describe("creation", () -> {
 
                 it("can be made from a stream",()->{
-                    NaryFromNative<Integer> nary = NaryFromNative.create(Stream.of(1, 2, 3));
+                    Nary<Integer> nary = NaryFromNative.create(Stream.of(1, 2, 3));
 
                     assertThat(nary).isNotNull();
                 });
 
                 it("can be made from an optional",()->{
-                    NaryFromNative<Integer> nary = NaryFromNative.create(Optional.of(1));
+                    Nary<Integer> nary = NaryFromNative.create(Optional.of(1));
 
                     assertThat(nary).isNotNull();
                 });
+
+                it("can be made from a single element",()->{
+                    Nary<Integer> nary = NaryFromNative.of(1);
+                    assertThat(nary.isPresent()).isTrue();
+                });
+
+                it("can be made from a nullable element as optional",()->{
+                    Nary<Integer> nary = NaryFromNative.ofNullable(null);
+                    assertThat(nary.isPresent()).isFalse();
+                });
+                
+                it("can be made from variable elements",()->{
+                    Nary<Integer> nary = NaryFromNative.of(1, 2, 3);
+                    assertThat(nary.count()).isEqualTo(3);
+                });   
             });
 
             it("can behave as a stream", () -> {
-                NaryFromNative<Integer> nary = NaryFromNative.create(Stream.of(1, 2, 3));
+                Nary<Integer> nary = NaryFromNative.create(Stream.of(1, 2, 3));
 
                 assertThat(nary.collect(Collectors.toList()))
                         .isEqualTo(Arrays.asList(1, 2, 3));
             });
 
             it("can behave as an optional",()->{
-                NaryFromNative<Integer> nary = NaryFromNative.create(Optional.of(1));
+                Nary<Integer> nary = NaryFromNative.create(Optional.of(1));
 
                 assertThat(nary.isPresent()).isTrue();
             });
 
             it("can behave as an iterable",()->{
-                NaryFromNative<Integer> nary = NaryFromNative.create(Stream.of(1, 2, 3));
+                Nary<Integer> nary = NaryFromNative.create(Stream.of(1, 2, 3));
 
                 for (Integer number : nary) {
                     assertThat(number).isLessThan(4);
@@ -135,6 +152,57 @@ public class NaryTest extends JavaSpec<NaryTestContext> {
                     });
                 });
             });
+
+            describe("last element", () -> {
+                it("can be accessed with a method",()->{
+                    Nary<Integer> nary = NaryFromNative.of(1, 2, 3);
+                    assertThat(nary.findLast().get()).isEqualTo(3);
+                });
+                it("is empty if no element",()->{
+                    Nary<Integer> nary = NaryFromNative.empty();
+                    assertThat(nary.findLast().isPresent()).isFalse();
+
+                });
+                it("is the only element for an optional nary",()->{
+                    Nary<Integer> nary = NaryFromNative.of(1);
+                    assertThat(nary.findLast().get()).isEqualTo(1);
+                });   
+
+            });
+
+            describe("ifAbsent", () -> {
+                it("receives a block that is executed if the nary represents an empty set",()->{
+                    Nary<Object> nary = NaryFromNative.empty();
+                    Variable<Boolean> executed = Variable.of(false);
+
+                    nary.ifAbsent(()-> executed.set(true));
+
+                    assertThat(executed.get()).isTrue();
+                }); 
+                
+                it("is not executed if the nary contains one element",()->{
+                    Nary<Object> nary = NaryFromNative.of(1);
+                    Variable<Boolean> executed = Variable.of(false);
+
+                    nary.ifAbsent(()-> executed.set(true));
+
+                    assertThat(executed.get()).isFalse();
+                }); 
+                
+                it("it fails with an exception if more than one element (misuse)",()->{
+                    Nary<Object> nary = NaryFromNative.of(1, 2, 3);
+                    Variable<Boolean> executed = Variable.of(false);
+
+                    try{
+                        nary.ifAbsent(()-> executed.set(true));
+                        failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
+                    }catch (MoreThanOneElementException e){
+                        assertThat(e).hasMessage("There's more than one element in the stream to create an optional: [1, 2]");
+                    }
+                });
+            });
+
+
         });
     }
 }

@@ -225,8 +225,21 @@ public class NaryFromNative<T> implements Nary<T> {
     }
 
 
-    public static<T> NaryFromNative<T> of(T element) {
-        return create(Stream.of(element));
+  /**
+   * Creates a nary enumerating its elements
+   * @param element The first mandatory element
+   * @param additionals The optional extra elements
+   * @param <T> The type of expected nary content
+   * @return The created nary
+   */
+    public static<T> NaryFromNative<T> of(T element, T... additionals) {
+        Stream<T> elementStream = Stream.of(element);
+        if(additionals == null){
+            // It's only one
+            return create(elementStream);
+        }
+        Stream<T> additionalStream = Stream.of(additionals);
+        return create(Stream.concat(elementStream, additionalStream));
     }
 
     public static<T> NaryFromNative<T> ofNullable(T nullableElement) {
@@ -337,9 +350,20 @@ public class NaryFromNative<T> implements Nary<T> {
         return NaryFromNative.create(Stream.concat((Stream) this, otherNary));
     }
 
+  @Override
+  public Optional<T> findLast() {
+    return NaryFromNative.create(reduce(this::keepLast));
+  }
+
+  /**
+   * Reductor operation that keeps the last element as result
+   */
+  private T keepLast(T previous, T current) {
+    return current;
+  }
 
 
-    private Stream<T> asNativeStream() {
+  private Stream<T> asNativeStream() {
         if (nativeStream == null) {
             nativeStream = StreamFromOptional.create(this.asNativeOptional());
         }

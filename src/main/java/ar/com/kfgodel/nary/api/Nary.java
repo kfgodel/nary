@@ -233,4 +233,11 @@ public interface Nary<T> extends Stream<T>, Optional<T>, Iterable<T> {
      * @return The created joined elements nary
      */
     <S> Nary<S> joinedWith(Stream<? extends S> otherNary);
+
+  /**
+   * Returns the last element in this nary, if present.<br>
+   *   Is empty if this is empty, it's the only element if this contains one, is the last if this is more than one
+   * @return The optional last contained element
+   */
+  Optional<T> findLast();
 }
