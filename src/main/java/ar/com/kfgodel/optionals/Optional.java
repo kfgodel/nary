@@ -3,10 +3,7 @@ package ar.com.kfgodel.optionals;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 
 import java.util.NoSuchElementException;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 /**
  * This type represents the interface definition of an optional.<br>
@@ -125,6 +122,13 @@ public interface Optional<T> {
   <U> Optional<U> flatMapOptional(Function<? super T, java.util.Optional<U>> mapper);
 
   /**
+   * Performs an action for on the element of this Optional, if present.
+   *
+   * @param action an action to perform on the element
+   */
+  void forEach(Consumer<? super T> action);
+
+  /**
    * Return the value if present, otherwise return {@code other}.
    *
    * @param other the value to be returned if there is no value present, may
@@ -161,6 +165,185 @@ public interface Optional<T> {
    * {@code IllegalStateException::new}
    */
   <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X;
+
+
+  /**
+   * Returns an Object array containing the element of this optional (if any).
+   *
+   * @return an empty array if this optional is empty
+   */
+  Object[] toArray();
+
+  /**
+   * Returns an array containing the element of this optional, using the
+   * provided {@code generator} function to allocate the returned array.
+   *
+   * @apiNote
+   * The generator function takes an integer, which is the size of the
+   * desired array, and produces an array of the desired size.  This can be
+   * concisely expressed with an array constructor reference:
+   * <pre>{@code
+   *     Person[] men = people.stream()
+   *                          .filter(p -> p.getGender() == MALE)
+   *                          .toArray(Person[]::new);
+   * }</pre>
+   *
+   * @param <A> the element type of the resulting array
+   * @param generator a function which produces a new array of the desired
+   *                  type and the provided length
+   * @return an array containing the elements in this stream
+   * @throws ArrayStoreException if the runtime type of the array returned
+   * from the array generator is not a supertype of the runtime type of every
+   * element in this stream
+   */
+  <A> A[] toArray(IntFunction<A[]> generator);
+
+  /**
+   * Performs a <a href="package-summary.html#Reduction">reduction</a> on the
+   * element of this optional, using the provided identity value and an
+   * <a href="package-summary.html#Associativity">associative</a>
+   * accumulation function, and returns the reduced value.  This is equivalent
+   * to:
+   * <pre>{@code
+   *     T result = identity;
+   *     result = accumulator.apply(result, element)
+   *     return result;
+   * }</pre>
+   *
+   * <p>The {@code identity} value must be an identity for the accumulator
+   * function. This means that for all {@code t},
+   * {@code accumulator.apply(identity, t)} is equal to {@code t}.
+   * The {@code accumulator} function must be an
+   * <a href="package-summary.html#Associativity">associative</a> function.
+   *
+   * @apiNote Sum, min, max, average, and string concatenation are all special
+   * cases of reduction. Summing a stream of numbers can be expressed as:
+   *
+   * <pre>{@code
+   *     Integer sum = integers.reduce(0, (a, b) -> a+b);
+   * }</pre>
+   *
+   * or:
+   *
+   * <pre>{@code
+   *     Integer sum = integers.reduce(0, Integer::sum);
+   * }</pre>
+   *
+   * <p>While this may seem a more roundabout way to perform an aggregation
+   * compared to simply mutating a running total in a loop, reduction
+   * operations parallelize more gracefully, without needing additional
+   * synchronization and with greatly reduced risk of data races.
+   *
+   * @param identity the identity value for the accumulating function
+   * @param accumulator an <a href="package-summary.html#Associativity">associative</a>,
+   *                    <a href="package-summary.html#NonInterference">non-interfering</a>,
+   *                    <a href="package-summary.html#Statelessness">stateless</a>
+   *                    function for combining two values
+   * @return the result of the reduction
+   */
+  T reduce(T identity, BinaryOperator<T> accumulator);
+
+  /**
+   * Performs a <a href="package-summary.html#MutableReduction">mutable
+   * reduction</a> operation on the element of this optional.  A mutable
+   * reduction is one in which the reduced value is a mutable result container,
+   * such as an {@code ArrayList}, and elements are incorporated by updating
+   * the state of the result rather than by replacing the result.  This
+   * produces a result equivalent to:
+   * <pre>{@code
+   *     R result = supplier.get();
+   *     accumulator.accept(result, element);
+   *     return result;
+   * }</pre>
+   *
+   * @apiNote There are many existing classes in the JDK whose signatures are
+   * well-suited for use with method references as arguments to {@code collect()}.
+   * For example, the following will accumulate strings into an {@code ArrayList}:
+   * <pre>{@code
+   *     List<String> asList = stringStream.collect(ArrayList::new, ArrayList::add);
+   * }</pre>
+   *
+   * <p>The following will take a stream of strings and concatenates them into a
+   * single string:
+   * <pre>{@code
+   *     String concat = stringStream.collect(StringBuilder::new, StringBuilder::append)
+   *                                 .toString();
+   * }</pre>
+   *
+   * @param <R> type of the result
+   * @param supplier a function that creates a new result container
+   * @param accumulator an <a href="package-summary.html#Associativity">associative</a>,
+   *                    <a href="package-summary.html#NonInterference">non-interfering</a>,
+   *                    <a href="package-summary.html#Statelessness">stateless</a>
+   *                    function for incorporating an additional element into a result
+   * @return the result of the reduction
+   */
+  <R> R collect(Supplier<R> supplier,
+                BiConsumer<R, ? super T> accumulator);
+
+  /**
+   * Returns the count of elements in this optional.  This is a special case of
+   * a <a href="package-summary.html#Reduction">reduction</a> and is
+   * equivalent to:
+   * <pre>{@code
+   *     return mapOptional(e -> 1L).sum();
+   * }</pre>
+   *
+   * @return 0 if this is empty, one if it has an element
+   */
+  long count();
+
+  /**
+   * Returns whether the element of this optional matches the provided
+   * predicate. If this is empty then
+   * {@code false} is returned and the predicate is not evaluated.
+   *
+   * @apiNote
+   * This method evaluates the <em>existential quantification</em> of the
+   * predicate over the element of the optional (for some x P(x)).
+   *
+   * @param predicate a <a href="package-summary.html#NonInterference">non-interfering</a>,
+   *                  <a href="package-summary.html#Statelessness">stateless</a>
+   *                  predicate to apply to elements of this stream
+   * @return {@code false} if this optional is empty, or the element doesn't match the predicate
+   */
+  boolean anyMatch(Predicate<? super T> predicate);
+
+  /**
+   * Returns whether the element of this optional matches the provided predicate.
+   * If the stream is empty then {@code true} is returned and the predicate is
+   * not evaluated.
+   *
+   * @apiNote
+   * This method evaluates the <em>universal quantification</em> of the
+   * predicate over the elements of the stream (for all x P(x)).  If the
+   * stream is empty, the quantification is said to be <em>vacuously
+   * satisfied</em> and is always {@code true} (regardless of P(x)).
+   *
+   * @param predicate a <a href="package-summary.html#NonInterference">non-interfering</a>,
+   *                  <a href="package-summary.html#Statelessness">stateless</a>
+   *                  predicate to apply to elements of this stream
+   * @return {@code true} if the element matches the predicate, or this optional is empty
+   */
+  boolean allMatch(Predicate<? super T> predicate);
+
+  /**
+   * Returns whether no element of this optional matches the provided predicate.
+   * If the stream is empty then {@code true} is returned and the predicate is not evaluated.
+   *
+   * @apiNote
+   * This method evaluates the <em>universal quantification</em> of the
+   * negated predicate over the elements of the stream (for all x ~P(x)).  If
+   * the stream is empty, the quantification is said to be vacuously satisfied
+   * and is always {@code true}, regardless of P(x).
+   *
+   * @param predicate a <a href="package-summary.html#NonInterference">non-interfering</a>,
+   *                  <a href="package-summary.html#Statelessness">stateless</a>
+   *                  predicate to apply to elements of this stream
+   * @return {@code true} if the element doesn't match the predicate or this optional is empty
+   */
+  boolean noneMatch(Predicate<? super T> predicate);
+
 
   /**
    * Indicates whether some other object is "equal to" this Optional. The

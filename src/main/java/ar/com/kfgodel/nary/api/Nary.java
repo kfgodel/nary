@@ -5,10 +5,7 @@ import ar.com.kfgodel.nary.impl.NaryFromNative;
 import ar.com.kfgodel.optionals.Optional;
 
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Stream;
 
 /**
@@ -199,6 +196,50 @@ public interface Nary<T> extends Stream<T>, Optional<T>, Iterable<T> {
    * {@code IllegalStateException::new}
    */
   <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X, MoreThanOneElementException;
+
+  /**
+   * Performs a <a href="package-summary.html#MutableReduction">mutable
+   * reduction</a> operation on the elements of this stream.  A mutable
+   * reduction is one in which the reduced value is a mutable result container,
+   * such as an {@code ArrayList}, and elements are incorporated by updating
+   * the state of the result rather than by replacing the result.  This
+   * produces a result equivalent to:
+   * <pre>{@code
+   *     R result = supplier.get();
+   *     for (T element : this stream)
+   *         accumulator.accept(result, element);
+   *     return result;
+   * }</pre>
+   *
+   * <p>This is a <a href="package-summary.html#StreamOps">terminal
+   * operation</a>.
+   *
+   * @apiNote There are many existing classes in the JDK whose signatures are
+   * well-suited for use with method references as arguments to {@code collect()}.
+   * For example, the following will accumulate strings into an {@code ArrayList}:
+   * <pre>{@code
+   *     List<String> asList = stringStream.collect(ArrayList::new, ArrayList::add);
+   * }</pre>
+   *
+   * <p>The following will take a stream of strings and concatenates them into a
+   * single string:
+   * <pre>{@code
+   *     String concat = stringStream.collect(StringBuilder::new, StringBuilder::append)
+   *                                 .toString();
+   * }</pre>
+   *
+   * @param <R> type of the result
+   * @param supplier a function that creates a new result container. For a
+   *                 parallel execution, this function may be called
+   *                 multiple times and must return a fresh value each time.
+   * @param accumulator an <a href="package-summary.html#Associativity">associative</a>,
+   *                    <a href="package-summary.html#NonInterference">non-interfering</a>,
+   *                    <a href="package-summary.html#Statelessness">stateless</a>
+   *                    function for incorporating an additional element into a result
+   * @return the result of the reduction
+   */
+  <R> R collect(Supplier<R> supplier,
+                BiConsumer<R, ? super T> accumulator);
 
   /**
    * @see java.lang.Object#equals(Object)

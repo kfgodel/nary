@@ -122,6 +122,13 @@ public class NaryFromNative<T> implements Nary<T> {
   }
 
   @Override
+  public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super T> accumulator) {
+    R container = supplier.get();
+    this.forEach((element) -> accumulator.accept(container, element));
+    return container;
+  }
+
+  @Override
   public java.util.Optional<T> reduce(BinaryOperator<T> accumulator) {
     return asNativeStream().reduce(accumulator);
   }

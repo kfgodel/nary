@@ -161,6 +161,11 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
               assertThat(e).hasMessage("There's more than one element in the stream to create an optional: [3, 2]");
             }
           });
+          it("returns a container with the values when #collect(supplier, accumulator) is called",()->{
+            List<Integer> result = context().nary().collect(ArrayList::new, ArrayList::add);
+            assertThat(result).isEqualTo(Lists.newArrayList(3, 2, 1, 3));
+          });
+
         });
 
         describe("as a normal stream", () -> {
