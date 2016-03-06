@@ -4,7 +4,7 @@ import ar.com.dgarcia.javaspec.api.JavaSpec;
 import ar.com.dgarcia.javaspec.api.JavaSpecRunner;
 import ar.com.dgarcia.javaspec.api.Variable;
 import ar.com.kfgodel.nary.api.Nary;
-import ar.com.kfgodel.nary.exceptions.MoreThanOneElementException;
+import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 import ar.com.kfgodel.nary.impl.NaryFromNative;
 import org.assertj.core.api.Assertions;
 import org.junit.runner.RunWith;
@@ -28,36 +28,6 @@ public class NaryTest extends JavaSpec<NaryTestContext> {
     @Override
     public void define() {
         describe("a Nary", () -> {
-
-            describe("creation", () -> {
-
-                it("can be made from a stream",()->{
-                    Nary<Integer> nary = NaryFromNative.create(Stream.of(1, 2, 3));
-
-                    assertThat(nary).isNotNull();
-                });
-
-                it("can be made from an optional",()->{
-                    Nary<Integer> nary = NaryFromNative.create(Optional.of(1));
-
-                    assertThat(nary).isNotNull();
-                });
-
-                it("can be made from a single element",()->{
-                    Nary<Integer> nary = NaryFromNative.of(1);
-                    assertThat(nary.isPresent()).isTrue();
-                });
-
-                it("can be made from a nullable element as optional",()->{
-                    Nary<Integer> nary = NaryFromNative.ofNullable(null);
-                    assertThat(nary.isPresent()).isFalse();
-                });
-                
-                it("can be made from variable elements",()->{
-                    Nary<Integer> nary = NaryFromNative.of(1, 2, 3);
-                    assertThat(nary.count()).isEqualTo(3);
-                });   
-            });
 
             it("can behave as a stream", () -> {
                 Nary<Integer> nary = NaryFromNative.create(Stream.of(1, 2, 3));

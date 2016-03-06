@@ -1,15 +1,12 @@
 package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
-import ar.com.kfgodel.nary.exceptions.MoreThanOneElementException;
+import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 import ar.com.kfgodel.optionals.Optional;
 import ar.com.kfgodel.optionals.OptionalFromStream;
 import ar.com.kfgodel.optionals.StreamFromOptional;
 
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Spliterator;
+import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
@@ -345,7 +342,37 @@ public class NaryFromNative<T> implements Nary<T> {
         return getClass().getSimpleName() + "{stream: " + this.nativeStream + ", optional: " + this.nativeOptional + "}";
     }
 
-    @Override
+  @Override
+  public boolean equals(Object obj) {
+    if(this == obj){
+      return true;
+    }
+    if(!Nary.class.isInstance(obj)){
+      return false;
+    }
+    Nary that = (Nary) obj;
+    Iterator<T> thisIterator = this.iterator();
+    Iterator thatIterator = that.iterator();
+    while(thisIterator.hasNext() && thatIterator.hasNext()){
+      T thisElement = thisIterator.next();
+      Object thatElement = thatIterator.next();
+      if(!Objects.equals(thisElement, thatElement)){
+        return false;
+      }
+    }
+    return !thisIterator.hasNext() && !thatIterator.hasNext();
+  }
+
+  @Override
+  public int hashCode() {
+    // Taken from arrayList implementation
+    int hashCode = 1;
+    for (T e : this)
+      hashCode = 31*hashCode + (e==null ? 0 : e.hashCode());
+    return hashCode;
+  }
+
+  @Override
     public<S> Nary<S> joinedWith(Stream<? extends S> otherNary) {
         return NaryFromNative.create(Stream.concat((Stream) this, otherNary));
     }

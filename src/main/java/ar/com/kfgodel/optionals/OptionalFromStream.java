@@ -1,6 +1,7 @@
 package ar.com.kfgodel.optionals;
 
-import ar.com.kfgodel.nary.exceptions.MoreThanOneElementException;
+
+import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -21,7 +22,7 @@ public class OptionalFromStream {
      * @return The optional element, or empty if none was in the stream
      * @throws MoreThanOneElementException if more than one found in the stream
      */
-    public static<T> Optional<T> using(Stream<T> stream) throws MoreThanOneElementException{
+    public static<T> Optional<T> using(Stream<T> stream) throws MoreThanOneElementException {
         Iterator<T> iterator = stream.iterator();
         if(!iterator.hasNext()){
             return Optional.empty();

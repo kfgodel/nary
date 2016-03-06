@@ -1,4 +1,4 @@
-package ar.com.kfgodel.nary.exceptions;
+package ar.com.kfgodel.nary.api.exceptions;
 
 /**
  * This type represents an exception due to a Nary used as an Optional but having more than one element to return
