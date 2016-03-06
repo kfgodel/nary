@@ -91,7 +91,7 @@ public interface Nary<T> extends Stream<T>, Optional<T>, Iterable<T> {
    * @param runnable The code to execute if this optional is empty
    * @throws MoreThanOneElementException if there are more than one
    */
-  void ifAbsent(Runnable runnable) throws MoreThanOneElementException;
+  Optional<T> ifAbsent(Runnable runnable) throws MoreThanOneElementException;
 
   /**
    * If the only value is present, and the value matches the given predicate,

@@ -60,7 +60,7 @@ public interface Optional<T> {
    *
    * @param runnable The code to execute if this optional is empty
    */
-  void ifAbsent(Runnable runnable);
+  Optional<T> ifAbsent(Runnable runnable);
 
   /**
    * If a value is present, and the value matches the given predicate,
