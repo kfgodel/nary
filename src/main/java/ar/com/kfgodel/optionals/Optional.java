@@ -405,5 +405,13 @@ public interface Optional<T> {
    * @return An empty nary if both are empty, a one element nary if one is empty,
    * a two element naryif both have elements
    */
-  Nary<T> concatWith(Optional<? extends T> other);
+  Nary<T> concatOptional(Optional<? extends T> other);
+
+  /**
+   * Creates a concatenated stream of the element of this optional, and the given stream
+   * @param other The stream to combine after this
+   * @return An empty nary if both are empty, a nary with the argument stream if this optional
+   * is empty, a nary with this element plus the stream elements
+   */
+  Nary<T> concatStream(Stream<? extends T> other);
 }
