@@ -285,12 +285,9 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
           assertThat(result).isEqualTo(java.util.Optional.empty());
         });
 
-
       });
 
-
     });
-
 
   }
 }
