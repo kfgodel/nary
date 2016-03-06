@@ -1,9 +1,11 @@
 package ar.com.kfgodel.optionals;
 
+import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 
 import java.util.NoSuchElementException;
 import java.util.function.*;
+import java.util.stream.Stream;
 
 /**
  * This type represents the interface definition of an optional.<br>
@@ -391,4 +393,17 @@ public interface Optional<T> {
    */
   java.util.Optional<T> asNativeOptional() throws MoreThanOneElementException;
 
+  /**
+   * Returns a stream of this optional containing the only element (if present)
+   * @return The empty stream if this is empty, a one element stream if not
+   */
+  Stream<T> asStream();
+
+  /**
+   * Creates a concatenation of the elements of this optional and the given
+   * @param other The other optional to concat elements
+   * @return An empty nary if both are empty, a one element nary if one is empty,
+   * a two element naryif both have elements
+   */
+  Nary<T> concatWith(Optional<? extends T> other);
 }

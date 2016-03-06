@@ -116,7 +116,24 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
         it("always returns an empty container when #collect(supplier, accumulator) is called",()->{
           List<Object> result = context().nary().collect(ArrayList::new, ArrayList::add);
           assertThat(result).isEmpty();
-        });   
+        });
+        it("returns an empty stream when #asStream() is called",()->{
+          List<Integer> result = context().nary().asStream().collect(Collectors.toList());
+          assertThat(result).isEmpty();
+        });
+        describe("#concatWith", () -> {
+          it("returns an empty nary if the other optional is empty",()->{
+            List<Integer> result = context().nary().concatWith(Nary.empty())
+              .collect(Collectors.toList());
+            assertThat(result).isEqualTo(Lists.newArrayList());
+          });
+          it("returns a one element nary if the other optional is not empty",()->{
+            List<Integer> result = context().nary().concatWith(Nary.of(1))
+              .collect(Collectors.toList());
+            assertThat(result).isEqualTo(Lists.newArrayList(1));
+          });
+        });
+
 
       });
 

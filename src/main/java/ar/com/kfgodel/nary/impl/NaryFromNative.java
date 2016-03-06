@@ -348,6 +348,16 @@ public class NaryFromNative<T> implements Nary<T> {
   }
 
   @Override
+  public Stream<T> asStream() {
+    return asNativeStream();
+  }
+
+  @Override
+  public Nary<T> concatWith(Optional<? extends T> other) {
+    return Nary.create(Stream.concat(this.asStream(), other.asStream()));
+  }
+
+  @Override
   public String toString() {
     return getClass().getSimpleName() + "{stream: " + this.nativeStream + ", optional: " + this.nativeOptional + "}";
   }
