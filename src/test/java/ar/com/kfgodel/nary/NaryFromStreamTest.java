@@ -194,6 +194,29 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
             });
           });
 
+          it("returns itself when #asNary() is called",()->{
+            List<Integer> result = context().nary().asNary().collect(Collectors.toList());
+            assertThat(result).isEqualTo(Lists.newArrayList(3,2,1,3));
+          });
+          it("applies the predicate to filter when #filterNary() is called",()->{
+            List<Integer> result = context().nary().filterNary((value) -> value.equals(3))
+              .collect(Collectors.toList());
+
+            assertThat(result).isEqualTo(Lists.newArrayList(3, 3));
+          });
+          it("transforms the values when #mapNary() is called",()->{
+            List<Integer> result = context().nary().mapNary((value) -> value + 1)
+              .collect(Collectors.toList());
+
+            assertThat(result).isEqualTo(Lists.newArrayList(4, 3, 2, 4));
+          });
+          it("transforms the values when #flatMapNary() is called",()->{
+            List<Integer> result = context().nary().flatMapNary((value) -> Nary.of(8))
+              .collect(Collectors.toList());
+
+            assertThat(result).isEqualTo(Lists.newArrayList(8, 8, 8, 8));
+          });
+
         });
 
         describe("as a normal stream", () -> {
@@ -366,10 +389,37 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
 
         });
 
+
+        describe("as nary with elements", () -> {
+
+          it("returns the last element when #findLast() is called",()->{
+            List<Integer> result = context().nary().findLast()
+              .collect(Collectors.toList());
+            assertThat(result).isEqualTo(Lists.newArrayList(3));
+          });
+          it("honors the contract when #reduceNary(accumulator) is called",()->{
+            Nary<Integer> result = context().nary().reduceNary((a, b) -> a + b);
+            assertThat(result.get()).isEqualTo(3 + 2 + 1 +3);
+          });
+          it("honors the contract when #findFirst() is called",()->{
+            Nary<Integer> result = context().nary().findFirstNary();
+            assertThat(result).isEqualTo(Nary.of(3));
+          });
+          it("honors the contract when #findAny() is called",()->{
+            Nary<Integer> result = context().nary().findAnyNary();
+            assertThat(result).isEqualTo(Nary.of(3));
+          });
+          it("honors the contract when #minNary() is called",()->{
+            Nary<Integer> result = context().nary().minNary(Integer::compareTo);
+            assertThat(result).isEqualTo(Nary.of(1));
+          });
+          it("honors the contract when #maxNary() is called",()->{
+            Nary<Integer> result = context().nary().maxNary(Integer::compareTo);
+            assertThat(result).isEqualTo(Nary.of(3));
+          });
+
+        });
       });
-
-
     });
-
   }
 }

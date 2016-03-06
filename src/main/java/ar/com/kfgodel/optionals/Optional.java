@@ -62,6 +62,21 @@ public interface Optional<T> {
   Optional<T> ifAbsent(Runnable runnable);
 
   /**
+   * Returns a nary consisting of the elements of this stream that match
+   * the given predicate.
+   *
+   * <p>This is an <a href="package-summary.html#StreamOps">intermediate
+   * operation</a>.
+   *
+   * @param predicate a <a href="package-summary.html#NonInterference">non-interfering</a>,
+   *                  <a href="package-summary.html#Statelessness">stateless</a>
+   *                  predicate to apply to each element to determine if it
+   *                  should be included
+   * @return the new stream
+   */
+  Nary<T> filterNary(Predicate<? super T> predicate);
+
+  /**
    * If a value is present, and the value matches the given predicate,
    * return an {@code Optional} describing the value, otherwise return an
    * empty {@code Optional}.
@@ -73,6 +88,21 @@ public interface Optional<T> {
    * @throws NullPointerException if the predicate is null
    */
   Optional<T> filterOptional(Predicate<? super T> predicate);
+
+  /**
+   * Returns a nary consisting of the results of applying the given
+   * function to the elements of this stream.
+   *
+   * <p>This is an <a href="package-summary.html#StreamOps">intermediate
+   * operation</a>.
+   *
+   * @param <R> The element type of the new stream
+   * @param mapper a <a href="package-summary.html#NonInterference">non-interfering</a>,
+   *               <a href="package-summary.html#Statelessness">stateless</a>
+   *               function to apply to each element
+   * @return the new stream
+   */
+  <R> Nary<R> mapNary(Function<? super T, ? extends R> mapper);
 
   /**
    * If a value is present, apply the provided mapping function to it,
@@ -103,6 +133,50 @@ public interface Optional<T> {
    * file if one exists.
    */
   <U> Optional<U> mapOptional(Function<? super T, ? extends U> mapper);
+
+  /**
+   * Returns a nary consisting of the results of replacing each element of
+   * this stream with the contents of a mapped stream produced by applying
+   * the provided mapping function to each element.  Each mapped stream is
+   * {@link java.util.stream.BaseStream#close() closed} after its contents
+   * have been placed into this stream.  (If a mapped stream is {@code null}
+   * an empty stream is used, instead.)
+   *
+   * <p>This is an <a href="package-summary.html#StreamOps">intermediate
+   * operation</a>.
+   *
+   * @apiNote
+   * The {@code flatMap()} operation has the effect of applying a one-to-many
+   * transformation to the elements of the stream, and then flattening the
+   * resulting elements into a new stream.
+   *
+   * <p><b>Examples.</b>
+   *
+   * <p>If {@code orders} is a stream of purchase orders, and each purchase
+   * order contains a collection of line items, then the following produces a
+   * stream containing all the line items in all the orders:
+   * <pre>{@code
+   *     orders.flatMap(order -> order.getLineItems().nary())...
+   * }</pre>
+   *
+   * <p>If {@code path} is the path to a file, then the following produces a
+   * stream of the {@code words} contained in that file:
+   * <pre>{@code
+   *     Stream<String> lines = Files.lines(path, StandardCharsets.UTF_8);
+   *     Stream<String> words = lines.flatMap(line -> Stream.of(line.split(" +")));
+   * }</pre>
+   * The {@code mapper} function passed to {@code flatMap} splits a line,
+   * using a simple regular expression, into an array of words, and then
+   * creates a stream of words from that array.
+   *
+   * @param <R> The element type of the new stream
+   * @param mapper a <a href="package-summary.html#NonInterference">non-interfering</a>,
+   *               <a href="package-summary.html#Statelessness">stateless</a>
+   *               function to apply to each element which produces a stream
+   *               of new values
+   * @return the new stream
+   */
+  <R> Nary<R> flatMapNary(Function<? super T, ? extends Nary<? extends R>> mapper);
 
   /**
    * If a value is present, apply the provided {@code Optional}-bearing
@@ -398,6 +472,11 @@ public interface Optional<T> {
    * @return The empty stream if this is empty, a one element stream if not
    */
   Stream<T> asStream();
+
+  /**
+   * @return The nary that represents this optional
+   */
+  Nary<T> asNary();
 
   /**
    * Creates a concatenation of the elements of this optional and the given

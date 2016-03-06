@@ -67,33 +67,58 @@ public class NaryFromNative<T> implements Nary<T> {
   }
 
   @Override
-  public Stream<T> distinct() {
-    return asNativeStream().distinct();
+  public Nary<T> distinct() {
+    return Nary.create(asNativeStream().distinct());
   }
 
   @Override
-  public Stream<T> sorted() {
-    return asNativeStream().sorted();
+  public Nary<T> sorted() {
+    return Nary.create(asNativeStream().sorted());
   }
 
   @Override
-  public Stream<T> sorted(Comparator<? super T> comparator) {
-    return asNativeStream().sorted(comparator);
+  public Nary<T> sorted(Comparator<? super T> comparator) {
+    return Nary.create(asNativeStream().sorted(comparator));
   }
 
   @Override
-  public Stream<T> peek(Consumer<? super T> action) {
-    return asNativeStream().peek(action);
+  public Nary<T> peek(Consumer<? super T> action) {
+    return Nary.create(asNativeStream().peek(action));
   }
 
   @Override
-  public Stream<T> limit(long maxSize) {
-    return asNativeStream().limit(maxSize);
+  public Nary<T> limit(long maxSize) {
+    return Nary.create(asNativeStream().limit(maxSize));
   }
 
   @Override
-  public Stream<T> skip(long n) {
-    return asNativeStream().skip(n);
+  public Nary<T> skip(long n) {
+    return Nary.create(asNativeStream().skip(n));
+  }
+
+  @Override
+  public Nary<T> reduceNary(BinaryOperator<T> accumulator) {
+    return Nary.create(reduce(accumulator));
+  }
+
+  @Override
+  public Nary<T> minNary(Comparator<? super T> comparator) {
+    return Nary.create(min(comparator));
+  }
+
+  @Override
+  public Nary<T> maxNary(Comparator<? super T> comparator) {
+    return Nary.create(max(comparator));
+  }
+
+  @Override
+  public Nary<T> findFirstNary() {
+    return Nary.create(findFirst());
+  }
+
+  @Override
+  public Nary<T> findAnyNary() {
+    return Nary.create(findAny());
   }
 
   @Override
@@ -310,13 +335,28 @@ public class NaryFromNative<T> implements Nary<T> {
   }
 
   @Override
+  public Nary<T> filterNary(Predicate<? super T> predicate) {
+    return Nary.create(filter(predicate));
+  }
+
+  @Override
   public Optional<T> filterOptional(Predicate<? super T> predicate) {
     return create(asNativeOptional().filter(predicate));
   }
 
   @Override
+  public <R> Nary<R> mapNary(Function<? super T, ? extends R> mapper) {
+    return Nary.create(map(mapper));
+  }
+
+  @Override
   public <U> Optional<U> mapOptional(Function<? super T, ? extends U> mapper) {
     return create(asNativeOptional().map(mapper));
+  }
+
+  @Override
+  public <R> Nary<R> flatMapNary(Function<? super T, ? extends Nary<? extends R>> mapper) {
+    return Nary.create(flatMap(mapper));
   }
 
   @Override
@@ -350,6 +390,11 @@ public class NaryFromNative<T> implements Nary<T> {
   @Override
   public Stream<T> asStream() {
     return asNativeStream();
+  }
+
+  @Override
+  public Nary<T> asNary() {
+    return this;
   }
 
   @Override
@@ -398,13 +443,8 @@ public class NaryFromNative<T> implements Nary<T> {
   }
 
   @Override
-  public <S> Nary<S> joinedWith(Stream<? extends S> otherNary) {
-    return NaryFromNative.create(Stream.concat((Stream) this, otherNary));
-  }
-
-  @Override
-  public Optional<T> findLast() {
-    return NaryFromNative.create(reduce(this::keepLast));
+  public Nary<T> findLast() {
+    return reduceNary(this::keepLast);
   }
 
   /**

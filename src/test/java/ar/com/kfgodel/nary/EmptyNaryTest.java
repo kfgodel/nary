@@ -19,9 +19,7 @@ import java.util.stream.LongStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * This type tests the behavior of an empty nary
@@ -145,7 +143,28 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
             assertThat(result).isEqualTo(Lists.newArrayList(1, 2, 3));
           });
         });
+        
+        it("returns the empty nary when #asNary() is called",()->{
+            assertThat(context().nary().asNary()).isEqualTo(Nary.empty());
+        });
+        it("returns an empty nary when #filterNary() is called",()->{
+          List<Integer> result = context().nary().filterNary((value) -> true)
+            .collect(Collectors.toList());
 
+          assertThat(result).isEqualTo(Lists.newArrayList());
+        });
+        it("returns an empty stream when #mapNary() is called",()->{
+          List<Integer> result = context().nary().mapNary((value) -> value)
+            .collect(Collectors.toList());
+
+          assertThat(result).isEqualTo(Lists.newArrayList());
+        });
+        it("returns an empty stream when #flatMapNary() is called",()->{
+          List<Integer> result = context().nary().flatMapNary((value) -> Nary.of(value))
+            .collect(Collectors.toList());
+
+          assertThat(result).isEqualTo(Lists.newArrayList());
+        });
 
       });
 
@@ -320,6 +339,39 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
 
       });
 
+      describe("as nary", () -> {
+
+        it("always returns an empty nary when #findLast() is called",()->{
+          List<Integer> result = context().nary().findLast()
+            .collect(Collectors.toList());
+          assertThat(result).isEqualTo(Lists.newArrayList());
+        });
+
+        it("returns an empty nary when #reduceNary(accumulator) is called",()->{
+          Nary<Integer> result = context().nary().reduceNary((a, b) -> a + b);
+          assertThat(result.isPresent()).isFalse();
+        });
+
+        it("returns an empty nary when #findFirstNary() is called",()->{
+          Nary<Integer> result = context().nary().findFirstNary();
+          assertThat(result.isAbsent()).isTrue();
+        });
+        it("returns an empty nary when #findAnyNary() is called",()->{
+          Nary<Integer> result = context().nary().findAnyNary();
+          assertThat(result.isAbsent()).isTrue();
+        });
+
+        it("returns an empty nary when #minNary() is called",()->{
+          Nary<Integer> result = context().nary().minNary(Integer::compareTo);
+          assertThat(result).isEqualTo(Nary.empty());
+        });
+        it("returns an empty nary when #maxNary() is called",()->{
+          Nary<Integer> result = context().nary().maxNary(Integer::compareTo);
+          assertThat(result).isEqualTo(Nary.empty());
+        });
+
+
+      });
     });
 
   }

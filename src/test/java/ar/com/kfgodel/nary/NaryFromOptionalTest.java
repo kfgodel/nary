@@ -143,10 +143,32 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
           });
         });
 
+        it("returns a one element nary when #asNary() is called",()->{
+          List<Integer> result = context().nary().asNary().collect(Collectors.toList());
+          assertThat(result).isEqualTo(Lists.newArrayList(3));
+        });
+        it("applies the predicate to filter when #filterNary() is called",()->{
+          List<Integer> result = context().nary().filterNary((value) -> value.equals(3))
+            .collect(Collectors.toList());
+
+          assertThat(result).isEqualTo(Lists.newArrayList(3));
+        });
+        it("transforms the value when #mapNary() is called",()->{
+          List<Integer> result = context().nary().mapNary((value) -> value + 1)
+            .collect(Collectors.toList());
+
+          assertThat(result).isEqualTo(Lists.newArrayList(4));
+        });
+        it("transforms the value when #flatMapNary() is called",()->{
+          List<Integer> result = context().nary().flatMapNary((value) -> Nary.of(8))
+            .collect(Collectors.toList());
+
+          assertThat(result).isEqualTo(Lists.newArrayList(8));
+        });
 
       });
 
-      describe("as non empty stream", () -> {
+      describe("as one element stream", () -> {
         it("applies the predicate to filter when #filter() is called",()->{
           List<Integer> result = context().nary().filter((value) -> value.equals(3))
             .collect(Collectors.toList());
@@ -329,6 +351,38 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
         it("returns the native optional when #findAny() is called",()->{
           java.util.Optional<Integer> result = context().nary().findAny();
           assertThat(result).isEqualTo(java.util.Optional.of(3));
+        });
+
+      });
+
+      describe("as one element nary", () -> {
+
+        it("returns itself when #findLast() is called",()->{
+          List<Integer> result = context().nary().findLast()
+            .collect(Collectors.toList());
+          assertThat(result).isEqualTo(Lists.newArrayList(3));
+        });
+
+        it("returns the value when #reduceNary(accumulator) is called",()->{
+          Nary<Integer> result = context().nary().reduceNary((a, b) -> a + b);
+          assertThat(result.get()).isEqualTo(3);
+        });
+
+        it("returns itself when #findFirstNary() is called",()->{
+          Nary<Integer> result = context().nary().findFirstNary();
+          assertThat(result).isEqualTo(Nary.of(3));
+        });
+        it("returns itself when #findAnyNary() is called",()->{
+          Nary<Integer> result = context().nary().findAnyNary();
+          assertThat(result).isEqualTo(Nary.of(3));
+        });
+        it("returns itself when #minNary() is called",()->{
+          Nary<Integer> result = context().nary().minNary(Integer::compareTo);
+          assertThat(result).isEqualTo(Nary.of(3));
+        });
+        it("returns itself when #maxNary() is called",()->{
+          Nary<Integer> result = context().nary().maxNary(Integer::compareTo);
+          assertThat(result).isEqualTo(Nary.of(3));
         });
 
       });

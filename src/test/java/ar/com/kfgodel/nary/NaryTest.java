@@ -123,22 +123,6 @@ public class NaryTest extends JavaSpec<NaryTestContext> {
                 });
             });
 
-            describe("last element", () -> {
-                it("can be accessed with a method",()->{
-                    Nary<Integer> nary = NaryFromNative.of(1, 2, 3);
-                    assertThat(nary.findLast().get()).isEqualTo(3);
-                });
-                it("is empty if no element",()->{
-                    Nary<Integer> nary = NaryFromNative.empty();
-                    assertThat(nary.findLast().isPresent()).isFalse();
-
-                });
-                it("is the only element for an optional nary",()->{
-                    Nary<Integer> nary = NaryFromNative.of(1);
-                    assertThat(nary.findLast().get()).isEqualTo(1);
-                });   
-
-            });
 
             describe("ifAbsent", () -> {
                 it("receives a block that is executed if the nary represents an empty set",()->{
