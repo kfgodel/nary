@@ -388,6 +388,11 @@ public class NaryFromNative<T> implements Nary<T> {
   }
 
   @Override
+  public Optional<T> asOptional() throws MoreThanOneElementException {
+    return Nary.create(asNativeOptional());
+  }
+
+  @Override
   public Stream<T> asStream() {
     return asNativeStream();
   }

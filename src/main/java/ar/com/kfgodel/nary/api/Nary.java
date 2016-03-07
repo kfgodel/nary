@@ -1,6 +1,7 @@
 package ar.com.kfgodel.nary.api;
 
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
+import ar.com.kfgodel.nary.impl.EmptyNary;
 import ar.com.kfgodel.nary.impl.NaryFromNative;
 import ar.com.kfgodel.optionals.Optional;
 
@@ -523,6 +524,14 @@ public interface Nary<T> extends Stream<T>, Optional<T>, Iterable<T> {
   Nary<T> findAnyNary();
 
   /**
+   * Reduces this nary to an optional, trying to represent 0, or 1 element.
+   * If this nary contains more than one, then an exception is thrown
+   * @return an empty optional if this is empty, a non empty optional if this
+   * has one element
+   */
+  Optional<T> asOptional() throws MoreThanOneElementException;
+
+  /**
    * Creates a nary enumerating its elements
    *
    * @param element     The first mandatory element
@@ -560,7 +569,7 @@ public interface Nary<T> extends Stream<T>, Optional<T>, Iterable<T> {
    * Creates an empty nary to represent an empty set
    */
   static<T> Nary<T> empty(){
-    return NaryFromNative.empty();
+    return EmptyNary.instance();
   }
 
   /**
