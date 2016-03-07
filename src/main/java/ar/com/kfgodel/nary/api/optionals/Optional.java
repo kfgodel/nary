@@ -7,7 +7,7 @@ import java.util.function.*;
 import java.util.stream.Stream;
 
 /**
- * This type represents an optional with completed interface for ansence of elements
+ * This type represents an optional with completed interface for absence of elements
  * and integration with nary type.<br>
  * Methods from stream are added to make optional pseudo-polymorphic with a stream
  * (no same type but similar semantics)
