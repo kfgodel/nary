@@ -2,6 +2,7 @@ package ar.com.kfgodel.nary;
 
 import ar.com.dgarcia.javaspec.api.JavaSpec;
 import ar.com.dgarcia.javaspec.api.JavaSpecRunner;
+import ar.com.dgarcia.javaspec.api.Variable;
 import ar.com.kfgodel.nary.impl.others.EmptyIterator;
 import org.junit.runner.RunWith;
 
@@ -11,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
 /**
+ * This type verifies the behavior of an empty iterator
  * Created by kfgodel on 07/03/16.
  */
 @RunWith(JavaSpecRunner.class)
@@ -32,6 +34,23 @@ public class EmptyIteratorTest extends JavaSpec<NaryTestContext> {
             assertThat(e).hasMessage("Next element can't be accessed on empty iterator");
           }
       });
+
+      it("throws an exception if tried to remove",()->{
+        try{
+          context().iterator().remove();
+          failBecauseExceptionWasNotThrown(UnsupportedOperationException.class);
+        }catch(UnsupportedOperationException e){
+          assertThat(e).hasMessage("Can't remove elements on an empty iterator");
+        }
+      });
+      
+      it("ignores the consumer argument when #forEachRemaining() called",()->{
+        Variable<Boolean> executed =Variable.of(false);
+
+        context().iterator().forEachRemaining((value)-> executed.set(true));
+
+        assertThat(executed.get()).isFalse();
+      });   
     });
   }
 }

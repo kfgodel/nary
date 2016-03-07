@@ -30,7 +30,7 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
 
       it("behaves like an empty nary when the optional is empty",()->{
         Nary<Object> nary = Nary.create(Optional.empty());
-        assertThat(nary).isEqualTo(Nary.empty());
+        assertThat(nary).isSameAs(Nary.empty());
       });
 
       context().nary(()-> Nary.create(Optional.of(3)));
@@ -105,7 +105,7 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
           assertThat(context().nary().hashCode()).isEqualTo(Lists.newArrayList(3).hashCode());
         });
         it("returns a one element nary representation when #toString() is called",()->{
-          assertThat(context().nary().toString()).isEqualTo("NaryFromNative{stream: null, optional: Optional[3]}");
+          assertThat(context().nary().toString()).isEqualTo("OneElementNary{ 3 }");
         });
         it("returns an equivalent optional when #asNativeOptional() is called",()->{
           assertThat(context().nary().asNativeOptional()).isEqualTo(java.util.Optional.of(3));

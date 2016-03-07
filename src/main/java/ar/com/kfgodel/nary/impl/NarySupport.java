@@ -301,32 +301,32 @@ public abstract class NarySupport<T> implements Nary<T> {
 
   @Override
   public Nary<T> distinct() {
-    return returningNaryDo(distinct());
+    return returningNaryDo(asStream().distinct());
   }
 
   @Override
   public Nary<T> sorted() {
-    return returningNaryDo(sorted());
+    return returningNaryDo(asStream().sorted());
   }
 
   @Override
   public Nary<T> sorted(Comparator<? super T> comparator) {
-    return returningNaryDo(sorted(comparator));
+    return returningNaryDo(asStream().sorted(comparator));
   }
 
   @Override
   public Nary<T> peek(Consumer<? super T> action) {
-    return returningNaryDo(peek(action));
+    return returningNaryDo(asStream().peek(action));
   }
 
   @Override
   public Nary<T> limit(long maxSize) {
-    return returningNaryDo(limit(maxSize));
+    return returningNaryDo(asStream().limit(maxSize));
   }
 
   @Override
   public Nary<T> skip(long n) {
-    return returningNaryDo(skip(n));
+    return returningNaryDo(asStream().skip(n));
   }
 
   @Override

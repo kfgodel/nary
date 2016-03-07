@@ -22,7 +22,8 @@ public class EmptySpliterator implements Spliterator<Object> {
 
   @Override
   public Spliterator<Object> trySplit() {
-    return this;
+    // Null is used to signify empty spliterator according to specs
+    return null;
   }
 
   @Override
@@ -32,6 +33,17 @@ public class EmptySpliterator implements Spliterator<Object> {
 
   @Override
   public int characteristics() {
-    return 0;
+    return ORDERED | DISTINCT | SORTED | SIZED | NONNULL | IMMUTABLE | CONCURRENT ;
   }
+
+  @Override
+  public void forEachRemaining(Consumer<? super Object> action) {
+    // Nothing to do on an empty spliterator
+  }
+
+  @Override
+  public long getExactSizeIfKnown() {
+    return estimateSize();
+  }
+
 }

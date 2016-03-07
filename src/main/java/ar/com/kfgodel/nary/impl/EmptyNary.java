@@ -6,6 +6,7 @@ import ar.com.kfgodel.nary.impl.others.EmptyStream;
 import ar.com.kfgodel.optionals.Optional;
 
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.function.*;
 import java.util.stream.Stream;
@@ -227,17 +228,6 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public Stream<Object> onClose(Runnable closeHandler) {
-    // Ignore the handler, we will never close
-    return this;
-  }
-
-  @Override
-  public void close() {
-    // Nothing to close
-  }
-
-  @Override
   public Stream<Object> asStream() {
     return EmptyStream.instance();
   }
@@ -245,5 +235,25 @@ public class EmptyNary extends NarySupport<Object> {
   @Override
   public Optional<Object> asOptional() throws MoreThanOneElementException {
     return this;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (!Nary.class.isInstance(obj)) {
+      return false;
+    }
+    Nary that = (Nary) obj;
+    Iterator thatIterator = that.iterator();
+    //we are equal if the other is empty too
+    return !thatIterator.hasNext();
+  }
+
+  @Override
+  public int hashCode() {
+    // Based on list implementation, hashcode for an empty list
+    return 1;
   }
 }

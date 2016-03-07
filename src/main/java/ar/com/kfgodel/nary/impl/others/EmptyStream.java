@@ -230,11 +230,13 @@ public class EmptyStream implements Stream<Object> {
 
   @Override
   public Stream<Object> onClose(Runnable closeHandler) {
-    return this;
+    // Because adding a handler is mutable operation, we use a new instance to
+    // be affected and returned
+    return Stream.empty().onClose(closeHandler);
   }
 
   @Override
   public void close() {
-    // No need to close
+    // Nothing to really close
   }
 }

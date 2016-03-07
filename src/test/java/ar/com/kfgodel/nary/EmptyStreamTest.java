@@ -10,14 +10,12 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 /**
  * This type verifies the behavior of an empty stream
@@ -138,12 +136,14 @@ public class EmptyStreamTest extends JavaSpec<NaryTestContext> {
         assertThat(result).isEqualTo(new Object[0]);
       });
       it("calls with 0 as size the intFunction argument of #toArray(IntFunction)",()->{
-        IntFunction function = mock(IntFunction.class);
-        when(function.apply(0)).thenReturn(new Object[0]);
+        Variable<Integer> sizeUsed = Variable.create();
 
-        context().stream().toArray(function);
+        context().stream().toArray((size)->{
+          sizeUsed.set(size);
+          return new Object[size];
+        });
 
-        verify(function).apply(0);
+        assertThat(sizeUsed.get()).isEqualTo(0);
       });
       it("returns the identity when #reduce(identity,accumulator) is called",()->{
         Integer result = context().stream().reduce(23, (a, b) -> a + b);

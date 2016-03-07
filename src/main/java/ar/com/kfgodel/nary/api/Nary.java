@@ -3,11 +3,13 @@ package ar.com.kfgodel.nary.api;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 import ar.com.kfgodel.nary.impl.EmptyNary;
 import ar.com.kfgodel.nary.impl.NaryFromNative;
+import ar.com.kfgodel.nary.impl.OneElementNary;
 import ar.com.kfgodel.optionals.Optional;
 
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * This type represents an uncertain set of elements, without any assumptions about order, uniqueness, or quantity.<br>
@@ -540,7 +542,13 @@ public interface Nary<T> extends Stream<T>, Optional<T>, Iterable<T> {
    * @return The created nary
    */
   static <T> Nary<T> of(T element, T... additionals){
-    return NaryFromNative.of(element,additionals);
+    Nary<T> elementNary = OneElementNary.create(element);
+    if (additionals == null || additionals.length == 0) {
+      // It's only one element
+      return elementNary;
+    }
+    Nary<T> additionalsNary = Nary.create(additionals);
+    return elementNary.concatStream(additionalsNary);
   }
 
   /**
@@ -555,14 +563,20 @@ public interface Nary<T> extends Stream<T>, Optional<T>, Iterable<T> {
    * optional
    */
   static<T> Nary<T> create(java.util.Optional<T> nativeOptional){
-    return NaryFromNative.create(nativeOptional);
+    return nativeOptional
+      .map((value)-> Nary.of(value))
+      .orElse(Nary.empty());
   }
 
   /**
    * Creates a nary from an element whose absence is represented by null
    */
   static<T> Nary<T> ofNullable(T nullableElement){
-    return NaryFromNative.ofNullable(nullableElement);
+    if(nullableElement == null){
+      return Nary.empty();
+    }else{
+      return Nary.of(nullableElement);
+    }
   }
 
   /**
@@ -576,26 +590,26 @@ public interface Nary<T> extends Stream<T>, Optional<T>, Iterable<T> {
    * Creates a nary from a spliterator as source for a stream
    */
   static<T> Nary<T> create(Spliterator<T> spliterator){
-    return NaryFromNative.create(spliterator);
+    return Nary.create(StreamSupport.stream(spliterator, false));
   }
 
   /**
    * Creates a nary from an iterator. No assumptions about iterator characteristics are made
    */
   static<T> Nary<T> create(Iterator<T> iterator){
-    return NaryFromNative.create(Spliterators.spliteratorUnknownSize(iterator, 0));
+    return Nary.create(Spliterators.spliteratorUnknownSize(iterator, 0));
   }
 
   /**
    * Creates a nary from an iterable source
    */
   static<T> Nary<T> create(Iterable<T> iterable){
-    return NaryFromNative.create(iterable.spliterator());
+    return Nary.create(iterable.spliterator());
   }
 
-  static<T> Nary<T> create(Object[] array){
-    Stream<T> asStream = Arrays.stream((T[]) array);
-    return NaryFromNative.create(asStream);
+  static<T> Nary<T> create(T[] array){
+    Stream<T> asStream = Arrays.stream(array);
+    return Nary.create(asStream);
   }
 
 }

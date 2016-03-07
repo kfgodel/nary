@@ -6,8 +6,7 @@ import ar.com.dgarcia.javaspec.api.Variable;
 import ar.com.kfgodel.nary.impl.others.EmptySpliterator;
 import org.junit.runner.RunWith;
 
-import java.util.Spliterator;
-
+import static java.util.Spliterator.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -22,26 +21,43 @@ public class EmptySpliteratorTest extends JavaSpec<NaryTestContext> {
       context().spliterator(EmptySpliterator::instance);
 
       it("cannot advance",()->{
-        Variable<Boolean> executed = Variable.of(false);
-
-        boolean result = context().spliterator().tryAdvance((value) -> executed.set(true));
+        boolean result = context().spliterator().tryAdvance((value) -> {throw new RuntimeException("never happens");});
 
         assertThat(result).isFalse();
-        assertThat(executed.get()).isFalse();
-      });
-      
-      it("returns itself when splitted",()->{
-        Spliterator<Integer> splitted = context().spliterator().trySplit();
-        assertThat(splitted).isSameAs(context().spliterator());
       });
 
-      it("has 0 size",()->{
+      it("doesn't execute the consumer argument",()->{
+        Variable<Boolean> executed = Variable.of(false);
+
+        context().spliterator().tryAdvance((value) -> executed.set(true));
+
+        assertThat(executed.get()).isFalse();
+      });
+
+      it("returns null when split",()->{
+        assertThat(context().spliterator().trySplit()).isNull();
+      });
+
+      it("has 0 estimated size",()->{
           assertThat(context().spliterator().estimateSize()).isEqualTo(0);
       });
-      
-      it("has no characteristics",()->{
-          assertThat(context().spliterator().characteristics()).isEqualTo(0);
-      });   
+
+      it("has 0 exact size",()->{
+        assertThat(context().spliterator().getExactSizeIfKnown()).isEqualTo(0);
+      });
+
+      it("has several characteristics to help combination with other spliterators",()->{
+          assertThat(context().spliterator().characteristics())
+            .isEqualTo(ORDERED | DISTINCT | SORTED | SIZED | NONNULL | IMMUTABLE | CONCURRENT );
+      });
+
+      it("ignores the consumer argument when #forEachRemaining() called",()->{
+        Variable<Boolean> executed =Variable.of(false);
+
+        context().spliterator().forEachRemaining((value)-> executed.set(true));
+
+        assertThat(executed.get()).isFalse();
+      });
     });
 
   }
