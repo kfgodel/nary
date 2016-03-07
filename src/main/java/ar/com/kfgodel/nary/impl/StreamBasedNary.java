@@ -1,0 +1,60 @@
+package ar.com.kfgodel.nary.impl;
+
+import ar.com.kfgodel.nary.api.Nary;
+import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
+import ar.com.kfgodel.optionals.Optional;
+
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.stream.Stream;
+
+/**
+ * This type represents a Nary with a stream as a source of elements.<br>
+ *   This implies the greatest level of uncertainty as we don't know if the stream
+ *   is empty, contains one, or more than one elements until it's consumed. So the nary
+ *   offers an interface that may be bigger that what the stream actually supports.<br>
+ *   <br>
+ *   That is why in Runtime, this type may throw exceptions depending on how it's used, but
+ *   it's assumed that the user may have a better judgement to avoid unsafe methods at runtime.
+ *   This brings much more flexibility on the type, than narrowing the interface on compile time
+ *
+ * Created by kfgodel on 07/03/16.
+ */
+public class StreamBasedNary<T> extends NarySupport<T>  {
+
+  private Stream<T> sourceStream;
+
+  public static<T> StreamBasedNary<T> create(Stream<T> source) {
+    StreamBasedNary<T> nary = new StreamBasedNary<>();
+    nary.sourceStream = source;
+    return nary;
+  }
+
+  @Override
+  public Optional<T> asOptional() throws MoreThanOneElementException {
+    Iterator<T> iterator = asStream().iterator();
+    if(!iterator.hasNext()){
+      return Nary.empty();
+    }
+    T onlyElement = iterator.next();
+    if(iterator.hasNext()){
+      throw new MoreThanOneElementException("Expecting 1 element in the stream to create an optional but found at least 2: " + Arrays.asList(onlyElement, iterator.next()));
+    }
+    return Nary.of(onlyElement);
+  }
+
+  @Override
+  public Stream<T> asStream() {
+    return sourceStream;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    builder.append(getClass().getSimpleName());
+    builder.append("{stream: ");
+    builder.append(sourceStream);
+    builder.append("}");
+    return builder.toString();
+  }
+}

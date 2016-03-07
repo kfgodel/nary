@@ -72,9 +72,7 @@ public abstract class NarySupport<T> implements Nary<T> {
 
   @Override
   public Optional<T> filterOptional(Predicate<? super T> predicate) throws MoreThanOneElementException {
-    // this nary may have more than 1 element, but after filtering it may be reduced (or not)
-    // That's why we do the filter first and force the optional last
-    return filterNary(predicate).asOptional();
+    return asOptional().filterNary(predicate);
   }
 
   @Override

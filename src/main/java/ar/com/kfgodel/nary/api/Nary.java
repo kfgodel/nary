@@ -2,8 +2,8 @@ package ar.com.kfgodel.nary.api;
 
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 import ar.com.kfgodel.nary.impl.EmptyNary;
-import ar.com.kfgodel.nary.impl.NaryFromNative;
 import ar.com.kfgodel.nary.impl.OneElementNary;
+import ar.com.kfgodel.nary.impl.StreamBasedNary;
 import ar.com.kfgodel.optionals.Optional;
 
 import java.util.*;
@@ -555,7 +555,7 @@ public interface Nary<T> extends Stream<T>, Optional<T>, Iterable<T> {
    * Creates a nary from a native stream. The operation on this nary will consume the stream
    */
   static<T> Nary<T> create(Stream<T> nativeStream){
-    return NaryFromNative.create(nativeStream);
+    return StreamBasedNary.create(nativeStream);
   }
 
   /**
@@ -605,6 +605,10 @@ public interface Nary<T> extends Stream<T>, Optional<T>, Iterable<T> {
    */
   static<T> Nary<T> create(Iterable<T> iterable){
     return Nary.create(iterable.spliterator());
+  }
+
+  static<T> Nary<T> create(Collection<T> collection){
+    return Nary.create(collection.stream());
   }
 
   static<T> Nary<T> create(T[] array){
