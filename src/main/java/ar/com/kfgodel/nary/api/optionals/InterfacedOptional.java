@@ -1,4 +1,4 @@
-package ar.com.kfgodel.optionals;
+package ar.com.kfgodel.nary.api.optionals;
 
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;

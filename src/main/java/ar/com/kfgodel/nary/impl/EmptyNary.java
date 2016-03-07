@@ -2,8 +2,8 @@ package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
+import ar.com.kfgodel.nary.api.optionals.Optional;
 import ar.com.kfgodel.nary.impl.others.EmptyStream;
-import ar.com.kfgodel.optionals.Optional;
 
 import java.util.Comparator;
 import java.util.Iterator;

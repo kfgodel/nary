@@ -1,4 +1,4 @@
-package ar.com.kfgodel.optionals;
+package ar.com.kfgodel.nary.api.optionals;
 
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;

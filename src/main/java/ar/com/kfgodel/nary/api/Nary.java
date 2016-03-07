@@ -1,10 +1,10 @@
 package ar.com.kfgodel.nary.api;
 
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
+import ar.com.kfgodel.nary.api.optionals.Optional;
 import ar.com.kfgodel.nary.impl.EmptyNary;
 import ar.com.kfgodel.nary.impl.OneElementNary;
 import ar.com.kfgodel.nary.impl.StreamBasedNary;
-import ar.com.kfgodel.optionals.Optional;
 
 import java.util.*;
 import java.util.function.*;

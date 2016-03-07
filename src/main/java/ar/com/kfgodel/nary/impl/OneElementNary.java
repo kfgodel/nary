@@ -2,16 +2,17 @@ package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
+import ar.com.kfgodel.nary.api.optionals.Optional;
 import ar.com.kfgodel.nary.impl.others.OneElementIterator;
 import ar.com.kfgodel.nary.impl.others.OneElementSpliterator;
-import ar.com.kfgodel.optionals.Optional;
 
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.function.*;
-import java.util.stream.*;
+import java.util.stream.Collector;
+import java.util.stream.Stream;
 
 /**
  * This type represents a nary
@@ -20,6 +21,10 @@ import java.util.stream.*;
 public class OneElementNary<T> extends NarySupport<T> {
 
   private T element;
+  /**
+   * Because optionals are immutable, we can cache it to avoid instantiation
+   */
+  private java.util.Optional<T> cachedOptional;
 
   public static<T> OneElementNary<T> create(T element) {
     OneElementNary<T> nary = new OneElementNary<>();
@@ -34,6 +39,13 @@ public class OneElementNary<T> extends NarySupport<T> {
 
   @Override
   public java.util.Optional<T> asNativeOptional() throws MoreThanOneElementException {
+    if(cachedOptional == null){
+      cachedOptional = createNativeOptional();
+    }
+    return cachedOptional;
+  }
+
+  private java.util.Optional<T> createNativeOptional() {
     return java.util.Optional.of(element);
   }
 

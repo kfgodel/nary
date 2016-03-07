@@ -4,8 +4,8 @@ import ar.com.dgarcia.javaspec.api.JavaSpec;
 import ar.com.dgarcia.javaspec.api.JavaSpecRunner;
 import ar.com.dgarcia.javaspec.api.Variable;
 import ar.com.kfgodel.nary.api.Nary;
+import ar.com.kfgodel.nary.api.optionals.Optional;
 import ar.com.kfgodel.nary.impl.others.EmptyStream;
-import ar.com.kfgodel.optionals.Optional;
 import org.assertj.core.util.Lists;
 import org.junit.runner.RunWith;
 

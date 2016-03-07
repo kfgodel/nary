@@ -61,17 +61,17 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
           assertThat(executed.get()).isFalse();
         });
         it("applies the predicate when called to #filterOptional()",()->{
-          ar.com.kfgodel.optionals.Optional<Integer> result = context().nary().filterOptional((value) -> value.equals(3));
+          ar.com.kfgodel.nary.api.optionals.Optional<Integer> result = context().nary().filterOptional((value) -> value.equals(3));
 
           assertThat(result.get()).isEqualTo(3);
         });
         it("transforms the value when called to #mapOptional()",()->{
-          ar.com.kfgodel.optionals.Optional<Integer> result = context().nary().mapOptional((value) -> value + 1);
+          ar.com.kfgodel.nary.api.optionals.Optional<Integer> result = context().nary().mapOptional((value) -> value + 1);
 
           assertThat(result.get()).isEqualTo(4);
         });
         it("transforms  the value when called to #flatmapOptional()",()->{
-          ar.com.kfgodel.optionals.Optional<Integer> result = context().nary().flatMapOptional((value)-> Optional.of(5));
+          ar.com.kfgodel.nary.api.optionals.Optional<Integer> result = context().nary().flatMapOptional((value)-> Optional.of(5));
 
           assertThat(result.get()).isEqualTo(5);
         });

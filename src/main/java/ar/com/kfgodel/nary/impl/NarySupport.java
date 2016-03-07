@@ -2,11 +2,12 @@ package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
-import ar.com.kfgodel.optionals.Optional;
+import ar.com.kfgodel.nary.api.optionals.Optional;
 
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
+
 
 /**
  * This type defines basic behavior for narys to be implemented
