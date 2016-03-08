@@ -27,6 +27,9 @@ public class OneElementNary<T> extends NarySupport<T> {
   private java.util.Optional<T> cachedOptional;
 
   public static<T> OneElementNary<T> create(T element) {
+    if(element == null){
+      throw new IllegalArgumentException("Element can't be null");
+    }
     OneElementNary<T> nary = new OneElementNary<>();
     nary.element = element;
     return nary;
