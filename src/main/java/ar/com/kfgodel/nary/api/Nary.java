@@ -30,7 +30,7 @@ import java.util.stream.StreamSupport;
  * <p/>
  * Created by kfgodel on 06/11/14.
  */
-public interface Nary<T> extends Stream<T>, Optional<T>, Iterable<T> {
+public interface Nary<T> extends Optional<T>, Iterable<T> {
 
   /**
    * Solves conflict between Iterable and Stream

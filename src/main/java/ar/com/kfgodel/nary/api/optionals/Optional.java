@@ -14,7 +14,7 @@ import java.util.stream.Stream;
  *
  * Created by kfgodel on 06/11/14.
  */
-public interface Optional<T> extends InterfacedOptional<T> {
+public interface Optional<T> extends InterfacedOptional<T>, Stream<T> {
 
   /**
    * Negation of isPresent(). Facility method
