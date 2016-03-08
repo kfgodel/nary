@@ -302,8 +302,8 @@ public class OneElementNary<T> extends NarySupport<T> {
 
   @Override
   public <U> Optional<U> mapOptional(Function<? super T, ? extends U> mapper) throws MoreThanOneElementException {
-    // Delay the actual mapping until the element is needed
-    return OneElementNary.create(mapper.apply(element));
+    U mapped = mapper.apply(element);
+    return OneElementNary.create(mapped);
   }
 
   @Override
