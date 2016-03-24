@@ -30,4 +30,15 @@
     </repository>
   </repositories>
 
+
+  <dependencies>
+
+    <!-- Rspec like testing -->
+    <dependency>
+      <groupId>ar.com.dgarcia</groupId>
+      <artifactId>java-spec</artifactId>
+    </dependency>
+
+  </dependencies>
+
 </project>
