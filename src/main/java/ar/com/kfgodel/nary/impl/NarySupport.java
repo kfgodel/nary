@@ -102,6 +102,11 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
+  public <X extends RuntimeException> T orElseThrowRuntime(Supplier<? extends X> exceptionSupplier) {
+    return orElseThrow(exceptionSupplier);
+  }
+
+  @Override
   public java.util.Optional<T> asNativeOptional() throws MoreThanOneElementException {
     return asOptional().asNativeOptional();
   }

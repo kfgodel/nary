@@ -111,6 +111,7 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
    * If the only value is present, apply the provided mapping function to it,
    * and if the result is non-null, return an {@code Optional} describing the
    * result.  Otherwise return an empty {@code Optional}.
+   * This Nary as Stream is consumed.
    *
    * @param <U>    The type of the result of the mapping function
    * @param mapper a mapping function to apply to the value, if present
@@ -145,6 +146,7 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
    * but the provided mapper is one whose result is already an {@code Optional},
    * and if invoked, {@code flatMapOptional} does not wrap it with an additional
    * {@code Optional}.
+   * This Nary as Stream is consumed.
    *
    * @param <U>    The type parameter to the {@code Optional} returned by
    * @param mapper a mapping function to apply to the value, if present
@@ -160,6 +162,7 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
 
   /**
    * Return the only value if present, otherwise return {@code other}.
+   * This Nary as Stream is consumed.
    *
    * @param other the value to be returned if there is no value present, may
    *              be null
@@ -171,6 +174,7 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
   /**
    * Return the only value if present, otherwise invoke {@code other} and return
    * the result of that invocation.
+   * This Nary as Stream is consumed.
    *
    * @param other a {@code Supplier} whose result is returned if no value
    *              is present
@@ -184,6 +188,7 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
   /**
    * Return the only contained value, if present, otherwise throw an exception
    * to be created by the provided supplier.
+   * This Nary as Stream is consumed.
    *
    * @param <X>               Type of the exception to be thrown
    * @param exceptionSupplier The supplier which will return the exception to
@@ -198,6 +203,27 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
    * {@code IllegalStateException::new}
    */
   <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X, MoreThanOneElementException;
+
+  /**
+   * Returns the only contained value, if present, otherwise throws a runtime exception
+   * to be created by the provided supplier.
+   * This method allows throwing runtime exception where the compiler cannot infer if it's runtime
+   * or compile time checked
+   * This Nary as Stream is consumed.
+   *
+   * @param <X>               Type of the exception to be thrown
+   * @param exceptionSupplier The supplier which will return the exception to
+   *                          be thrown
+   * @return the present value
+   * @throws X                           if there is no value present
+   * @throws NullPointerException        if no value is present and
+   *                                     {@code exceptionSupplier} is null
+   * @throws MoreThanOneElementException if there are more than one
+   * @apiNote A method reference to the exception constructor with an empty
+   * argument list can be used as the supplier. For example,
+   * {@code IllegalStateException::new}
+   */
+  <X extends RuntimeException> T orElseThrowRuntime(Supplier<? extends X> exceptionSupplier) throws X, MoreThanOneElementException;
 
   /**
    * Performs a <a href="package-summary.html#MutableReduction">mutable

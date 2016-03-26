@@ -127,6 +127,14 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
               assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
             }
           });
+          it("throws an exception when #orElseThrowRuntime() is called", () -> {
+            try {
+              context().nary().orElseThrowRuntime(() -> new RuntimeException("never happens"));
+              failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
+            } catch (MoreThanOneElementException e) {
+              assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
+            }
+          });
           describe("#equals", () -> {
             it("is true if other stream has the same values and order",()->{
               boolean result = context().nary().equals(Nary.of(3, 2, 1, 3));

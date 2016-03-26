@@ -357,4 +357,24 @@ public interface Optional<T> extends InterfacedOptional<T>, Stream<T> {
    * is empty, a nary with this element plus the stream elements
    */
   Nary<T> concatStream(Stream<? extends T> other);
+
+  /**
+   * Returns the only contained value, if present, otherwise throws a runtime exception
+   * to be created by the provided supplier.<br>
+   * This method allows throwing runtime exception where the compiler cannot infer if it's runtime
+   * or compile time checked
+   *
+   * @param <X>               Type of the exception to be thrown
+   * @param exceptionSupplier The supplier which will return the exception to
+   *                          be thrown
+   * @return the present value
+   * @throws X                           if there is no value present
+   * @throws NullPointerException        if no value is present and
+   *                                     {@code exceptionSupplier} is null
+   * @throws MoreThanOneElementException if there are more than one
+   * @apiNote A method reference to the exception constructor with an empty
+   * argument list can be used as the supplier. For example,
+   * {@code IllegalStateException::new}
+   */
+  <X extends RuntimeException> T orElseThrowRuntime(Supplier<? extends X> exceptionSupplier) throws X;
 }
