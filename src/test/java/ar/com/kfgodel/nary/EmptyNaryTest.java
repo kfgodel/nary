@@ -10,6 +10,7 @@ import org.assertj.core.util.Lists;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -170,6 +171,13 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
           assertThat(result).isEqualTo(Lists.newArrayList());
         });
 
+        it("returns an empty list when toList() is called", () -> {
+          assertThat(context().nary().toList()).isEqualTo(Collections.emptyList());
+        });
+        it("returns an empty set when toSet() is called", () -> {
+          assertThat(context().nary().toSet()).isEqualTo(Collections.emptySet());
+        });
+
       });
 
       describe("as stream", () -> {
@@ -212,7 +220,6 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
         it("always returns the empty optional when #asOptional() is called",()->{
           assertThat(context().nary().asOptional()).isEqualTo(Nary.empty());
         });
-
 
       });
     });

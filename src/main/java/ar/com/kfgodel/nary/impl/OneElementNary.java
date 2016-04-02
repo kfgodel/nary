@@ -6,10 +6,7 @@ import ar.com.kfgodel.nary.api.optionals.Optional;
 import ar.com.kfgodel.nary.impl.others.OneElementIterator;
 import ar.com.kfgodel.nary.impl.others.OneElementSpliterator;
 
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Spliterator;
+import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
@@ -38,6 +35,20 @@ public class OneElementNary<T> extends NarySupport<T> {
   @Override
   public Optional<T> asOptional() throws MoreThanOneElementException {
     return this;
+  }
+
+  @Override
+  public List<T> toList() {
+    List<T> lista = new ArrayList<>(1);
+    lista.add(element);
+    return lista;
+  }
+
+  @Override
+  public Set<T> toSet() {
+    Set<T> set = new HashSet<>();
+    set.add(element);
+    return set;
   }
 
   @Override

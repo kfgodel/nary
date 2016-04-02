@@ -5,9 +5,7 @@ import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 import ar.com.kfgodel.nary.api.optionals.Optional;
 import ar.com.kfgodel.nary.impl.others.EmptyStream;
 
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.function.*;
 import java.util.stream.Stream;
 
@@ -235,6 +233,16 @@ public class EmptyNary extends NarySupport<Object> {
   @Override
   public Optional<Object> asOptional() throws MoreThanOneElementException {
     return this;
+  }
+
+  @Override
+  public List<Object> toList() {
+    return Collections.emptyList();
+  }
+
+  @Override
+  public Set<Object> toSet() {
+    return Collections.emptySet();
   }
 
   @Override

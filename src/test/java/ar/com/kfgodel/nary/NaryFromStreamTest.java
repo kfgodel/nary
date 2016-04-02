@@ -4,12 +4,14 @@ import ar.com.dgarcia.javaspec.api.JavaSpec;
 import ar.com.dgarcia.javaspec.api.JavaSpecRunner;
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
+import com.google.common.collect.Sets;
 import org.assertj.core.util.Lists;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -224,6 +226,16 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
 
             assertThat(result).isEqualTo(Lists.newArrayList(8, 8, 8, 8));
           });
+
+          it("returns a list with the values in the order they are present", () -> {
+            List<Integer> list = context().nary().toList();
+            assertThat(list).isEqualTo(Lists.newArrayList(3, 2, 1, 3));
+          });
+          it("returns a set with the values of the nary without duplicates or an order", () -> {
+            Set<Integer> set = context().nary().toSet();
+            assertThat(set).isEqualTo(Sets.newHashSet(1, 2, 3));
+          });
+
 
         });
 

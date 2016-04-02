@@ -559,6 +559,26 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
    */
   Optional<T> asOptional() throws MoreThanOneElementException;
 
+
+  /**
+   * Returns the content of this nary in a list.<br>
+   *   This nary, as stream, will be consumed in the operation.<br>
+   * This method is a shorthand of calling collect(Collectors.toList())
+   * @return The list with the elements of this nary
+   */
+  @Override
+  List<T> toList();
+
+  /**
+   * Returns the content of this nary in a set.<br>
+   * This nary, as stream, will be consumed in the operation.<br>
+   * This method is a shorthand of calling collect(Collectors.toSet())
+   *
+   * @return The set with the elements of this nary
+   */
+  @Override
+  Set<T> toSet();
+
   /**
    * Creates a nary enumerating its elements
    *
@@ -641,5 +661,6 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
     Stream<T> asStream = Arrays.stream(array);
     return Nary.create(asStream);
   }
+
 
 }

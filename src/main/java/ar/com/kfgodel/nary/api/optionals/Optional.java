@@ -3,6 +3,8 @@ package ar.com.kfgodel.nary.api.optionals;
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 
+import java.util.List;
+import java.util.Set;
 import java.util.function.*;
 import java.util.stream.Stream;
 
@@ -377,4 +379,21 @@ public interface Optional<T> extends InterfacedOptional<T>, Stream<T> {
    * {@code IllegalStateException::new}
    */
   <X extends RuntimeException> T orElseThrowRuntime(Supplier<? extends X> exceptionSupplier) throws X;
+
+  /**
+   * Returns the content of this optional inside a list.<br>
+   * It will be empty if this optional is empty, or a one element list if not.
+   *
+   * @return The list version of this optional
+   */
+  List<T> toList();
+
+  /**
+   * Returns the content of this optional inside a set<br>
+   * It will be empty, ot have just one element depending on this optional.
+   *
+   * @return The set version of this optional
+   */
+  Set<T> toSet();
+
 }

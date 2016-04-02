@@ -4,12 +4,14 @@ import ar.com.dgarcia.javaspec.api.JavaSpec;
 import ar.com.dgarcia.javaspec.api.JavaSpecRunner;
 import ar.com.dgarcia.javaspec.api.Variable;
 import ar.com.kfgodel.nary.api.Nary;
+import com.google.common.collect.Sets;
 import org.assertj.core.util.Lists;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
@@ -168,6 +170,14 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
             .collect(Collectors.toList());
 
           assertThat(result).isEqualTo(Lists.newArrayList(8));
+        });
+        it("returns a list with only the value", () -> {
+          List<Integer> oneElementList = context().nary().toList();
+          assertThat(oneElementList).isEqualTo(Lists.newArrayList(3));
+        });
+        it("returns a set with only the value", () -> {
+          Set<Integer> oneElementSet = context().nary().toSet();
+          assertThat(oneElementSet).isEqualTo(Sets.newHashSet(3));
         });
 
       });

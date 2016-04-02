@@ -6,6 +6,9 @@ import ar.com.kfgodel.nary.api.optionals.Optional;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -41,6 +44,16 @@ public class StreamBasedNary<T> extends NarySupport<T>  {
       this.cachedOptional = reduceStreamToOptional();
     }
     return cachedOptional;
+  }
+
+  @Override
+  public List<T> toList() {
+    return collect(Collectors.toList());
+  }
+
+  @Override
+  public Set<T> toSet() {
+    return collect(Collectors.toSet());
   }
 
   private Optional<T> reduceStreamToOptional() {
