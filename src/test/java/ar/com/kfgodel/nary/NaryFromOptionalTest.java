@@ -2,7 +2,7 @@ package ar.com.kfgodel.nary;
 
 import ar.com.dgarcia.javaspec.api.JavaSpec;
 import ar.com.dgarcia.javaspec.api.JavaSpecRunner;
-import ar.com.dgarcia.javaspec.api.Variable;
+import ar.com.dgarcia.javaspec.api.variable.Variable;
 import ar.com.kfgodel.nary.api.Nary;
 import com.google.common.collect.Sets;
 import org.assertj.core.util.Lists;
