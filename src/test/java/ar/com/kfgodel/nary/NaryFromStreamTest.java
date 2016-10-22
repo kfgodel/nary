@@ -105,6 +105,14 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
               assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
             }
           });
+          it("throws an exception  when called to #flatmapOptionally()",()->{
+            try{
+              context().nary().flatMapOptionally((value)-> { throw new RuntimeException("never happens");});
+              failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
+            }catch (MoreThanOneElementException e){
+              assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
+            }
+          });
           it("throws an exception when #orElse() is called",()->{
             try{
               context().nary().orElse(200);

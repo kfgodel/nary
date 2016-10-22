@@ -40,7 +40,7 @@ public class StreamBasedNary<T> extends NarySupport<T>  {
 
   @Override
   public Optional<T> asOptional() throws MoreThanOneElementException {
-    if(cachedOptional== null){
+    if(cachedOptional == null){
       this.cachedOptional = reduceStreamToOptional();
     }
     return cachedOptional;

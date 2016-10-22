@@ -87,6 +87,11 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
+  public <U> Optional<U> flatMapOptionally(Function<? super T, Optional<U>> mapper) {
+    return asOptional().flatMapOptionally(mapper);
+  }
+
+  @Override
   public T orElse(T other) throws MoreThanOneElementException {
     return asOptional().orElse(other);
   }

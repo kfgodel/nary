@@ -51,6 +51,7 @@ public interface Optional<T> extends InterfacedOptional<T>, Stream<T> {
    */
   Nary<T> filterNary(Predicate<? super T> predicate);
 
+
   /**
    * Returns a nary consisting of the results of applying the given
    * function to the elements of this stream.
@@ -110,6 +111,25 @@ public interface Optional<T> extends InterfacedOptional<T>, Stream<T> {
    */
   <R> Nary<R> flatMapNary(Function<? super T, ? extends Nary<? extends R>> mapper);
 
+
+  /**
+   * If a value is present, apply the provided {@code Optional}-bearing
+   * mapping function to it, return that result, otherwise return an empty
+   * {@code Optional}.  This method is similar to {@link #mapOptional(Function)},
+   * but the provided mapper is one whose result is already an {@code Optional},
+   * and if invoked, {@code flatMapOptional} does not wrap it with an additional
+   * {@code Optional}.
+   *
+   * @param <U>    The type parameter to the {@code Optional} returned by
+   * @param mapper a mapping function to apply to the value, if present
+   *               the mapping function
+   * @return the result of applying an {@code Optional}-bearing mapping
+   * function to the value of this {@code Optional}, if a value is present,
+   * otherwise an empty {@code Optional}
+   * @throws NullPointerException if the mapping function is null or returns
+   *                              a null result
+   */
+  <U> Optional<U> flatMapOptionally(Function<? super T, Optional<U>> mapper);
 
   /**
    * Returns an Object array containing the element of this optional (if any).
