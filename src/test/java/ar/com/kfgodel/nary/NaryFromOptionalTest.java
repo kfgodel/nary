@@ -62,6 +62,13 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
 
           assertThat(executed.get()).isFalse();
         });
+        it("applies the action when called to #peekOptional()", () -> {
+          Variable<Integer> variable = Variable.create();
+          ar.com.kfgodel.nary.api.optionals.Optional<Integer> result = context().nary().peekOptional(variable::set);
+
+          assertThat(result.get()).isEqualTo(3);
+          assertThat(variable.get()).isEqualTo(3);
+        });
         it("applies the predicate when called to #filterOptional()",()->{
           ar.com.kfgodel.nary.api.optionals.Optional<Integer> result = context().nary().filterOptional((value) -> value.equals(3));
 
@@ -157,6 +164,14 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
         it("returns a one element nary when #asNary() is called",()->{
           List<Integer> result = context().nary().asNary().collect(Collectors.toList());
           assertThat(result).isEqualTo(Lists.newArrayList(3));
+        });
+        it("applies the action to the value when #peekNary() is called", () -> {
+          Variable<Object> variable = Variable.create();
+          List<Integer> result = context().nary().peekNary(variable::set)
+            .collect(Collectors.toList());
+
+          assertThat(result).isEqualTo(Lists.newArrayList(3));
+          assertThat(variable.get()).isEqualTo(3);
         });
         it("applies the predicate to filter when #filterNary() is called",()->{
           List<Integer> result = context().nary().filterNary((value) -> value.equals(3))

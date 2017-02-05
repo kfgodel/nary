@@ -58,6 +58,13 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
 
           assertThat(executed.get()).isTrue();
         });
+        it("always returns an emtpy optional when called to #peekOptional()", () -> {
+          Variable<Integer> variable = Variable.create();
+          Optional<Integer> result = context().nary().peekOptional(variable::set);
+
+          assertThat(result.isAbsent()).isTrue();
+          assertThat(variable.get()).isNull();
+        });
         it("always returns an empty optional when called to #filterOptional()",()->{
           Optional<Integer> result = context().nary().filterOptional((value) -> true);
 
@@ -156,6 +163,14 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
         
         it("returns the empty nary when #asNary() is called",()->{
             assertThat(context().nary().asNary()).isEqualTo(Nary.empty());
+        });
+        it("returns an empty nary when #peekNary() is called", () -> {
+          Variable<Integer> variable = Variable.create();
+          List<Integer> result = context().nary().peekNary(variable::set)
+            .collect(Collectors.toList());
+
+          assertThat(result).isEqualTo(Lists.newArrayList());
+          assertThat(variable.get()).isNull();
         });
         it("returns an empty nary when #filterNary() is called",()->{
           List<Integer> result = context().nary().filterNary((value) -> true)
