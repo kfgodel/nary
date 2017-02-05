@@ -36,6 +36,124 @@ public interface Optional<T> extends InterfacedOptional<T>, Stream<T> {
    */
   Optional<T> ifAbsent(Runnable runnable);
 
+
+  /**
+   * If the only value is present, apply the given action over it, returning self.<br>
+   * This method is semantically similar to ifPresent() but it allows method chaining
+   *
+   * @param action a <a href="package-summary.html#NonInterference">
+   *               non-interfering</a> action to perform on the elements as
+   *               they are consumed from the stream
+   * @return an {@code Optional} describing the value of this {@code Optional}
+   * if a value is present and the value matches the given predicate,
+   * otherwise an empty {@code Optional}
+   */
+  Optional<T> peekOptional(Consumer<? super T> action);
+
+  /**
+   * If the only value is present, and the value matches the given predicate,
+   * return an {@code Optional} describing the value, otherwise return an
+   * empty {@code Optional}.
+   *
+   * @param predicate a predicate to apply to the value, if present
+   * @return an {@code Optional} describing the value of this {@code Optional}
+   * if a value is present and the value matches the given predicate,
+   * otherwise an empty {@code Optional}
+   * @throws NullPointerException        if the predicate is null
+   * @throws MoreThanOneElementException if there are more than one
+   */
+  Optional<T> filterOptional(Predicate<? super T> predicate) throws MoreThanOneElementException;
+
+  /**
+   * If the only value is present, apply the provided mapping function to it,
+   * and if the result is non-null, return an {@code Optional} describing the
+   * result.  Otherwise return an empty {@code Optional}.
+   *
+   * @param <U>    The type of the result of the mapping function
+   * @param mapper a mapping function to apply to the value, if present
+   * @return an {@code Optional} describing the result of applying a mapping
+   * function to the value of this {@code Optional}, if a value is present,
+   * otherwise an empty {@code Optional}
+   * @throws NullPointerException        if the mapping function is null
+   * @throws MoreThanOneElementException if there are more than one
+   * @apiNote This method supports post-processing on optional values, without
+   * the need to explicitly check for a return status.  For example, the
+   * following code traverses a stream of file names, selects one that has
+   * not yet been processed, and then opens that file, returning an
+   * {@code Optional<FileInputStream>}:
+   * <p/>
+   * <pre>{@code
+   *     Optional<FileInputStream> fis =
+   *         names.stream().filter(name -> !isProcessedYet(name))
+   *                       .findFirst()
+   *                       .mapOptional(name -> new FileInputStream(name));
+   * }</pre>
+   * <p/>
+   * Here, {@code findFirst} returns an {@code Optional<String>}, and then
+   * {@code mapOptional} returns an {@code Optional<FileInputStream>} for the desired
+   * file if one exists.
+   */
+  <U> Optional<U> mapOptional(Function<? super T, ? extends U> mapper) throws MoreThanOneElementException;
+
+  /**
+   * If the only value is present, apply the provided {@code Optional}-bearing
+   * mapping function to it, return that result, otherwise return an empty
+   * {@code Optional}.  This method is similar to {@link #mapOptional(Function)},
+   * but the provided mapper is one whose result is already an {@code Optional},
+   * and if invoked, {@code flatMapOptional} does not wrap it with an additional
+   * {@code Optional}.
+   *
+   * @param <U>    The type parameter to the {@code Optional} returned by
+   * @param mapper a mapping function to apply to the value, if present
+   *               the mapping function
+   * @return the result of applying an {@code Optional}-bearing mapping
+   * function to the value of this {@code Optional}, if a value is present,
+   * otherwise an empty {@code Optional}
+   * @throws NullPointerException        if the mapping function is null or returns
+   *                                     a null result
+   * @throws MoreThanOneElementException if there are more than one
+   */
+  <U> Optional<U> flatMapOptional(Function<? super T, java.util.Optional<U>> mapper) throws MoreThanOneElementException;
+
+  /**
+   * If a value is present, apply the provided {@code Optional}-bearing
+   * mapping function to it, return that result, otherwise return an empty
+   * {@code Optional}.  This method is similar to {@link #mapOptional(Function)},
+   * but the provided mapper is one whose result is already an {@code Optional},
+   * and if invoked, {@code flatMapOptional} does not wrap it with an additional
+   * {@code Optional}.
+   *
+   * @param <U>    The type parameter to the {@code Optional} returned by
+   * @param mapper a mapping function to apply to the value, if present
+   *               the mapping function
+   * @return the result of applying an {@code Optional}-bearing mapping
+   * function to the value of this {@code Optional}, if a value is present,
+   * otherwise an empty {@code Optional}
+   * @throws NullPointerException if the mapping function is null or returns
+   *                              a null result
+   */
+  <U> Optional<U> flatMapOptionally(Function<? super T, Optional<U>> mapper);
+
+  /**
+   * If a value is present, when the returned nary is consumed, the
+   * given action will be apllied to it.
+   * <p>
+   * <p>This is an <a href="package-summary.html#StreamOps">intermediate
+   * operation</a>.
+   * <p>
+   * <p>For parallel stream pipelines, the action may be called at
+   * whatever time and in whatever thread the element is made available by the
+   * upstream operation.  If the action modifies shared state,
+   * it is responsible for providing the required synchronization.
+   *
+   * @param action a <a href="package-summary.html#NonInterference">
+   *               non-interfering</a> action to perform on the elements as
+   *               they are consumed from the stream
+   * @return the new Nary
+   */
+  Nary<T> peekNary(Consumer<? super T> action);
+
+
   /**
    * Returns a nary consisting of the elements of this stream that match
    * the given predicate.
@@ -112,24 +230,6 @@ public interface Optional<T> extends InterfacedOptional<T>, Stream<T> {
   <R> Nary<R> flatMapNary(Function<? super T, ? extends Nary<? extends R>> mapper);
 
 
-  /**
-   * If a value is present, apply the provided {@code Optional}-bearing
-   * mapping function to it, return that result, otherwise return an empty
-   * {@code Optional}.  This method is similar to {@link #mapOptional(Function)},
-   * but the provided mapper is one whose result is already an {@code Optional},
-   * and if invoked, {@code flatMapOptional} does not wrap it with an additional
-   * {@code Optional}.
-   *
-   * @param <U>    The type parameter to the {@code Optional} returned by
-   * @param mapper a mapping function to apply to the value, if present
-   *               the mapping function
-   * @return the result of applying an {@code Optional}-bearing mapping
-   * function to the value of this {@code Optional}, if a value is present,
-   * otherwise an empty {@code Optional}
-   * @throws NullPointerException if the mapping function is null or returns
-   *                              a null result
-   */
-  <U> Optional<U> flatMapOptionally(Function<? super T, Optional<U>> mapper);
 
   /**
    * Returns an Object array containing the element of this optional (if any).

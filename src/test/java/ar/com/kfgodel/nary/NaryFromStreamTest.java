@@ -81,11 +81,23 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
               assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
             }
           });
-          it("throws an exception when called to #filterOptional()",()->{
+          it("throws an exception when called to #peekOptional()", () -> {
             try{
-              context().nary().filterOptional((value)-> { throw new RuntimeException("never happens");});
+              context().nary().peekOptional((value) -> {
+                throw new RuntimeException("never happens");
+              });
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             }catch (MoreThanOneElementException e){
+              assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
+            }
+          });
+          it("throws an exception when called to #filterOptional()", () -> {
+            try {
+              context().nary().filterOptional((value) -> {
+                throw new RuntimeException("never happens");
+              });
+              failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
+            } catch (MoreThanOneElementException e) {
               assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
             }
           });
@@ -215,6 +227,14 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           it("returns itself when #asNary() is called",()->{
             List<Integer> result = context().nary().asNary().collect(Collectors.toList());
             assertThat(result).isEqualTo(Lists.newArrayList(3,2,1,3));
+          });
+          it("applies the action when #peekNary() is called", () -> {
+            List<Integer> values = new ArrayList<>();
+
+            context().nary().peekNary(values::add)
+              .collect(Collectors.toList());
+
+            assertThat(values).isEqualTo(Lists.newArrayList(3, 2, 1, 3));
           });
           it("applies the predicate to filter when #filterNary() is called",()->{
             List<Integer> result = context().nary().filterNary((value) -> value.equals(3))

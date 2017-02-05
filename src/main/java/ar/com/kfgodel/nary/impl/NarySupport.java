@@ -27,6 +27,11 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
+  public Nary<T> peekNary(Consumer<? super T> action) {
+    return returningNaryDo(peek(action));
+  }
+
+  @Override
   public Nary<T> filterNary(Predicate<? super T> predicate) {
     return returningNaryDo(filter(predicate));
   }
@@ -69,6 +74,11 @@ public abstract class NarySupport<T> implements Nary<T> {
   @Override
   public Optional<T> ifAbsent(Runnable runnable) {
     return asOptional().ifAbsent(runnable);
+  }
+
+  @Override
+  public Optional<T> peekOptional(Consumer<? super T> action) {
+    return asOptional().peekOptional(action);
   }
 
   @Override

@@ -93,6 +93,41 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
   Optional<T> ifAbsent(Runnable runnable) throws MoreThanOneElementException;
 
   /**
+   * If the only value is present, apply the given action over it, returning self.<br>
+   *   This method is semantically similar to ifPresent() but it allows method chaining
+   * This Nary as Stream is consumed.
+   *
+   * @param action a <a href="package-summary.html#NonInterference">
+   *                 non-interfering</a> action to perform on the elements as
+   *                 they are consumed from the stream
+   * @return an {@code Optional} describing the value of this {@code Optional}
+   * if a value is present and the value matches the given predicate,
+   * otherwise an empty {@code Optional}
+   */
+  Optional<T> peekOptional(Consumer<? super T> action);
+
+  /**
+   * Returns a Nary consisting of the elements of this Nary, additionally
+   * performing the provided action on each element as elements are consumed
+   * from the resulting Nary.
+   * <p>
+   * <p>This is an <a href="package-summary.html#StreamOps">intermediate
+   * operation</a>.
+   * <p>
+   * <p>For parallel stream pipelines, the action may be called at
+   * whatever time and in whatever thread the element is made available by the
+   * upstream operation.  If the action modifies shared state,
+   * it is responsible for providing the required synchronization.
+   *
+   * @param action a <a href="package-summary.html#NonInterference">
+   *               non-interfering</a> action to perform on the elements as
+   *               they are consumed from the stream
+   * @return the new Nary
+   */
+  Nary<T> peekNary(Consumer<? super T> action);
+
+
+  /**
    * If the only value is present, and the value matches the given predicate,
    * return an {@code Optional} describing the value, otherwise return an
    * empty {@code Optional}.

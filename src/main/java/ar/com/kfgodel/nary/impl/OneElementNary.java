@@ -318,6 +318,12 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
+  public Optional<T> peekOptional(Consumer<? super T> action) {
+    action.accept(element);
+    return this;
+  }
+
+  @Override
   public Optional<T> filterOptional(Predicate<? super T> predicate) throws MoreThanOneElementException {
     if(predicate.test(element)){
       return this;
