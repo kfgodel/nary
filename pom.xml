@@ -9,17 +9,25 @@
     <version>0.1-SNAPSHOT</version>
   </parent>
 
-  <groupId>ar.com.kfgodel</groupId>
   <artifactId>nary</artifactId>
   <version>2.0.6-SNAPSHOT</version>
 
   <name>Nary</name>
   <description>Small project that captures the concept of N-Ary an element that can reference 0, 1 or N elements</description>
+  <url>https://github.com/kfgodel/nary</url>
+
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
   <scm>
-    <connection>scm:git:ssh://github.com/kfgodel/nary.git</connection>
     <developerConnection>scm:git:ssh://github.com/kfgodel/nary.git</developerConnection>
-    <url>https://github.com/kfgodel/nary</url>
+    <connection>${project.scm.developerConnection}</connection>
+    <url>${project.url}</url>
   </scm>
 
   <repositories>
