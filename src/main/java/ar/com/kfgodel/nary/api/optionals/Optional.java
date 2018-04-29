@@ -39,6 +39,7 @@ public interface Optional<T> extends InterfacedOptional<T>, Stream<T> {
    * If the value is absent invoke the given runnable, or else do nothing
    *
    * @param runnable The code to execute if this optional is empty
+   * @return This instance for method chaining
    */
   Optional<T> ifAbsent(Runnable runnable);
 
