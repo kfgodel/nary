@@ -4,9 +4,27 @@ import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 import ar.com.kfgodel.nary.api.optionals.Optional;
 
-import java.util.*;
-import java.util.function.*;
-import java.util.stream.*;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Spliterator;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.IntFunction;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.function.ToDoubleFunction;
+import java.util.function.ToIntFunction;
+import java.util.function.ToLongFunction;
+import java.util.stream.Collector;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 
 /**
@@ -406,6 +424,7 @@ public abstract class NarySupport<T> implements Nary<T> {
   /**
    * Wraps the native stream in a nary to conform to nary interface
    * @param nativeStream The stream to wrap
+   * @param <R> type of expected elements
    * @return The created nary
    */
   protected<R> Nary<R> returningNaryDo(Stream<R> nativeStream) {

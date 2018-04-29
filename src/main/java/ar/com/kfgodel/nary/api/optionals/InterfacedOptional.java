@@ -10,8 +10,7 @@ import java.util.function.Supplier;
  * This type represents the interface definition of an optional.<br>
  * Copied from concrete class java.util.Optional, and modified to be compatible with Stream<br>
  * It conserves the same semantics but it's slightly modified to be extended by a stream compatible type
- * <p/>
-
+ * <br>
  * Created by kfgodel on 07/03/16.
  */
 public interface InterfacedOptional<T> {
@@ -60,28 +59,30 @@ public interface InterfacedOptional<T> {
    * and if the result is non-null, return an {@code Optional} describing the
    * result.  Otherwise return an empty {@code Optional}.
    *
-   * @param <U>    The type of the result of the mapping function
-   * @param mapper a mapping function to apply to the value, if present
-   * @return an {@code Optional} describing the result of applying a mapping
-   * function to the value of this {@code Optional}, if a value is present,
-   * otherwise an empty {@code Optional}
-   * @throws NullPointerException if the mapping function is null
-   * @apiNote This method supports post-processing on optional values, without
+   * This method supports post-processing on optional values, without
    * the need to explicitly check for a return status.  For example, the
    * following code traverses a stream of file names, selects one that has
    * not yet been processed, and then opens that file, returning an
    * {@code Optional<FileInputStream>}:
-   * <p/>
+   *
    * <pre>{@code
    *     Optional<FileInputStream> fis =
    *         names.stream().filter(name -> !isProcessedYet(name))
    *                       .findFirst()
    *                       .mapOptional(name -> new FileInputStream(name));
    * }</pre>
-   * <p/>
+   *
    * Here, {@code findFirst} returns an {@code Optional<String>}, and then
    * {@code mapOptional} returns an {@code Optional<FileInputStream>} for the desired
    * file if one exists.
+   *
+   * @param <U>    The type of the result of the mapping function
+   * @param mapper a mapping function to apply to the value, if present
+   * @return an {@code Optional} describing the result of applying a mapping
+   * function to the value of this {@code Optional}, if a value is present,
+   * otherwise an empty {@code Optional}
+   * @throws NullPointerException if the mapping function is null
+   *
    */
   <U> Optional<U> mapOptional(Function<? super T, ? extends U> mapper);
 
@@ -136,6 +137,10 @@ public interface InterfacedOptional<T> {
    * Return the contained value, if present, otherwise throw an exception
    * to be created by the provided supplier.
    *
+   * A method reference to the exception constructor with an empty
+   * argument list can be used as the supplier. For example,
+   * {@code IllegalStateException::new}
+   *
    * @param <X>               Type of the exception to be thrown
    * @param exceptionSupplier The supplier which will return the exception to
    *                          be thrown
@@ -143,9 +148,6 @@ public interface InterfacedOptional<T> {
    * @throws X                    if there is no value present
    * @throws NullPointerException if no value is present and
    *                              {@code exceptionSupplier} is null
-   * @apiNote A method reference to the exception constructor with an empty
-   * argument list can be used as the supplier. For example,
-   * {@code IllegalStateException::new}
    */
   <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X;
 }

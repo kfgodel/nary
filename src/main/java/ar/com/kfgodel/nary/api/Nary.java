@@ -5,9 +5,24 @@ import ar.com.kfgodel.nary.api.optionals.Optional;
 import ar.com.kfgodel.nary.impl.EmptyNary;
 import ar.com.kfgodel.nary.impl.OneElementNary;
 import ar.com.kfgodel.nary.impl.StreamBasedNary;
+import ar.com.kfgodel.nary.impl.others.EnumerationSpliterator;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -27,7 +42,7 @@ import java.util.stream.StreamSupport;
  * <br>
  * When used as an Optional, because this object may contain more than one element, an exception could be thrown. If
  * the method returning this instance doesn't guarantee how many elements it contains, it is safest to use it as a Stream.<br>
- * <p/>
+ * <br>
  * Created by kfgodel on 06/11/14.
  */
 public interface Nary<T> extends Optional<T>, Iterable<T> {
@@ -110,14 +125,14 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
    * Returns a Nary consisting of the elements of this Nary, additionally
    * performing the provided action on each element as elements are consumed
    * from the resulting Nary.
-   * <p>
    * <p>This is an <a href="package-summary.html#StreamOps">intermediate
    * operation</a>.
-   * <p>
+   * </p>
    * <p>For parallel stream pipelines, the action may be called at
    * whatever time and in whatever thread the element is made available by the
    * upstream operation.  If the action modifies shared state,
    * it is responsible for providing the required synchronization.
+   * </p>
    *
    * @param action a <a href="package-summary.html#NonInterference">
    *               non-interfering</a> action to perform on the elements as
@@ -148,6 +163,24 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
    * result.  Otherwise return an empty {@code Optional}.
    * This Nary as Stream is consumed.
    *
+   *
+   * This method supports post-processing on optional values, without
+   * the need to explicitly check for a return status.  For example, the
+   * following code traverses a stream of file names, selects one that has
+   * not yet been processed, and then opens that file, returning an
+   * {@code Optional<FileInputStream>}:
+   *
+   * <pre>{@code
+   *     Optional<FileInputStream> fis =
+   *         names.stream().filter(name -> !isProcessedYet(name))
+   *                       .findFirst()
+   *                       .mapOptional(name -> new FileInputStream(name));
+   * }</pre>
+   *
+   * Here, {@code findFirst} returns an {@code Optional<String>}, and then
+   * {@code mapOptional} returns an {@code Optional<FileInputStream>} for the desired
+   * file if one exists.
+   *
    * @param <U>    The type of the result of the mapping function
    * @param mapper a mapping function to apply to the value, if present
    * @return an {@code Optional} describing the result of applying a mapping
@@ -155,22 +188,6 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
    * otherwise an empty {@code Optional}
    * @throws NullPointerException        if the mapping function is null
    * @throws MoreThanOneElementException if there are more than one
-   * @apiNote This method supports post-processing on optional values, without
-   * the need to explicitly check for a return status.  For example, the
-   * following code traverses a stream of file names, selects one that has
-   * not yet been processed, and then opens that file, returning an
-   * {@code Optional<FileInputStream>}:
-   * <p/>
-   * <pre>{@code
-   *     Optional<FileInputStream> fis =
-   *         names.stream().filter(name -> !isProcessedYet(name))
-   *                       .findFirst()
-   *                       .mapOptional(name -> new FileInputStream(name));
-   * }</pre>
-   * <p/>
-   * Here, {@code findFirst} returns an {@code Optional<String>}, and then
-   * {@code mapOptional} returns an {@code Optional<FileInputStream>} for the desired
-   * file if one exists.
    */
   <U> Optional<U> mapOptional(Function<? super T, ? extends U> mapper) throws MoreThanOneElementException;
 
@@ -225,6 +242,10 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
    * to be created by the provided supplier.
    * This Nary as Stream is consumed.
    *
+   * A method reference to the exception constructor with an empty
+   * argument list can be used as the supplier. For example,
+   * {@code IllegalStateException::new}
+   *
    * @param <X>               Type of the exception to be thrown
    * @param exceptionSupplier The supplier which will return the exception to
    *                          be thrown
@@ -233,9 +254,6 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
    * @throws NullPointerException        if no value is present and
    *                                     {@code exceptionSupplier} is null
    * @throws MoreThanOneElementException if there are more than one
-   * @apiNote A method reference to the exception constructor with an empty
-   * argument list can be used as the supplier. For example,
-   * {@code IllegalStateException::new}
    */
   <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X, MoreThanOneElementException;
 
@@ -246,6 +264,10 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
    * or compile time checked
    * This Nary as Stream is consumed.
    *
+   * A method reference to the exception constructor with an empty
+   * argument list can be used as the supplier. For example,
+   * {@code IllegalStateException::new}
+   *
    * @param <X>               Type of the exception to be thrown
    * @param exceptionSupplier The supplier which will return the exception to
    *                          be thrown
@@ -254,9 +276,6 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
    * @throws NullPointerException        if no value is present and
    *                                     {@code exceptionSupplier} is null
    * @throws MoreThanOneElementException if there are more than one
-   * @apiNote A method reference to the exception constructor with an empty
-   * argument list can be used as the supplier. For example,
-   * {@code IllegalStateException::new}
    */
   <X extends RuntimeException> T orElseThrowRuntime(Supplier<? extends X> exceptionSupplier) throws X, MoreThanOneElementException;
 
@@ -277,7 +296,7 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
    * <p>This is a <a href="package-summary.html#StreamOps">terminal
    * operation</a>.
    *
-   * @apiNote There are many existing classes in the JDK whose signatures are
+   * There are many existing classes in the JDK whose signatures are
    * well-suited for use with method references as arguments to {@code collect()}.
    * For example, the following will accumulate strings into an {@code ArrayList}:
    * <pre>{@code
@@ -342,7 +361,6 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
    * <p>This is a <a href="package-summary.html#StreamOps">stateful
    * intermediate operation</a>.
    *
-   * @apiNote
    * Preserving stability for {@code distinct()} in parallel pipelines is
    * relatively expensive (requires that the operation act as a full barrier,
    * with substantial buffering overhead), and stability is often not needed.
@@ -405,7 +423,7 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
    * upstream operation.  If the action modifies shared state,
    * it is responsible for providing the required synchronization.
    *
-   * @apiNote This method exists mainly to support debugging, where you want
+   * This method exists mainly to support debugging, where you want
    * to see the elements as they flow past a certain point in a pipeline:
    * <pre>{@code
    *     Stream.of("one", "two", "three", "four")
@@ -430,7 +448,7 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
    * <p>This is a <a href="package-summary.html#StreamOps">short-circuiting
    * stateful intermediate operation</a>.
    *
-   * @apiNote
+   *
    * While {@code limit()} is generally a cheap operation on sequential
    * stream pipelines, it can be quite expensive on ordered parallel pipelines,
    * especially for large values of {@code maxSize}, since {@code limit(n)}
@@ -459,7 +477,7 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
    * <p>This is a <a href="package-summary.html#StreamOps">stateful
    * intermediate operation</a>.
    *
-   * @apiNote
+   *
    * While {@code skip()} is generally a cheap operation on sequential
    * stream pipelines, it can be quite expensive on ordered parallel pipelines,
    * especially for large values of {@code n}, since {@code skip(n)}
@@ -634,6 +652,9 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
 
   /**
    * Creates a nary from a native stream. The operation on this nary will consume the stream
+   * @param nativeStream original stream
+   * @param <T> Expected type
+   * @return A nre nary
    */
   static<T> Nary<T> create(Stream<T> nativeStream){
     return StreamBasedNary.create(nativeStream);
@@ -642,6 +663,9 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
   /**
    * Creates a nary from a native optional. Stream like operations will generate a stream from the
    * optional
+   * @param nativeOptional original optional
+   * @param <T> The expected element type
+   * @return A new nary
    */
   static<T> Nary<T> create(java.util.Optional<T> nativeOptional){
     return nativeOptional
@@ -651,6 +675,9 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
 
   /**
    * Creates a nary from an element whose absence is represented by null
+   * @param nullableElement An unknown value
+   * @param <T> The expected element type
+   * @return The created nary
    */
   static<T> Nary<T> ofNullable(T nullableElement){
     if(nullableElement == null){
@@ -662,6 +689,8 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
 
   /**
    * Creates an empty nary to represent an empty set
+   * @param <T> Expected type
+   * @return The empty instance
    */
   static<T> Nary<T> empty(){
     return EmptyNary.instance();
@@ -669,6 +698,9 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
 
   /**
    * Creates a nary from a spliterator as source for a stream
+   * @param spliterator A spliterator
+   * @param <T> The expected iterated element types
+   * @return The new nary
    */
   static<T> Nary<T> create(Spliterator<T> spliterator){
     return Nary.create(StreamSupport.stream(spliterator, false));
@@ -676,6 +708,9 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
 
   /**
    * Creates a nary from an iterator. No assumptions about iterator characteristics are made
+   * @param iterator An iterator
+   * @param <T> The expected iterated type
+   * @return a new nary
    */
   static<T> Nary<T> create(Iterator<T> iterator){
     return Nary.create(Spliterators.spliteratorUnknownSize(iterator, 0));
@@ -683,18 +718,46 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
 
   /**
    * Creates a nary from an iterable source
+   * @param iterable An iterable source
+   * @param <T> The expected iterable type
+   * @return a new nary
    */
   static<T> Nary<T> create(Iterable<T> iterable){
     return Nary.create(iterable.spliterator());
   }
 
+  /**
+   * Creates a nary instance from the elements of a collection
+   *
+   * @param collection The collection
+   * @param <T>        Expected type for collection elements
+   * @return The new nary
+   */
   static<T> Nary<T> create(Collection<T> collection){
     return Nary.create(collection.stream());
   }
 
+  /**
+   * Creates a nary from an array
+   * @param array The original array
+   * @param <T> The expected array element type
+   * @return a new nary
+   */
   static<T> Nary<T> create(T[] array){
     Stream<T> asStream = Arrays.stream(array);
     return Nary.create(asStream);
+  }
+
+  /**
+   * Creates a nary from an enumeration
+   *
+   * @param enumeration The input enumeration
+   * @param <T>         The expected element types
+   * @return The new nary
+   */
+  static <T> Nary<T> create(Enumeration<T> enumeration) {
+    EnumerationSpliterator<T> spliterator = EnumerationSpliterator.create(enumeration);
+    return Nary.create(spliterator);
   }
 
 
