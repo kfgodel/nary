@@ -10,7 +10,7 @@
   <parent>
     <groupId>info.kfgodel</groupId>
     <artifactId>java-pom</artifactId>
-    <version>0.1.2-SNAPSHOT</version>
+    <version>0.1.3</version>
   </parent>
 
   <name>Nary</name>
@@ -32,12 +32,17 @@
     <url>${project.url}</url>
   </scm>
 
+  <properties>
+    <version.javaspec>2.4.1</version.javaspec>
+  </properties>
+
   <dependencies>
 
     <!-- Rspec like testing -->
     <dependency>
-      <groupId>ar.com.dgarcia</groupId>
+      <groupId>info.kfgodel</groupId>
       <artifactId>java-spec</artifactId>
+      <version>${version.javaspec}</version>
     </dependency>
 
   </dependencies>
