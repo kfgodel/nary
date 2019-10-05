@@ -10,7 +10,7 @@
   <parent>
     <groupId>info.kfgodel</groupId>
     <artifactId>java-pom</artifactId>
-    <version>0.1.3</version>
+    <version>0.1.6</version>
   </parent>
 
   <name>Nary</name>
