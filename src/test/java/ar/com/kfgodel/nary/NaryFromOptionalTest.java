@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,7 +33,7 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
 
       it("behaves like an empty nary when the optional is empty",()->{
         Nary<Object> nary = Nary.create(Optional.empty());
-        assertThat(nary).isSameAs(Nary.empty());
+        assertThat((Stream)nary).isSameAs(Nary.empty());
       });
 
       context().nary(()-> Nary.create(Optional.of(3)));
@@ -404,19 +405,19 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
 
         it("returns itself when #findFirstNary() is called",()->{
           Nary<Integer> result = context().nary().findFirstNary();
-          assertThat(result).isEqualTo(Nary.of(3));
+          assertThat((Object)result).isEqualTo(Nary.of(3));
         });
         it("returns itself when #findAnyNary() is called",()->{
           Nary<Integer> result = context().nary().findAnyNary();
-          assertThat(result).isEqualTo(Nary.of(3));
+          assertThat((Object)result).isEqualTo(Nary.of(3));
         });
         it("returns itself when #minNary() is called",()->{
           Nary<Integer> result = context().nary().minNary(Integer::compareTo);
-          assertThat(result).isEqualTo(Nary.of(3));
+          assertThat((Object)result).isEqualTo(Nary.of(3));
         });
         it("returns itself when #maxNary() is called",()->{
           Nary<Integer> result = context().nary().maxNary(Integer::compareTo);
-          assertThat(result).isEqualTo(Nary.of(3));
+          assertThat((Object)result).isEqualTo(Nary.of(3));
         });
 
       });

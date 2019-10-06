@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
@@ -162,7 +163,7 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
         });
         
         it("returns the empty nary when #asNary() is called",()->{
-            assertThat(context().nary().asNary()).isEqualTo(Nary.empty());
+            assertThat((Stream)context().nary().asNary()).isEqualTo(Nary.empty());
         });
         it("returns an empty nary when #peekNary() is called", () -> {
           Variable<Integer> variable = Variable.create();
@@ -230,11 +231,11 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
 
         it("returns an empty nary when #minNary() is called",()->{
           Nary<Integer> result = context().nary().minNary(Integer::compareTo);
-          assertThat(result).isEqualTo(Nary.empty());
+          assertThat((Stream)result).isEqualTo(Nary.empty());
         });
         it("returns an empty nary when #maxNary() is called",()->{
           Nary<Integer> result = context().nary().maxNary(Integer::compareTo);
-          assertThat(result).isEqualTo(Nary.empty());
+          assertThat((Stream)result).isEqualTo(Nary.empty());
         });
 
         it("always returns the empty optional when #asOptional() is called",()->{

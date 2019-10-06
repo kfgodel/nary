@@ -12,7 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.*;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
@@ -29,12 +33,12 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
 
       it("behaves like an empty nary when the stream is empty",()->{
         Nary<Object> nary = Nary.create(Stream.empty());
-        assertThat(nary).isEqualTo(Nary.empty());
+        assertThat((Object)nary).isEqualTo(Nary.empty());
       });
       
       it("behaves like an optional based nary when the stream has only one element",()->{
         Nary<Integer> nary = Nary.create(Stream.of(1));
-        assertThat(nary).isEqualTo(Nary.create(Optional.of(1)));
+        assertThat((Object)nary).isEqualTo(Nary.create(Optional.of(1)));
       });   
 
       describe("when having more than one element", () -> {
@@ -451,19 +455,19 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           });
           it("honors the contract when #findFirst() is called",()->{
             Nary<Integer> result = context().nary().findFirstNary();
-            assertThat(result).isEqualTo(Nary.of(3));
+            assertThat((Object)result).isEqualTo(Nary.of(3));
           });
           it("honors the contract when #findAny() is called",()->{
             Nary<Integer> result = context().nary().findAnyNary();
-            assertThat(result).isEqualTo(Nary.of(3));
+            assertThat((Object)result).isEqualTo(Nary.of(3));
           });
           it("honors the contract when #minNary() is called",()->{
             Nary<Integer> result = context().nary().minNary(Integer::compareTo);
-            assertThat(result).isEqualTo(Nary.of(1));
+            assertThat((Object)result).isEqualTo(Nary.of(1));
           });
           it("honors the contract when #maxNary() is called",()->{
             Nary<Integer> result = context().nary().maxNary(Integer::compareTo);
-            assertThat(result).isEqualTo(Nary.of(3));
+            assertThat((Object)result).isEqualTo(Nary.of(3));
           });
 
         });
