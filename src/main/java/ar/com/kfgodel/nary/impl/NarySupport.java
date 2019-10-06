@@ -396,7 +396,7 @@ public abstract class NarySupport<T> implements Nary<T> {
     if (this == obj) {
       return true;
     }
-    if (!Nary.class.isInstance(obj)) {
+    if (!(obj instanceof Nary)) {
       return false;
     }
     Nary that = (Nary) obj;

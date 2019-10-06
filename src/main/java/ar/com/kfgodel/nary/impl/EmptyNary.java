@@ -5,8 +5,18 @@ import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 import ar.com.kfgodel.nary.api.optionals.Optional;
 import ar.com.kfgodel.nary.impl.others.EmptyStream;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -268,7 +278,7 @@ public class EmptyNary extends NarySupport<Object> {
     if (this == obj) {
       return true;
     }
-    if (!Nary.class.isInstance(obj)) {
+    if (!(obj instanceof Nary)) {
       return false;
     }
     Nary that = (Nary) obj;
