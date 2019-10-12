@@ -10,7 +10,7 @@
   <parent>
     <groupId>info.kfgodel</groupId>
     <artifactId>java-pom</artifactId>
-    <version>0.1.6</version>
+    <version>0.1.7</version>
   </parent>
 
   <name>Nary</name>
@@ -24,6 +24,20 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+
+  <developers>
+    <developer>
+      <id>dlgarcia</id>
+      <name>Dario L Garcia</name>
+      <email>dario.garcia@10pines.com</email>
+      <organization>10Pines SRL</organization>
+      <organizationUrl>https://www.10pines.com/</organizationUrl>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+    </developer>
+  </developers>
 
   <scm>
     <developerConnection>scm:git:ssh://github.com/kfgodel/nary.git</developerConnection>
@@ -43,24 +57,9 @@
     <!-- Rspec like testing -->
     <dependency>
       <groupId>info.kfgodel</groupId>
-      <artifactId>java-spec</artifactId>
-      <version>${version.javaspec}</version>
+      <artifactId>jspek</artifactId>
     </dependency>
 
   </dependencies>
-
-  <developers>
-    <developer>
-      <id>dlgarcia</id>
-      <name>Dario L Garcia</name>
-      <email>dario.garcia@10pines.com</email>
-      <organization>10Pines SRL</organization>
-      <organizationUrl>https://www.10pines.com/</organizationUrl>
-      <roles>
-        <role>architect</role>
-        <role>developer</role>
-      </roles>
-    </developer>
-  </developers>
 
 </project>
