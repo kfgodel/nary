@@ -1,9 +1,9 @@
 package ar.com.kfgodel.nary;
 
-import ar.com.dgarcia.javaspec.api.JavaSpec;
-import ar.com.dgarcia.javaspec.api.JavaSpecRunner;
-import ar.com.dgarcia.javaspec.api.variable.Variable;
 import ar.com.kfgodel.nary.impl.others.EmptyIterator;
+import info.kfgodel.jspek.api.JavaSpec;
+import info.kfgodel.jspek.api.JavaSpecRunner;
+import info.kfgodel.jspek.api.variable.Variable;
 import org.junit.runner.RunWith;
 
 import java.util.NoSuchElementException;

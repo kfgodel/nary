@@ -1,8 +1,8 @@
 package ar.com.kfgodel.nary;
 
-import ar.com.dgarcia.javaspec.api.contexts.TestContext;
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.optionals.Optional;
+import info.kfgodel.jspek.api.contexts.TestContext;
 
 import java.util.Iterator;
 import java.util.Spliterator;

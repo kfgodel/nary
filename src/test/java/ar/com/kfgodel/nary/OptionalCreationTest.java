@@ -1,8 +1,8 @@
 package ar.com.kfgodel.nary;
 
-import ar.com.dgarcia.javaspec.api.JavaSpec;
-import ar.com.dgarcia.javaspec.api.JavaSpecRunner;
 import ar.com.kfgodel.nary.api.optionals.Optional;
+import info.kfgodel.jspek.api.JavaSpec;
+import info.kfgodel.jspek.api.JavaSpecRunner;
 import org.assertj.core.util.Lists;
 import org.junit.runner.RunWith;
 
