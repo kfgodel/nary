@@ -7,6 +7,8 @@ import org.assertj.core.util.Lists;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
@@ -95,6 +97,16 @@ public class NaryCreationTest extends JavaSpec<NaryTestContext> {
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(Lists.newArrayList(1, 2, 3));
+      });
+
+      it("can be created from enumeration",()->{
+        final Dictionary<String, String> dictionary = new Hashtable<>();
+        dictionary.put("text","123");
+
+        final List<String> elements = Nary.from(dictionary.keys())
+          .collectToList();
+
+        assertThat(elements).containsExactly("text");
       });
 
       it("can be created from a map", () -> {
