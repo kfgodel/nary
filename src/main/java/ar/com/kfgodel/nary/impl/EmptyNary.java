@@ -70,12 +70,6 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public Nary<Object> peekOptional(Consumer<? super Object> action) {
-    // Ignore the action
-    return instance();
-  }
-
-  @Override
   public Nary<Object> peekNary(Consumer<? super Object> action) {
     // Ignore the action
     return instance();

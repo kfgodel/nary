@@ -96,11 +96,6 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public Nary<T> peekOptional(Consumer<? super T> action) {
-    return coerceToMonoElement().peekOptional(action);
-  }
-
-  @Override
   public Nary<T> filterOptional(Predicate<? super T> predicate) throws MoreThanOneElementException {
     return coerceToMonoElement().filterNary(predicate);
   }

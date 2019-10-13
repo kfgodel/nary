@@ -63,13 +63,6 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
 
           assertThat(executed.get()).isFalse();
         });
-        it("applies the action when called to #peekOptional()", () -> {
-          Variable<Integer> variable = Variable.create();
-          Nary<Integer> result = context().nary().peekOptional(variable::set);
-
-          assertThat(result.get()).isEqualTo(3);
-          assertThat(variable.get()).isEqualTo(3);
-        });
         it("applies the predicate when called to #filterOptional()",()->{
           Nary<Integer> result = context().nary().filterOptional((value) -> value.equals(3));
 

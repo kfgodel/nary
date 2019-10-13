@@ -76,20 +76,6 @@ public interface MonoElement<T> {
   Nary<T> ifAbsent(Runnable runnable) throws MoreThanOneElementException;
 
   /**
-   * If the only value is present, apply the given action over it, returning self.<br>
-   *   This method is semantically similar to ifPresent() but it allows method chaining
-   * This Nary as Stream is consumed.
-   *
-   * @param action a <a href="package-summary.html#NonInterference">
-   *                 non-interfering</a> action to perform on the elements as
-   *                 they are consumed from the stream
-   * @return an {@code Optional} describing the value of this {@code Optional}
-   * if a value is present and the value matches the given predicate,
-   * otherwise an empty {@code Optional}
-   */
-  Nary<T> peekOptional(Consumer<? super T> action);
-
-  /**
    * If the only value is present, and the value matches the given predicate,
    * return an {@code Optional} describing the value, otherwise return an
    * empty {@code Optional}.
