@@ -239,7 +239,7 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
         });
 
         it("always returns the empty optional when #asOptional() is called",()->{
-          assertThat(context().nary().asOptional()).isEqualTo(Nary.empty());
+          assertThat((Stream)context().nary().asOptional()).isEqualTo(Nary.empty());
         });
 
       });

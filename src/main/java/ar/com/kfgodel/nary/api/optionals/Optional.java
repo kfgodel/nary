@@ -1,6 +1,8 @@
 package ar.com.kfgodel.nary.api.optionals;
 
 import ar.com.kfgodel.nary.api.Nary;
+import ar.com.kfgodel.nary.api.arity.MonoElement;
+import ar.com.kfgodel.nary.api.arity.MultiElement;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 
 import java.util.List;
@@ -22,7 +24,7 @@ import java.util.stream.Stream;
  * Created by kfgodel on 06/11/14.
  */
 @Deprecated
-public interface Optional<T> extends InterfacedOptional<T>, Stream<T> {
+public interface Optional<T> extends InterfacedOptional<T>, Stream<T>, MultiElement<T>, MonoElement<T> {
 
   /**
    * Negation of isPresent(). Facility method
