@@ -96,8 +96,11 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public <U> Nary<U> mapOptional(Function<? super T, ? extends U> mapper) throws MoreThanOneElementException {
-    return coerceToMonoElement().mapOptional(mapper);
+  public <U> Nary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper) {
+    return returningNaryDo(
+      this.<U>map(mapper)
+      .filter(Objects::nonNull)
+    );
   }
 
   @Override

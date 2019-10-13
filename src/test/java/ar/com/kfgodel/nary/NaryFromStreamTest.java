@@ -85,14 +85,6 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
               assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
             }
           });
-          it("throws an exception when called to #mapOptional()",()->{
-            try{
-              context().nary().mapOptional((value)-> { throw new RuntimeException("never happens");});
-              failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
-            }catch (MoreThanOneElementException e){
-              assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
-            }
-          });
           it("throws an exception  when called to #flatmapOptional()",()->{
             try{
               context().nary().flatMapOptional((value)-> { throw new RuntimeException("never happens");});
@@ -251,6 +243,13 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
               .collect(Collectors.toList());
 
             assertThat(result).isEqualTo(Lists.newArrayList(4, 3, 2, 4));
+          });
+          it("transforms the values when #mapFilteringNullResult is called, and discards null results",()->{
+            List<Integer> result = context().nary()
+              .mapFilteringNullResult((value) -> value.equals(1) ? null : value + 1)
+              .collect(Collectors.toList());
+
+            assertThat(result).isEqualTo(Lists.newArrayList(4, 3, 4));
           });
           it("transforms the values to int when #mapToInt() is called",()->{
             List<Integer> result = context().nary().mapToInt((value) -> value + 2)

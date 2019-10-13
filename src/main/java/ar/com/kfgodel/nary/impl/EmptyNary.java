@@ -94,7 +94,7 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public <U> Nary<U> mapOptional(Function<? super Object, ? extends U> mapper) throws MoreThanOneElementException {
+  public <U> Nary<U> mapFilteringNullResult(Function<? super Object, ? extends U> mapper) {
     // Ignore the argument
     return instance();
   }

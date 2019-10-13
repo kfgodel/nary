@@ -325,7 +325,7 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public <U> Nary<U> mapOptional(Function<? super T, ? extends U> mapper) throws MoreThanOneElementException {
+  public <U> Nary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper) {
     U mapped = mapper.apply(element);
     return Nary.ofNullable(mapped);
   }

@@ -58,8 +58,8 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
 
           assertThat(executed.get()).isTrue();
         });
-        it("always returns an empty optional when called to #mapOptional()",()->{
-          Nary<Integer> result = context().nary().mapOptional((value) -> value);
+        it("always returns an empty optional when called to #mapFilteringNullResult()",()->{
+          Nary<Integer> result = context().nary().mapFilteringNullResult((value) -> value);
 
           assertThat(result.isAbsent()).isTrue();
         });

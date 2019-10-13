@@ -75,43 +75,25 @@ public interface MonoElement<T> {
   Nary<T> ifAbsent(Runnable runnable) throws MoreThanOneElementException;
 
   /**
-   * If the only value is present, apply the provided mapping function to it,
-   * and if the result is non-null, return an {@code Optional} describing the
-   * result.  Otherwise return an empty {@code Optional}.
-   * This Nary as Stream is consumed.
-   *
-   *
-   * This method supports post-processing on optional values, without
-   * the need to explicitly check for a return status.  For example, the
-   * following code traverses a stream of file names, selects one that has
-   * not yet been processed, and then opens that file, returning an
-   * {@code Optional<FileInputStream>}:
-   *
-   * <pre>{@code
-   *     Optional<FileInputStream> fis =
-   *         names.stream().filter(name -> !isProcessedYet(name))
-   *                       .findFirst()
-   *                       .mapOptional(name -> new FileInputStream(name));
-   * }</pre>
-   *
-   * Here, {@code findFirst} returns an {@code Optional<String>}, and then
-   * {@code mapOptional} returns an {@code Optional<FileInputStream>} for the desired
-   * file if one exists.
+   * This method maps each element on this element and filters null out.<br>
+   * If the result of mapping the elment produces a null result, then this
+   * method ignores that result reducing the elements contained.<br>
+   * <br>
+   * This is semantically equivalent to {@link Optional#map(Function)} and
+   * different from {@link java.util.stream.Stream#map(Function)} that takes null
+   * as valid results
    *
    * @param <U>    The type of the result of the mapping function
    * @param mapper a mapping function to apply to the value, if present
-   * @return an {@code Optional} describing the result of applying a mapping
-   * function to the value of this {@code Optional}, if a value is present,
-   * otherwise an empty {@code Optional}
+   * @return a Nary with the mapped results excluding the ones that returned null
    * @throws NullPointerException        if the mapping function is null
-   * @throws MoreThanOneElementException if there are more than one
    */
-  <U> Nary<U> mapOptional(Function<? super T, ? extends U> mapper) throws MoreThanOneElementException;
+  <U> Nary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper);
 
   /**
    * If the only value is present, apply the provided {@code Optional}-bearing
    * mapping function to it, return that result, otherwise return an empty
-   * {@code Optional}.  This method is similar to {@link #mapOptional(Function)},
+   * {@code Optional}.  This method is similar to {@link #mapFilteringNullResult(Function)},
    * but the provided mapper is one whose result is already an {@code Optional},
    * and if invoked, {@code flatMapOptional} does not wrap it with an additional
    * {@code Optional}.
@@ -207,7 +189,7 @@ public interface MonoElement<T> {
   /**
    * If a value is present, apply the provided {@code Optional}-bearing
    * mapping function to it, return that result, otherwise return an empty
-   * {@code Optional}.  This method is similar to {@link #mapOptional(Function)},
+   * {@code Optional}.  This method is similar to {@link #mapFilteringNullResult(Function)},
    * but the provided mapper is one whose result is already an {@code Optional},
    * and if invoked, {@code flatMapOptional} does not wrap it with an additional
    * {@code Optional}.
