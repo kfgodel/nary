@@ -81,6 +81,10 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
           Integer result = context().nary().orElseGet(()-> 4);
           assertThat(result).isEqualTo(3);
         });
+        it("never executes the supplier argument when #orElseUse() is called",()->{
+          final Nary<Integer> result = context().nary().orElseUse(() -> 4);
+          assertThat(result.get()).isEqualTo(3);
+        });
         it("never throws the exception when #orElseThrow() is called",()->{
           Integer result = context().nary().orElseThrow(() -> new RuntimeException("Kaboom"));
           assertThat(result).isEqualTo(3);
@@ -109,7 +113,7 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
         it("returns a one element nary representation when #toString() is called",()->{
           assertThat(context().nary().toString()).isEqualTo("OneElementNary{ 3 }");
         });
-        it("returns an equivalent optional when #asNativeOptional() is called",()->{
+        it("returns an equivalent optional when asOptional() is called",()->{
           assertThat(context().nary().asOptional()).isEqualTo(java.util.Optional.of(3));
         });
         it("returns a one element container when #collect(supplier, accumulator) is called",()->{

@@ -94,6 +94,12 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
+  public Nary<Object> orElseUse(Supplier<?> mapper) throws MoreThanOneElementException {
+    final Object element = mapper.get();
+    return Nary.of(element);
+  }
+
+  @Override
   public <X extends Throwable> Object orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
     throw exceptionSupplier.get();
   }

@@ -322,6 +322,11 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
+  public Nary<T> orElseUse(Supplier<? extends T> mapper) throws MoreThanOneElementException {
+    return this;
+  }
+
+  @Override
   public T orElse(T other) throws MoreThanOneElementException {
     return element;
   }

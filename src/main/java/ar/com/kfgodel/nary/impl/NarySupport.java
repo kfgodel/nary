@@ -108,6 +108,11 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
+  public Nary<T> orElseUse(Supplier<? extends T> mapper) throws MoreThanOneElementException {
+    return coerceToMonoElement().orElseUse(mapper);
+  }
+
+  @Override
   public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
     return coerceToMonoElement().orElseThrow(exceptionSupplier);
   }

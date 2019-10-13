@@ -101,6 +101,18 @@ public interface MonoElement<T> {
   T orElseGet(Supplier<? extends T> other) throws MoreThanOneElementException;
 
   /**
+   * Returns a Nary element that is populated with the given supplier only if this Nary is empty.<br>
+   *   This method allows defining a mapping function for nary that can be empty and keep chaining other
+   *   mapping definitions after that.<br>
+   *  This stream is consumed and it's assumed to have at most 1 element. It fails otherwise
+   * @param mapper The function that supplies a value if missing
+   * @return A non empty nary with this instance element or the one given by the supplier
+   * @throws MoreThanOneElementException If this instance has more than 1 element
+   */
+  Nary<T> orElseUse(Supplier<? extends T> mapper) throws MoreThanOneElementException;
+
+
+  /**
    * Return the only contained value, if present, otherwise throw an exception
    * to be created by the provided supplier.
    * This Nary as Stream is consumed.

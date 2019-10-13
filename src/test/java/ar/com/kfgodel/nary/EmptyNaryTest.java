@@ -89,6 +89,10 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
           Integer result = context().nary().orElseGet(()-> 4);
           assertThat(result).isEqualTo(4);
         });
+        it("always uses the supplier argument when #orElseUse() is called",()->{
+          Nary<Integer> result = context().nary().orElseUse(()-> 4);
+          assertThat(result.get()).isEqualTo(4);
+        });
         it("always throws the exception when #orElseThrow() is called",()->{
           try{
             context().nary().orElseThrow(()-> new RuntimeException("Kaboom"));
@@ -121,7 +125,7 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
         it("returns an empty nary representation when #toString() is called",()->{
             assertThat(context().nary().toString()).isEqualTo("EmptyNary");
         });
-        it("always returns the empty optional when #asNativeOptional() is called",()->{
+        it("always returns the empty optional when asOptional() is called",()->{
             assertThat(context().nary().asOptional()).isEqualTo(java.util.Optional.empty());
         });
         it("always returns an empty container when #collect(supplier, accumulator) is called",()->{
