@@ -96,7 +96,7 @@ public class EmptyNary extends NarySupport<Object> {
   @Override
   public Nary<Object> orElseUse(Supplier<?> mapper) throws MoreThanOneElementException {
     final Object element = mapper.get();
-    return Nary.of(element);
+    return Nary.ofNonNullable(element);
   }
 
   @Override
@@ -231,7 +231,7 @@ public class EmptyNary extends NarySupport<Object> {
   @Override
   public Nary<Object> concat(Stream<?> other) {
     // This is empty. Only the other elements are relevant
-    return Nary.create(other);
+    return Nary.from(other);
   }
 
   @Override

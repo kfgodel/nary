@@ -33,28 +33,28 @@ public class NaryCreationTest extends JavaSpec<NaryTestContext> {
       });   
       
       it("can be done from a single element",()->{
-        Nary<Integer> nary = Nary.of(1);
+        Nary<Integer> nary = Nary.ofNonNullable(1);
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(Lists.newArrayList(1));
       });
 
       it("can be donde from variable elements",()->{
-        Nary<Integer> nary = Nary.of(1, 2, 3);
+        Nary<Integer> nary = Nary.ofNonNullable(1, 2, 3);
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(Lists.newArrayList(1, 2, 3));
       });
 
       it("can be done from a stream",()->{
-        Nary<Integer> nary = Nary.create(Stream.of(1, 2, 3));
+        Nary<Integer> nary = Nary.from(Stream.of(1, 2, 3));
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(Lists.newArrayList(1, 2, 3));
       });
 
       it("can be done from an optional",()->{
-        Nary<Integer> nary = Nary.create(Optional.of(1));
+        Nary<Integer> nary = Nary.from(Optional.of(1));
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(Lists.newArrayList(1));
@@ -68,7 +68,7 @@ public class NaryCreationTest extends JavaSpec<NaryTestContext> {
       });
 
       it("can be done from a spliterator",()->{
-        Nary<Integer> nary = Nary.create(Spliterators.spliterator(new int[]{1, 2, 3}, 0));
+        Nary<Integer> nary = Nary.from(Spliterators.spliterator(new int[]{1, 2, 3}, 0));
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(Lists.newArrayList(1, 2, 3));
@@ -76,21 +76,21 @@ public class NaryCreationTest extends JavaSpec<NaryTestContext> {
 
       it("can be done from an iterator",()->{
         ArrayList<Integer> originalList = Lists.newArrayList(1, 2, 3);
-        Nary<Integer> nary = Nary.create(originalList.iterator());
+        Nary<Integer> nary = Nary.from(originalList.iterator());
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(originalList);
       });
 
       it("can be done from an iterable",()->{
-        Nary<Integer> nary = Nary.create(Lists.newArrayList(1, 2, 3));
+        Nary<Integer> nary = Nary.from(Lists.newArrayList(1, 2, 3));
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(Lists.newArrayList(1, 2, 3));
       });
 
       it("can be made from an array",()->{
-        Nary<Integer> nary = Nary.create(new Integer[]{1, 2, 3});
+        Nary<Integer> nary = Nary.from(new Integer[]{1, 2, 3});
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(Lists.newArrayList(1, 2, 3));
