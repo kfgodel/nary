@@ -7,7 +7,6 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -74,21 +73,6 @@ public interface MonoElement<T> {
    * @throws MoreThanOneElementException if there are more than one
    */
   Nary<T> ifAbsent(Runnable runnable) throws MoreThanOneElementException;
-
-  /**
-   * If the only value is present, and the value matches the given predicate,
-   * return an {@code Optional} describing the value, otherwise return an
-   * empty {@code Optional}.
-   * This Nary as Stream is consumed.
-   *
-   * @param predicate a predicate to apply to the value, if present
-   * @return an {@code Optional} describing the value of this {@code Optional}
-   * if a value is present and the value matches the given predicate,
-   * otherwise an empty {@code Optional}
-   * @throws NullPointerException        if the predicate is null
-   * @throws MoreThanOneElementException if there are more than one
-   */
-  Nary<T> filterOptional(Predicate<? super T> predicate) throws MoreThanOneElementException;
 
   /**
    * If the only value is present, apply the provided mapping function to it,

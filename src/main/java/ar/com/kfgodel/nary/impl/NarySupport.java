@@ -96,11 +96,6 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public Nary<T> filterOptional(Predicate<? super T> predicate) throws MoreThanOneElementException {
-    return coerceToMonoElement().filterNary(predicate);
-  }
-
-  @Override
   public <U> Nary<U> mapOptional(Function<? super T, ? extends U> mapper) throws MoreThanOneElementException {
     return coerceToMonoElement().mapOptional(mapper);
   }

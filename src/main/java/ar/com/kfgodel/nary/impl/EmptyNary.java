@@ -94,12 +94,6 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public Nary<Object> filterOptional(Predicate<? super Object> predicate) throws MoreThanOneElementException {
-    // Ignore the argument
-    return instance();
-  }
-
-  @Override
   public <U> Nary<U> mapOptional(Function<? super Object, ? extends U> mapper) throws MoreThanOneElementException {
     // Ignore the argument
     return instance();

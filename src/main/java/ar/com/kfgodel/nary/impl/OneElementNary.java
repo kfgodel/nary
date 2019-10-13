@@ -331,7 +331,7 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public Nary<T> filterOptional(Predicate<? super T> predicate) throws MoreThanOneElementException {
+  public Nary<T> filterNary(Predicate<? super T> predicate) throws MoreThanOneElementException {
     if(predicate.test(element)){
       return this;
     }else {
