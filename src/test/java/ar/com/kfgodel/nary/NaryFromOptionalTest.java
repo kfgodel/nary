@@ -144,14 +144,14 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
             assertThat(result).isEqualTo(Lists.newArrayList(3, 1));
           });
         });
-        describe("#concat(T)", () -> {
+        describe("#add", () -> {
           it("returns a one element nary if no arguments are passed",()->{
-            List<Integer> result = context().nary().concat()
+            List<Integer> result = context().nary().add()
               .collect(Collectors.toList());
             assertThat(result).isEqualTo(Lists.newArrayList(3));
           });
           it("returns a nary with the value and the elements passed as arguments",()->{
-            List<Integer> result = context().nary().concat(1, 2, 3)
+            List<Integer> result = context().nary().add(1, 2, 3)
               .collect(Collectors.toList());
             assertThat(result).isEqualTo(Lists.newArrayList(3, 1, 2, 3));
           });

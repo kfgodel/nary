@@ -80,7 +80,7 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
    * @param others The elements to append to this stream
    * @return A new Nary with the elements from this instance plus the ones on the given array
    */
-  Nary<T> concat(T... others);
+  Nary<T> add(T... others);
 
   /**
    * Performs a <a href="package-summary.html#MutableReduction">mutable

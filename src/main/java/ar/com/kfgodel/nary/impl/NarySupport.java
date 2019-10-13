@@ -56,7 +56,7 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public Nary<T> concat(T... others) {
+  public Nary<T> add(T... others) {
     return concat(Nary.create(others));
   }
 
