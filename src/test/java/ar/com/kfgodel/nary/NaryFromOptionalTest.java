@@ -133,12 +133,6 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
           });
         });
 
-        it("transforms the value when #flatMapNary() is called",()->{
-          List<Integer> result = context().nary().flatMapNary((value) -> Nary.of(8))
-            .collect(Collectors.toList());
-
-          assertThat(result).isEqualTo(Lists.newArrayList(8));
-        });
         it("returns a list with only the value", () -> {
           List<Integer> oneElementList = context().nary().collectToList();
           assertThat(oneElementList).isEqualTo(Lists.newArrayList(3));

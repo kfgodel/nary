@@ -45,11 +45,6 @@ public abstract class NarySupport<T> implements Nary<T> {
   protected abstract Nary<T> coerceToMonoElement() throws MoreThanOneElementException;
 
   @Override
-  public <R> Nary<R> flatMapNary(Function<? super T, ? extends Stream<? extends R>> mapper) {
-    return returningNaryDo(flatMap(mapper));
-  }
-
-  @Override
   public Nary<T> concat(Stream<? extends T> other) {
     return returningNaryDo(Stream.concat(this, other));
   }

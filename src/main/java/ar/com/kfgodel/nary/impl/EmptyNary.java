@@ -71,12 +71,6 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public <R> Nary<R> flatMapNary(Function<? super Object, ? extends Stream<? extends R>> mapper) {
-    // Ignore the mapper, return an empty nary
-    return instance();
-  }
-
-  @Override
   public <U> Nary<U> mapFilteringNullResult(Function<? super Object, ? extends U> mapper) {
     // Ignore the argument
     return instance();
