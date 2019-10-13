@@ -24,7 +24,7 @@ import java.util.stream.Stream;
  * Created by kfgodel on 06/11/14.
  */
 @Deprecated
-public interface Optional<T> extends InterfacedOptional<T>, Stream<T>, MultiElement<T>, MonoElement<T> {
+public interface Optional<T> extends Stream<T>, MultiElement<T>, MonoElement<T> {
 
   /**
    * Negation of isPresent(). Facility method
