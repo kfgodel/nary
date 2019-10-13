@@ -43,13 +43,13 @@ public class NullMappingTest extends JavaSpec<NaryTestContext> {
 
       describe("when using nary", () -> {
         it("takes null as valid result when #map() is used", () -> {
-          final List<Object> result = Nary.of("algo")
+          final List<Object> result = Nary.ofNonNullable("algo")
             .map(algo -> null)
             .collect(Collectors.toList());
           assertThat(result).isEqualTo(Lists.newArrayList((Object)null));
         });
         it("explicitly filters null as valid result when #mapFilteringNullResult() is used",()->{
-          final List<Object> result = Nary.of("algo")
+          final List<Object> result = Nary.ofNonNullable("algo")
             .mapFilteringNullResult(algo -> null)
             .map((nullValue)-> {
               throw new RuntimeException("This code is never executed");

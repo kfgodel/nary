@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -61,66 +62,6 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
 
 
   /**
-   * Creates a nary enumerating its elements
-   *
-   * @param element     The first mandatory element
-   * @param additionals The optional extra elements
-   * @param <T>         The type of expected nary content
-   * @return The created nary
-   */
-  static <T> Nary<T> of(T element, T... additionals){
-    Nary<T> elementNary = OneElementNary.create(element);
-    if (additionals == null || additionals.length == 0) {
-      // It's only one element
-      return elementNary;
-    }
-    Nary<T> additionalsNary = Nary.create(additionals);
-    return elementNary.concat(additionalsNary);
-  }
-
-  /**
-   * Creates a nary from a native stream. The operation on this nary will consume the stream
-   * @param stream original stream
-   * @param <T> Expected type
-   * @return A nre nary
-   */
-  static<T> Nary<T> create(Stream<? extends T> stream){
-    if(stream instanceof Nary){
-      //To avoid unnecesary wrapping
-      return (Nary<T>) stream;
-    }
-    return StreamBasedNary.create(stream);
-  }
-
-  /**
-   * Creates a nary from a native optional. Stream like operations will generate a stream from the
-   * optional
-   * @param nativeOptional original optional
-   * @param <T> The expected element type
-   * @return A new nary
-   */
-  static<T> Nary<T> create(Optional<? extends T> nativeOptional){
-    if(nativeOptional.isPresent()){
-      return OneElementNary.create(nativeOptional.get());
-    }
-    return empty();
-  }
-
-  /**
-   * Creates a nary from an element whose absence is represented by null
-   * @param nullableElement An unknown value
-   * @param <T> The expected element type
-   * @return The created nary
-   */
-  static<T> Nary<T> ofNullable(T nullableElement){
-    if(nullableElement == null){
-      return Nary.empty();
-    }else{
-      return Nary.of(nullableElement);
-    }
-  }
-
-  /**
    * Creates an empty nary to represent an empty set
    * @param <T> Expected type
    * @return The empty instance
@@ -130,13 +71,84 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
   }
 
   /**
+   * Creates a nary from a native stream. The operation on this nary will consume the stream
+   * @param stream original stream
+   * @param <T> Expected type
+   * @return A nre nary
+   */
+  static<T> Nary<T> from(Stream<? extends T> stream){
+    if(stream instanceof Nary){
+      //To avoid unnecesary wrapping
+      return (Nary<T>) stream;
+    }
+    return StreamBasedNary.create(stream);
+  }
+
+  /**
+   * Creates a nary with a single element.<br>
+   *
+   * @param element     The non null element
+   * @param <T>         The type of expected nary content
+   * @return The non empty created nary
+   */
+  static <T> Nary<T> ofNonNullable(T element){
+    return OneElementNary.create(element);
+  }
+
+  /**
+   * Creates a nary enumerating its elements.<br>
+   *
+   * @param element     The first mandatory element
+   * @param additionals The optional extra elements
+   * @param <T>         The type of expected nary content
+   * @return The created nary
+   */
+  static <T> Nary<T> ofNonNullable(T element, T... additionals){
+    Nary<T> elementNary = Nary.ofNonNullable(element);
+    if (additionals == null || additionals.length == 0) {
+      // It's only one element
+      return elementNary;
+    }
+    Nary<T> additionalsNary = Nary.from(additionals);
+    return elementNary.concat(additionalsNary);
+  }
+
+  /**
+   * Creates a nary from an element whose absence is represented by null
+   * @param nullableElement An unknown value
+   * @param <T> The expected element type
+   * @return A nary with the given element or empty if it was null
+   */
+  static<T> Nary<T> of(T nullableElement){
+    if(nullableElement == null){
+      return Nary.empty();
+    }else{
+      return Nary.ofNonNullable(nullableElement);
+    }
+  }
+
+  /**
+   * Creates a nary from a native optional. Stream like operations will generate a stream from the
+   * optional
+   * @param nativeOptional original optional
+   * @param <T> The expected element type
+   * @return A new nary
+   */
+  static<T> Nary<T> from(Optional<? extends T> nativeOptional){
+    return nativeOptional
+      .<Nary<T>>map(Nary::ofNonNullable)
+      .orElseGet(Nary::empty);
+  }
+
+  /**
    * Creates a nary from a spliterator as source for a stream
    * @param spliterator A spliterator
    * @param <T> The expected iterated element types
    * @return The new nary
    */
-  static<T> Nary<T> create(Spliterator<T> spliterator){
-    return Nary.create(StreamSupport.stream(spliterator, false));
+  static<T> Nary<T> from(Spliterator<T> spliterator){
+    final Stream<T> stream = StreamSupport.stream(spliterator, false);
+    return Nary.from(stream);
   }
 
   /**
@@ -145,8 +157,9 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
    * @param <T> The expected iterated type
    * @return a new nary
    */
-  static<T> Nary<T> create(Iterator<T> iterator){
-    return Nary.create(Spliterators.spliteratorUnknownSize(iterator, 0));
+  static<T> Nary<T> from(Iterator<T> iterator){
+    final Spliterator<T> spliterator = Spliterators.spliteratorUnknownSize(iterator, 0);
+    return Nary.from(spliterator);
   }
 
   /**
@@ -155,8 +168,9 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
    * @param <T> The expected iterable type
    * @return a new nary
    */
-  static<T> Nary<T> create(Iterable<T> iterable){
-    return Nary.create(iterable.spliterator());
+  static<T> Nary<T> from(Iterable<T> iterable){
+    final Spliterator<T> spliterator = iterable.spliterator();
+    return Nary.from(spliterator);
   }
 
   /**
@@ -166,8 +180,9 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
    * @param <T>        Expected type for collection elements
    * @return The new nary
    */
-  static<T> Nary<T> create(Collection<T> collection){
-    return Nary.create(collection.stream());
+  static<T> Nary<T> from(Collection<T> collection){
+    final Stream<T> stream = collection.stream();
+    return Nary.from(stream);
   }
 
   /**
@@ -176,9 +191,9 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
    * @param <T> The expected array element type
    * @return a new nary
    */
-  static<T> Nary<T> create(T[] array){
+  static<T> Nary<T> from(T[] array){
     Stream<T> asStream = Arrays.stream(array);
-    return Nary.create(asStream);
+    return Nary.from(asStream);
   }
 
   /**
@@ -188,10 +203,20 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
    * @param <T>         The expected element types
    * @return The new nary
    */
-  static <T> Nary<T> create(Enumeration<T> enumeration) {
+  static <T> Nary<T> from(Enumeration<T> enumeration) {
     EnumerationSpliterator<T> spliterator = EnumerationSpliterator.create(enumeration);
-    return Nary.create(spliterator);
+    return Nary.from(spliterator);
   }
 
+  /**
+   * Creates a nary from the pairs of elements in a {@link Map}
+   * @param map The map whose pairs of elements can be iterated
+   * @param <K> The type of Keys
+   * @param <V> The type of values
+   * @return The created Nary with the entries of the map
+   */
+  static <K,V> Nary<Map.Entry<K,V>> from(Map<K,V> map){
+    return Nary.from(map.entrySet().stream());
+  }
 
 }

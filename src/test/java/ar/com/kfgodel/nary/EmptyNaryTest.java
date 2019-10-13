@@ -71,13 +71,13 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
           assertThat(result).isEqualTo(Lists.newArrayList());
         });
         it("returns an empty stream when #flatMap() is called",()->{
-          List<Integer> result = context().nary().flatMap((value) -> Nary.of(value))
+          List<Integer> result = context().nary().flatMap((value) -> Nary.ofNonNullable(value))
             .collectToList();
 
           assertThat(result).isEqualTo(Lists.newArrayList());
         });
         it("always returns an empty optional when called to #flatmapOptional()",()->{
-          Nary<Integer> result = context().nary().flatMapOptional((value)-> Nary.of(value).asOptional());
+          Nary<Integer> result = context().nary().flatMapOptional((value)-> Nary.ofNonNullable(value).asOptional());
 
           assertThat(result.isAbsent()).isTrue();
         });
@@ -115,7 +115,7 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
             assertThat(result).isTrue();
           }); 
           it("is false if a non empty optional is passed",()->{
-            boolean result = context().nary().equals(Nary.of(1));
+            boolean result = context().nary().equals(Nary.ofNonNullable(1));
             assertThat(result).isFalse();
           });   
         });
@@ -143,7 +143,7 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
             assertThat(result).isEqualTo(Lists.newArrayList());
           });
           it("returns a nary with the stream elements if the stream is not empty",()->{
-            List<Integer> result = context().nary().concat(Nary.of(1, 2, 3))
+            List<Integer> result = context().nary().concat(Nary.ofNonNullable(1, 2, 3))
               .collect(Collectors.toList());
             assertThat(result).isEqualTo(Lists.newArrayList(1, 2, 3));
           });

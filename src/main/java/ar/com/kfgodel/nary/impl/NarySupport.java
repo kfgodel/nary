@@ -52,12 +52,12 @@ public abstract class NarySupport<T> implements Nary<T> {
 
   @Override
   public Nary<T> concat(Optional<? extends T> other) {
-    return concat(Nary.create(other));
+    return concat(Nary.from(other));
   }
 
   @Override
   public Nary<T> add(T... others) {
-    return concat(Nary.create(others));
+    return concat(Nary.from(others));
   }
 
   @Override
@@ -93,7 +93,7 @@ public abstract class NarySupport<T> implements Nary<T> {
   public <U> Nary<U> flatMapOptional(Function<? super T, java.util.Optional<U>> mapper) throws MoreThanOneElementException {
     return returningNaryDo(
       map(mapper)
-      .flatMap(Nary::create)
+      .flatMap(Nary::from)
     );
   }
 
@@ -411,7 +411,7 @@ public abstract class NarySupport<T> implements Nary<T> {
    * @return The created nary
    */
   protected<R> Nary<R> returningNaryDo(Stream<R> nativeStream) {
-    return Nary.create(nativeStream);
+    return Nary.from(nativeStream);
   }
 
   /**
@@ -420,7 +420,7 @@ public abstract class NarySupport<T> implements Nary<T> {
    * @return The created nary
    */
   protected Nary<T> returningNaryDo(java.util.Optional<T> nativeOptional) {
-    return Nary.create(nativeOptional);
+    return Nary.from(nativeOptional);
   }
 
 }
