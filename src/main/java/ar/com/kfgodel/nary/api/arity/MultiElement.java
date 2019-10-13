@@ -63,7 +63,7 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
    * @return An empty nary if both are empty, a nary with the argument stream if this optional
    * is empty, a nary with this element plus the stream elements
    */
-  Nary<T> concatStream(Stream<? extends T> other);
+  Nary<T> concat(Stream<? extends T> other);
 
   /**
    * Performs a <a href="package-summary.html#MutableReduction">mutable

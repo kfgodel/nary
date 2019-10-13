@@ -122,12 +122,12 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
         });
         describe("#concatStream", () -> {
           it("returns a one element nary if the stream is empty",()->{
-            List<Integer> result = context().nary().concatStream(Nary.empty())
+            List<Integer> result = context().nary().concat(Nary.empty())
               .collect(Collectors.toList());
             assertThat(result).isEqualTo(Lists.newArrayList(3));
           });
           it("returns a nary with the value and the stream elements if the stream is not empty",()->{
-            List<Integer> result = context().nary().concatStream(Nary.of(1,2, 3))
+            List<Integer> result = context().nary().concat(Nary.of(1,2, 3))
               .collect(Collectors.toList());
             assertThat(result).isEqualTo(Lists.newArrayList(3, 1, 2, 3));
           });

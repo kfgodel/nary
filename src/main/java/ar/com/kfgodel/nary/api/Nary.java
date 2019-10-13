@@ -74,7 +74,7 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
       return elementNary;
     }
     Nary<T> additionalsNary = Nary.create(additionals);
-    return elementNary.concatStream(additionalsNary);
+    return elementNary.concat(additionalsNary);
   }
 
   /**

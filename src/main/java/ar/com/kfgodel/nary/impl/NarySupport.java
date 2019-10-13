@@ -65,7 +65,7 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public Nary<T> concatStream(Stream<? extends T> other) {
+  public Nary<T> concat(Stream<? extends T> other) {
     return returningNaryDo(Stream.concat(this, other));
   }
 
