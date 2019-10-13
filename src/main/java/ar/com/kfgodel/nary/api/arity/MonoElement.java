@@ -166,25 +166,21 @@ public interface MonoElement<T> {
   <U> Nary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper);
 
   /**
-   * If the only value is present, apply the provided {@code Optional}-bearing
-   * mapping function to it, return that result, otherwise return an empty
-   * {@code Optional}.  This method is similar to {@link #mapFilteringNullResult(Function)},
-   * but the provided mapper is one whose result is already an {@code Optional},
-   * and if invoked, {@code flatMapOptional} does not wrap it with an additional
-   * {@code Optional}.
-   * This Nary as Stream is consumed.
+   * Makes a normal flat-map transformation but accepts {@link Optional} as the mapper
+   * result instead of {@link java.util.stream.Stream}.<br>
+   * This method is the semantic equivalent of {@link Optional#flatMap(Function)} but it can
+   * be applied in more than one element.<br>
+   * <br>
    *
    * @param <U>    The type parameter to the {@code Optional} returned by
    * @param mapper a mapping function to apply to the value, if present
    *               the mapping function
    * @return the result of applying an {@code Optional}-bearing mapping
-   * function to the value of this {@code Optional}, if a value is present,
-   * otherwise an empty {@code Optional}
+   * function to the elements of this instance which may be 0, 1, or more elements
    * @throws NullPointerException        if the mapping function is null or returns
    *                                     a null result
-   * @throws MoreThanOneElementException if there are more than one
    */
-  <U> Nary<U> flatMapOptional(Function<? super T, Optional<U>> mapper) throws MoreThanOneElementException;
+  <U> Nary<U> flatMapOptional(Function<? super T, Optional<U>> mapper);
 
   /**
    * If a value is present, apply the provided {@code Optional}-bearing

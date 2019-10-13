@@ -334,12 +334,6 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public <U> Nary<U> flatMapOptional(Function<? super T, Optional<U>> mapper) throws MoreThanOneElementException {
-    Optional<U> mapped = mapper.apply(element);
-    return Nary.create(mapped);
-  }
-
-  @Override
   public <U> Nary<U> flatMapOptionally(Function<? super T, Nary<U>> mapper) {
     return mapper.apply(element);
   }

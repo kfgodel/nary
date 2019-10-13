@@ -85,14 +85,6 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
               assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
             }
           });
-          it("throws an exception  when called to #flatmapOptional()",()->{
-            try{
-              context().nary().flatMapOptional((value)-> { throw new RuntimeException("never happens");});
-              failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
-            }catch (MoreThanOneElementException e){
-              assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
-            }
-          });
           it("throws an exception  when called to #flatmapOptionally()",()->{
             try{
               context().nary().flatMapOptionally((value)-> { throw new RuntimeException("never happens");});
@@ -274,6 +266,13 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
               .collect(Collectors.toList());
 
             assertThat(result).isEqualTo(Lists.newArrayList(8, 8, 8, 8));
+          });
+          it("transforms the values #flatmapOptional() allowing Optionals to be used as 1 element streams",()->{
+            List<Integer> result = context().nary()
+              .flatMapOptional((value) -> value.equals(1) ? Optional.empty() : Optional.of(value))
+              .collect(Collectors.toList());
+
+            assertThat(result).isEqualTo(Lists.newArrayList(3, 2, 3));
           });
           it("transforms the values when #flatMapToInt() is called",()->{
             List<Integer> result = context().nary().flatMapToInt((value) -> IntStream.of(value + 2))
