@@ -182,24 +182,4 @@ public interface MonoElement<T> {
    */
   <U> Nary<U> flatMapOptional(Function<? super T, Optional<U>> mapper);
 
-  /**
-   * If a value is present, apply the provided {@code Optional}-bearing
-   * mapping function to it, return that result, otherwise return an empty
-   * {@code Optional}.  This method is similar to {@link #mapFilteringNullResult(Function)},
-   * but the provided mapper is one whose result is already an {@code Optional},
-   * and if invoked, {@code flatMapOptional} does not wrap it with an additional
-   * {@code Optional}.
-   *
-   * @param <U>    The type parameter to the {@code Optional} returned by
-   * @param mapper a mapping function to apply to the value, if present
-   *               the mapping function
-   * @return the result of applying an {@code Optional}-bearing mapping
-   * function to the value of this {@code Optional}, if a value is present,
-   * otherwise an empty {@code Optional}
-   * @throws NullPointerException if the mapping function is null or returns
-   *                              a null result
-   */
-  <U> Nary<U> flatMapOptionally(Function<? super T, Nary<U>> mapper);
-
-
 }

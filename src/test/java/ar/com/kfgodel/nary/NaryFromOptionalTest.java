@@ -73,11 +73,6 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
 
           assertThat(result.get()).isEqualTo(5);
         });
-        it("transforms  the value when called to #flatmapOptionally()",()->{
-          Nary<Integer> result = context().nary().flatMapOptionally((value)-> Nary.of(5));
-
-          assertThat(result.get()).isEqualTo(5);
-        });
         it("never returns the alternative value when #orElse() is called",()->{
           Integer result = context().nary().orElse(4);
           assertThat(result).isEqualTo(3);

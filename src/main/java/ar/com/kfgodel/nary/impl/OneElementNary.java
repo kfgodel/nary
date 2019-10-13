@@ -334,11 +334,6 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public <U> Nary<U> flatMapOptionally(Function<? super T, Nary<U>> mapper) {
-    return mapper.apply(element);
-  }
-
-  @Override
   public Nary<T> ifAbsent(Runnable runnable) {
     // Nothing to do
     return this;

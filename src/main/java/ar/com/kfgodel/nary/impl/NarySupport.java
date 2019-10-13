@@ -112,11 +112,6 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public <U> Nary<U> flatMapOptionally(Function<? super T, Nary<U>> mapper) {
-    return coerceToMonoElement().flatMapOptionally(mapper);
-  }
-
-  @Override
   public T orElse(T other) throws MoreThanOneElementException {
     return coerceToMonoElement().orElse(other);
   }

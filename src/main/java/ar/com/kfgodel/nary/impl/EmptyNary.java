@@ -107,12 +107,6 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public <U> Nary<U> flatMapOptionally(Function<? super Object, Nary<U>> mapper) {
-    // Nothing to map
-    return instance();
-  }
-
-  @Override
   public Object orElse(Object other) throws MoreThanOneElementException {
     return other;
   }
