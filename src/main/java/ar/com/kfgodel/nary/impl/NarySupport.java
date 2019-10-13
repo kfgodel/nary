@@ -56,6 +56,11 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
+  public Nary<T> concat(T... others) {
+    return concat(Nary.create(others));
+  }
+
+  @Override
   public T get() throws NoSuchElementException {
     return coerceToMonoElement().get();
   }

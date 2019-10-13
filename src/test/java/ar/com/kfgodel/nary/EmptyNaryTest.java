@@ -156,6 +156,18 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
             assertThat(result).isEqualTo(Lists.newArrayList(1));
           });
         });
+        describe("#concat(T)", () -> {
+          it("returns an empty nary if no arguments are passed",()->{
+            List<Integer> result = context().nary().concat()
+              .collect(Collectors.toList());
+            assertThat(result).isEqualTo(Lists.newArrayList());
+          });
+          it("returns a nary with the elements from passed as arguments",()->{
+            List<Integer> result = context().nary().concat(1 ,2 ,3)
+              .collect(Collectors.toList());
+            assertThat(result).isEqualTo(Lists.newArrayList(1, 2, 3));
+          });
+        });
 
         it("returns an empty nary when #peek() is called", () -> {
           Variable<Integer> variable = Variable.create();

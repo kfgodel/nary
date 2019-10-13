@@ -183,6 +183,18 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
               assertThat(result).isEqualTo(Lists.newArrayList(3, 2, 1, 3, 4));
             });
           });
+          describe("#concat(T)", () -> {
+            it("returns itself if no arguments are passed",()->{
+              List<Integer> result = context().nary().concat()
+                .collect(Collectors.toList());
+              assertThat(result).isEqualTo(Lists.newArrayList(3, 2, 1, 3));
+            });
+            it("returns a nary with concatenated elements passed as arguments",()->{
+              List<Integer> result = context().nary().concat(4, 5, 6)
+                .collect(Collectors.toList());
+              assertThat(result).isEqualTo(Lists.newArrayList(3, 2, 1, 3, 4, 5, 6));
+            });
+          });
 
           it("returns a list with the values in the order they are present", () -> {
             List<Integer> list = context().nary().collectToList();

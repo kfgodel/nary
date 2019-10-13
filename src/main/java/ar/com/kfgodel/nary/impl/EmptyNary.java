@@ -229,12 +229,6 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public Nary<Object> concat(Optional<?> other) {
-    // This is empty. Only the other element is relevant
-    return Nary.create(other);
-  }
-
-  @Override
   public List<Object> collectToList() {
     return Collections.emptyList();
   }

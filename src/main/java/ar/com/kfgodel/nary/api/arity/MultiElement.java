@@ -76,6 +76,13 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
   Nary<T> concat(Optional<? extends T> other);
 
   /**
+   * Creates a new Nary with the elements of this instance and the ones passed as var arg array
+   * @param others The elements to append to this stream
+   * @return A new Nary with the elements from this instance plus the ones on the given array
+   */
+  Nary<T> concat(T... others);
+
+  /**
    * Performs a <a href="package-summary.html#MutableReduction">mutable
    * reduction</a> operation on the elements of this stream.  A mutable
    * reduction is one in which the reduced value is a mutable result container,
