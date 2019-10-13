@@ -2,7 +2,6 @@ package ar.com.kfgodel.nary.api.arity;
 
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
-import ar.com.kfgodel.nary.api.optionals.Optional;
 
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
