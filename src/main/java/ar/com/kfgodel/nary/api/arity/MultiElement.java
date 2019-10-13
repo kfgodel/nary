@@ -2,10 +2,12 @@ package ar.com.kfgodel.nary.api.arity;
 
 import ar.com.kfgodel.nary.api.Nary;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -116,4 +118,51 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
    * @return The optional last contained element
    */
   Nary<T> findLast();
+
+  /**
+   * Alternative to {@link Stream#reduce(BinaryOperator)} that returns {@link Nary} instead of {@link java.util.Optional}
+   * @see Stream#reduce(BinaryOperator) for a complete reference
+   * @param accumulator The associative function to reduce the elements of this nary to a result of the same type
+   * @return The optional result of the reduction (or an empty nary)
+   */
+  Nary<T> reduceNary(BinaryOperator<T> accumulator);
+
+  /**
+   * Alternative to {@link Stream#min(Comparator)} that returns {@link Nary} instead of {@link java.util.Optional}
+   * @param comparator a <a href="package-summary.html#NonInterference">non-interfering</a>,
+   *                   <a href="package-summary.html#Statelessness">stateless</a>
+   *                   {@code Comparator} to compare elements of this stream
+   * @return a {@link Nary} describing the minimum element of this stream,
+   * or an empty if there are no elements
+   * @throws NullPointerException if the minimum element is null
+   */
+  Nary<T> minNary(Comparator<? super T> comparator);
+
+  /**
+   * Alternative to {@link Stream#max(Comparator)} that returns {@link Nary} instead of {@link java.util.Optional}
+   * @param comparator a <a href="package-summary.html#NonInterference">non-interfering</a>,
+   *                   <a href="package-summary.html#Statelessness">stateless</a>
+   *                   {@code Comparator} to compare elements of this stream
+   * @return a {@link Nary} describing the maximum element of this stream,
+   * or an empty if there are no elements
+   * @throws NullPointerException if the maximum element is null
+   */
+  Nary<T> maxNary(Comparator<? super T> comparator);
+
+  /**
+   * Alternative to {@link Stream#findFirst()} that returns {@link Nary} instead of {@link java.util.Optional}
+   * @return a  {@code Nary} describing the first element of this stream,
+   * or an empty {@code Nary} if the stream is empty
+   * @throws NullPointerException if the element selected is null
+   */
+  Nary<T> findFirstNary();
+
+  /**
+   * Alternative to {@link Stream#findAny()} that returns {@link Nary} instead of {@link java.util.Optional}
+   * @return an {@code Nary} describing some element of this stream, or an
+   * empty {@code Nary} if the stream is empty
+   * @throws NullPointerException if the element selected is null
+   * @see #findFirst()
+   */
+  Nary<T> findAnyNary();
 }

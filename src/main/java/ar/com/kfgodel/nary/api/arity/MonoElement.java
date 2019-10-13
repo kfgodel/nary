@@ -182,5 +182,4 @@ public interface MonoElement<T> {
    *                                     a null result
    */
   <U> Nary<U> flatMapOptional(Function<? super T, Optional<U>> mapper);
-
 }

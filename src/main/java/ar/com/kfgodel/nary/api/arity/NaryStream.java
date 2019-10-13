@@ -3,7 +3,6 @@ package ar.com.kfgodel.nary.api.arity;
 import ar.com.kfgodel.nary.api.Nary;
 
 import java.util.Comparator;
-import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -37,6 +36,9 @@ public interface NaryStream<T> extends Stream<T> {
    * @return the new Nary
    */
   Nary<T> peekNary(Consumer<? super T> action);
+
+  @Override
+  Nary<T> peek(Consumer<? super T> action);
 
   /**
    * Returns a nary consisting of the distinct elements (according to
@@ -100,37 +102,6 @@ public interface NaryStream<T> extends Stream<T> {
   Nary<T> sorted(Comparator<? super T> comparator);
 
   /**
-   * Returns a nary consisting of the elements of this stream, additionally
-   * performing the provided action on each element as elements are consumed
-   * from the resulting stream.
-   *
-   * <p>This is an <a href="package-summary.html#StreamOps">intermediate
-   * operation</a>.
-   *
-   * <p>For parallel stream pipelines, the action may be called at
-   * whatever time and in whatever thread the element is made available by the
-   * upstream operation.  If the action modifies shared state,
-   * it is responsible for providing the required synchronization.
-   *
-   * This method exists mainly to support debugging, where you want
-   * to see the elements as they flow past a certain point in a pipeline:
-   * <pre>{@code
-   *     Stream.of("one", "two", "three", "four")
-   *         .filter(e -> e.length() > 3)
-   *         .peek(e -> System.out.println("Filtered value: " + e))
-   *         .map(String::toUpperCase)
-   *         .peek(e -> System.out.println("Mapped value: " + e))
-   *         .collect(Collectors.toList());
-   * }</pre>
-   *
-   * @param action a <a href="package-summary.html#NonInterference">
-   *                 non-interfering</a> action to perform on the elements as
-   *                 they are consumed from the stream
-   * @return the new stream
-   */
-  Nary<T> peek(Consumer<? super T> action);
-
-  /**
    * Returns a nary consisting of the elements of this stream, truncated
    * to be no longer than {@code maxSize} in length.
    *
@@ -185,113 +156,6 @@ public interface NaryStream<T> extends Stream<T> {
    * @throws IllegalArgumentException if {@code n} is negative
    */
   Nary<T> skip(long n);
-
-  /**
-   * Performs a <a href="package-summary.html#Reduction">reduction</a> on the
-   * elements of this stream, using an
-   * <a href="package-summary.html#Associativity">associative</a> accumulation
-   * function, and returns an {@code Optional} describing the reduced value,
-   * if any. This is equivalent to:
-   * <pre>{@code
-   *     boolean foundAny = false;
-   *     T result = null;
-   *     for (T element : this stream) {
-   *         if (!foundAny) {
-   *             foundAny = true;
-   *             result = element;
-   *         }
-   *         else
-   *             result = accumulator.apply(result, element);
-   *     }
-   *     return foundAny ? Nary.of(result) : Optional.empty();
-   * }</pre>
-   *
-   * but is not constrained to execute sequentially.
-   *
-   * <p>The {@code accumulator} function must be an
-   * <a href="package-summary.html#Associativity">associative</a> function.
-   *
-   * <p>This is a <a href="package-summary.html#StreamOps">terminal
-   * operation</a>.
-   *
-   * @param accumulator an <a href="package-summary.html#Associativity">associative</a>,
-   *                    <a href="package-summary.html#NonInterference">non-interfering</a>,
-   *                    <a href="package-summary.html#Statelessness">stateless</a>
-   *                    function for combining two values
-   * @return an {@link java.util.Optional} describing the result of the reduction
-   * @throws NullPointerException if the result of the reduction is null
-   * @see #reduce(Object, BinaryOperator)
-   * @see #min(Comparator)
-   * @see #max(Comparator)
-   */
-  Nary<T> reduceNary(BinaryOperator<T> accumulator);
-
-  /**
-   * Returns the minimum element of this stream according to the provided
-   * {@code Comparator}.  This is a special case of a
-   * <a href="package-summary.html#Reduction">reduction</a>.
-   *
-   * <p>This is a <a href="package-summary.html#StreamOps">terminal operation</a>.
-   *
-   * @param comparator a <a href="package-summary.html#NonInterference">non-interfering</a>,
-   *                   <a href="package-summary.html#Statelessness">stateless</a>
-   *                   {@code Comparator} to compare elements of this stream
-   * @return an {@code Optional} describing the minimum element of this stream,
-   * or an empty {@code Optional} if the stream is empty
-   * @throws NullPointerException if the minimum element is null
-   */
-  Nary<T> minNary(Comparator<? super T> comparator);
-
-  /**
-   * Returns the maximum element of this stream according to the provided
-   * {@code Comparator}.  This is a special case of a
-   * <a href="package-summary.html#Reduction">reduction</a>.
-   *
-   * <p>This is a <a href="package-summary.html#StreamOps">terminal
-   * operation</a>.
-   *
-   * @param comparator a <a href="package-summary.html#NonInterference">non-interfering</a>,
-   *                   <a href="package-summary.html#Statelessness">stateless</a>
-   *                   {@code Comparator} to compare elements of this stream
-   * @return an {@code Optional} describing the maximum element of this stream,
-   * or an empty {@code Optional} if the stream is empty
-   * @throws NullPointerException if the maximum element is null
-   */
-  Nary<T> maxNary(Comparator<? super T> comparator);
-
-  /**
-   * Returns an {@link java.util.Optional} describing the first element of this stream,
-   * or an empty {@code Optional} if the stream is empty.  If the stream has
-   * no encounter order, then any element may be returned.
-   *
-   * <p>This is a <a href="package-summary.html#StreamOps">short-circuiting
-   * terminal operation</a>.
-   *
-   * @return an {@code Optional} describing the first element of this stream,
-   * or an empty {@code Optional} if the stream is empty
-   * @throws NullPointerException if the element selected is null
-   */
-  Nary<T> findFirstNary();
-
-  /**
-   * Returns an {@link java.util.Optional} describing some element of the stream, or an
-   * empty {@code Optional} if the stream is empty.
-   *
-   * <p>This is a <a href="package-summary.html#StreamOps">short-circuiting
-   * terminal operation</a>.
-   *
-   * <p>The behavior of this operation is explicitly nondeterministic; it is
-   * free to select any element in the stream.  This is to allow for maximal
-   * performance in parallel operations; the cost is that multiple invocations
-   * on the same source may not return the same result.  (If a stable result
-   * is desired, use {@link #findFirst()} instead.)
-   *
-   * @return an {@code Optional} describing some element of this stream, or an
-   * empty {@code Optional} if the stream is empty
-   * @throws NullPointerException if the element selected is null
-   * @see #findFirst()
-   */
-  Nary<T> findAnyNary();
 
   /**
    * Returns a nary consisting of the elements of this stream that match
