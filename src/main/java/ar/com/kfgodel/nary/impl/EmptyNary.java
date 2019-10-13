@@ -58,8 +58,9 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public void ifPresent(Consumer<? super Object> consumer) throws MoreThanOneElementException {
+  public Nary<Object> ifPresent(Consumer<? super Object> consumer) throws MoreThanOneElementException {
     //Ignore the consumer
+    return this;
   }
 
   @Override
@@ -258,7 +259,7 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public Nary<Object> asOptional() throws MoreThanOneElementException {
+  public Nary<Object> coerceToMonoElement() throws MoreThanOneElementException {
     return this;
   }
 

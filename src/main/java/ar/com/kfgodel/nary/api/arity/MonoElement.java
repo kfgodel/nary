@@ -4,6 +4,7 @@ import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -27,7 +28,7 @@ public interface MonoElement<T> {
    * @return the non-null value held by this {@code Nary}
    * @throws java.util.NoSuchElementException if there is no value present
    * @throws MoreThanOneElementException      if there are more than one
-   * @see Optional#isPresent()
+   * @see Optional#get()
    */
   T get() throws NoSuchElementException, MoreThanOneElementException;
 
@@ -37,16 +38,19 @@ public interface MonoElement<T> {
    *
    * @return {@code true} if there is a value present, otherwise {@code false}
    * @throws MoreThanOneElementException if there are more than one
+   * @see Optional#isPresent()
    */
   boolean isPresent() throws MoreThanOneElementException;
 
   /**
-   * Negation of isPresent(). Facility method
+   * Negation of isPresent(). Facility method to check for missing element without having to negate
    *
    * @return true if there's no value to get
    * @throws MoreThanOneElementException If there's more than one value to get as Optional
    */
-  boolean isAbsent() throws MoreThanOneElementException;
+  default boolean isAbsent() throws MoreThanOneElementException{
+    return !isPresent();
+  }
 
   /**
    * If the only value is present, invoke the specified consumer with the value,
@@ -54,15 +58,16 @@ public interface MonoElement<T> {
    * This Nary as Stream is consumed.
    *
    * @param consumer block to be executed if a value is present
+   * @return this for easy method chaining
    * @throws NullPointerException        if value is present and {@code consumer} is
    *                                     null
    * @throws MoreThanOneElementException if there are more than one
+   * @see Optional#ifPresent(Consumer)
    */
-  void ifPresent(Consumer<? super T> consumer) throws MoreThanOneElementException;
+  Nary<T> ifPresent(Consumer<? super T> consumer) throws MoreThanOneElementException;
 
   /**
-   * [Method not present in Optional]
-   * If the only value is absent invoke the given runnable, or else do nothing
+   * If the only value is absent invoke the given lambda, or else do nothing
    * This Nary as Stream is consumed.
    *
    * @param runnable The code to execute if this optional is empty

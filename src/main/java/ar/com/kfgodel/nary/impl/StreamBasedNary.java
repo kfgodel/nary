@@ -38,7 +38,7 @@ public class StreamBasedNary<T> extends NarySupport<T>  {
   }
 
   @Override
-  public Nary<T> asOptional() throws MoreThanOneElementException {
+  public Nary<T> coerceToMonoElement() throws MoreThanOneElementException {
     if(cachedOptional == null){
       this.cachedOptional = reduceStreamToOptional();
     }

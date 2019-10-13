@@ -38,18 +38,16 @@ public abstract class NarySupport<T> implements Nary<T> {
     return this;
   }
 
-  @Override
-  public boolean isAbsent() throws MoreThanOneElementException {
-    return asOptional().isAbsent();
-  }
-
   /**
-   * Reduces this nary to an optional, trying to represent 0, or 1 element.
-   * If this nary contains more than one, then an exception is thrown
-   * @return an empty optional if this is empty, a non empty optional if this
-   * has one element
+   * Forces this instance to contain only 1 element (or none).<br>
+   *   If this nary contains more than one element the coercion fails. This method
+   *   helps on checking the constraints that a mono element nary needs to have, that the user may
+   *   unintentionally violate
+   * @return an empty nary if this is empty, a non empty optional if this
+   * has only one element
+   * @throws MoreThanOneElementException If this nary has more than 1 element
    */
-  protected abstract Nary<T> asOptional() throws MoreThanOneElementException;
+  protected abstract Nary<T> coerceToMonoElement() throws MoreThanOneElementException;
 
   @Override
   public Nary<T> peekNary(Consumer<? super T> action) {
@@ -78,62 +76,63 @@ public abstract class NarySupport<T> implements Nary<T> {
 
   @Override
   public T get() throws NoSuchElementException {
-    return asOptional().get();
+    return coerceToMonoElement().get();
   }
 
   @Override
   public boolean isPresent() {
-    return asOptional().isPresent();
+    return coerceToMonoElement().isPresent();
   }
 
   @Override
-  public void ifPresent(Consumer<? super T> consumer) throws MoreThanOneElementException {
-    asOptional().ifPresent(consumer);
+  public Nary<T> ifPresent(Consumer<? super T> consumer) throws MoreThanOneElementException {
+    coerceToMonoElement().ifPresent(consumer);
+    return this;
   }
 
   @Override
   public Nary<T> ifAbsent(Runnable runnable) {
-    return asOptional().ifAbsent(runnable);
+    return coerceToMonoElement().ifAbsent(runnable);
   }
 
   @Override
   public Nary<T> peekOptional(Consumer<? super T> action) {
-    return asOptional().peekOptional(action);
+    return coerceToMonoElement().peekOptional(action);
   }
 
   @Override
   public Nary<T> filterOptional(Predicate<? super T> predicate) throws MoreThanOneElementException {
-    return asOptional().filterNary(predicate);
+    return coerceToMonoElement().filterNary(predicate);
   }
 
   @Override
   public <U> Nary<U> mapOptional(Function<? super T, ? extends U> mapper) throws MoreThanOneElementException {
-    return asOptional().mapOptional(mapper);
+    return coerceToMonoElement().mapOptional(mapper);
   }
 
   @Override
   public <U> Nary<U> flatMapOptional(Function<? super T, java.util.Optional<U>> mapper) throws MoreThanOneElementException {
-    return asOptional().flatMapOptional(mapper);
+    return coerceToMonoElement().flatMapOptional(mapper);
   }
 
   @Override
   public <U> Nary<U> flatMapOptionally(Function<? super T, Nary<U>> mapper) {
-    return asOptional().flatMapOptionally(mapper);
+    return coerceToMonoElement().flatMapOptionally(mapper);
   }
 
   @Override
   public T orElse(T other) throws MoreThanOneElementException {
-    return asOptional().orElse(other);
+    return coerceToMonoElement().orElse(other);
   }
 
   @Override
   public T orElseGet(Supplier<? extends T> other) throws MoreThanOneElementException {
-    return asOptional().orElseGet(other);
+    return coerceToMonoElement().orElseGet(other);
   }
 
   @Override
   public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
-    return asOptional().orElseThrow(exceptionSupplier);
+    return coerceToMonoElement().orElseThrow(exceptionSupplier);
   }
 
   @Override
@@ -143,7 +142,7 @@ public abstract class NarySupport<T> implements Nary<T> {
 
   @Override
   public java.util.Optional<T> asNativeOptional() throws MoreThanOneElementException {
-    return asOptional().asNativeOptional();
+    return coerceToMonoElement().asNativeOptional();
   }
 
   @Override

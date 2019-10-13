@@ -46,7 +46,7 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public Nary<T> asOptional() throws MoreThanOneElementException {
+  public Nary<T> coerceToMonoElement() throws MoreThanOneElementException {
     return this;
   }
 
@@ -363,8 +363,9 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public void ifPresent(Consumer<? super T> consumer) throws MoreThanOneElementException {
+  public Nary<T> ifPresent(Consumer<? super T> consumer) throws MoreThanOneElementException {
     consumer.accept(element);
+    return this;
   }
 
   @Override
