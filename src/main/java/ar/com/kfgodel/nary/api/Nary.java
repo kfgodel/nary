@@ -118,7 +118,7 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
    * @param <T> The expected element type
    * @return A nary with the given element or empty if it was null
    */
-  static<T> Nary<T> ofNullable(T nullableElement){
+  static<T> Nary<T> of(T nullableElement){
     if(nullableElement == null){
       return Nary.empty();
     }else{

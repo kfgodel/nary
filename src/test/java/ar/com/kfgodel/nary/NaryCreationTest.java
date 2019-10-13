@@ -61,7 +61,7 @@ public class NaryCreationTest extends JavaSpec<NaryTestContext> {
       });
 
       it("can be made from a nullable element as optional",()->{
-        Nary<Integer> nary = Nary.ofNullable(null);
+        Nary<Integer> nary = Nary.of(null);
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(Lists.newArrayList());
