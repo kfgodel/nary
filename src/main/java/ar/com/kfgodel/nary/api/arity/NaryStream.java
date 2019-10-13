@@ -140,21 +140,6 @@ public interface NaryStream<T> extends Stream<T> {
   @Override
   Nary<T> filter(Predicate<? super T> predicate);
 
-  /**
-   * Returns a nary consisting of the results of applying the given
-   * function to the elements of this stream.
-   *
-   * <p>This is an <a href="package-summary.html#StreamOps">intermediate
-   * operation</a>.
-   *
-   * @param <R> The element type of the new stream
-   * @param mapper a <a href="package-summary.html#NonInterference">non-interfering</a>,
-   *               <a href="package-summary.html#Statelessness">stateless</a>
-   *               function to apply to each element
-   * @return the new stream
-   */
-  <R> Nary<R> mapNary(Function<? super T, ? extends R> mapper);
-
   @Override
   <R> Nary<R> map(Function<? super T, ? extends R> mapper);
 

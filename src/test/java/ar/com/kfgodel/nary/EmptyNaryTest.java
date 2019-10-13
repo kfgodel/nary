@@ -63,6 +63,12 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
 
           assertThat(result.isAbsent()).isTrue();
         });
+        it("returns an empty stream when #map() is called",()->{
+          List<Integer> result = context().nary().map((value) -> value)
+            .collectToList();
+
+          assertThat(result).isEqualTo(Lists.newArrayList());
+        });
         it("always returns an empty optional when called to #flatmapOptional()",()->{
           Nary<Integer> result = context().nary().flatMapOptional((value)-> Nary.of(value).asOptional());
 
@@ -143,12 +149,6 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
         it("returns an empty nary when #filter() is called",()->{
           List<Integer> result = context().nary().filter((value) -> true)
             .collectToList();
-
-          assertThat(result).isEqualTo(Lists.newArrayList());
-        });
-        it("returns an empty stream when #mapNary() is called",()->{
-          List<Integer> result = context().nary().mapNary((value) -> value)
-            .collect(Collectors.toList());
 
           assertThat(result).isEqualTo(Lists.newArrayList());
         });

@@ -173,12 +173,6 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           });
 
 
-          it("transforms the values when #mapNary() is called",()->{
-            List<Integer> result = context().nary().mapNary((value) -> value + 1)
-              .collect(Collectors.toList());
-
-            assertThat(result).isEqualTo(Lists.newArrayList(4, 3, 2, 4));
-          });
           it("transforms the values when #flatMapNary() is called",()->{
             List<Integer> result = context().nary().flatMapNary((value) -> Nary.of(8))
               .collect(Collectors.toList());
