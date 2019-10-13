@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -207,5 +208,15 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
     return Nary.from(spliterator);
   }
 
+  /**
+   * Creates a nary from the pairs of elements in a {@link Map}
+   * @param map The map whose pairs of elements can be iterated
+   * @param <K> The type of Keys
+   * @param <V> The type of values
+   * @return The created Nary with the entries of the map
+   */
+  static <K,V> Nary<Map.Entry<K,V>> from(Map<K,V> map){
+    return Nary.from(map.entrySet().stream());
+  }
 
 }
