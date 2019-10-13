@@ -140,9 +140,9 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
           assertThat(result).isEqualTo(Lists.newArrayList());
           assertThat(variable.get()).isNull();
         });
-        it("returns an empty nary when #filterNary() is called",()->{
-          List<Integer> result = context().nary().filterNary((value) -> true)
-            .collect(Collectors.toList());
+        it("returns an empty nary when #filter() is called",()->{
+          List<Integer> result = context().nary().filter((value) -> true)
+            .collectToList();
 
           assertThat(result).isEqualTo(Lists.newArrayList());
         });

@@ -71,12 +71,6 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public Nary<Object> filterNary(Predicate<? super Object> predicate) {
-    // Ignore the predicate, return an empty nary
-    return instance();
-  }
-
-  @Override
   public <R> Nary<R> mapNary(Function<? super Object, ? extends R> mapper) {
     // Ignore the mapper, return empty nary
     return instance();

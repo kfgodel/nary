@@ -45,11 +45,6 @@ public abstract class NarySupport<T> implements Nary<T> {
   protected abstract Nary<T> coerceToMonoElement() throws MoreThanOneElementException;
 
   @Override
-  public Nary<T> filterNary(Predicate<? super T> predicate) {
-    return returningNaryDo(filter(predicate));
-  }
-
-  @Override
   public <R> Nary<R> mapNary(Function<? super T, ? extends R> mapper) {
     return returningNaryDo(map(mapper));
   }

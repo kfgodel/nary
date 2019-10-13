@@ -137,21 +137,6 @@ public interface NaryStream<T> extends Stream<T> {
   @Override
   Nary<T> peek(Consumer<? super T> action);
 
-  /**
-   * Returns a nary consisting of the elements of this stream that match
-   * the given predicate.
-   *
-   * <p>This is an <a href="package-summary.html#StreamOps">intermediate
-   * operation</a>.
-   *
-   * @param predicate a <a href="package-summary.html#NonInterference">non-interfering</a>,
-   *                  <a href="package-summary.html#Statelessness">stateless</a>
-   *                  predicate to apply to each element to determine if it
-   *                  should be included
-   * @return the new stream
-   */
-  Nary<T> filterNary(Predicate<? super T> predicate);
-
   @Override
   Nary<T> filter(Predicate<? super T> predicate);
 
