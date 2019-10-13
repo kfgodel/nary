@@ -111,7 +111,6 @@ public interface MonoElement<T> {
    */
   Nary<T> orElseUse(Supplier<? extends T> mapper) throws MoreThanOneElementException;
 
-
   /**
    * Return the only contained value, if present, otherwise throw an exception
    * to be created by the provided supplier.

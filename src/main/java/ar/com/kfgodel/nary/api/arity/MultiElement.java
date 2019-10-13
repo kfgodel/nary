@@ -180,4 +180,13 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
    * @see #findFirst()
    */
   Nary<T> findAnyNary();
+
+  /**
+   * Consumes the first elements of this nary and returns the rest.<br>
+   *   If there are less elements than consumers passed, then some consumers will not be called.<br>
+   *   If there are more elements than consumers passed, then the returned nary will contain them
+   * @param consumers The consumers that will be applied in order to the elements of this Nary
+   * @return The Nary of the un-consumed elements on this nary
+   */
+  Nary<T> consumeWith(Consumer<? super T>... consumers);
 }

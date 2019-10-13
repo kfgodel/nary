@@ -423,4 +423,16 @@ public abstract class NarySupport<T> implements Nary<T> {
     return Nary.create(nativeOptional);
   }
 
+  @Override
+  public Nary<T> consumeWith(Consumer<? super T>... consumers) {
+    final Spliterator<T> spliterator = this.spliterator();
+    for (Consumer<? super T> consumer : consumers) {
+      final boolean advanced = spliterator.tryAdvance(consumer);
+      if(!advanced){
+        // We reached the end. No point in keeping iterating
+        return Nary.empty();
+      }
+    }
+    return Nary.create(spliterator);
+  }
 }
