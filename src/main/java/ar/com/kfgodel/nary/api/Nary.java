@@ -514,7 +514,7 @@ public interface Nary<T> extends Optional<T>, Iterable<T> {
    *         else
    *             result = accumulator.apply(result, element);
    *     }
-   *     return foundAny ? Optional.of(result) : Optional.empty();
+   *     return foundAny ? Nary.of(result) : Optional.empty();
    * }</pre>
    *
    * but is not constrained to execute sequentially.

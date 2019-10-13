@@ -1,7 +1,6 @@
 package ar.com.kfgodel.nary;
 
 import ar.com.kfgodel.nary.api.Nary;
-import ar.com.kfgodel.nary.api.optionals.Optional;
 import info.kfgodel.jspek.api.contexts.TestContext;
 
 import java.util.Iterator;
@@ -29,8 +28,5 @@ public interface NaryTestContext extends TestContext {
 
   Spliterator<Integer> spliterator();
   void spliterator(Supplier<Spliterator<Integer>> definition);
-
-  Optional<Integer> optional();
-  void optional(Supplier<Optional<Integer>> definition);
 
 }

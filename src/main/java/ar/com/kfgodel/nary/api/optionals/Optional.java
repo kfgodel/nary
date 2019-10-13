@@ -3,10 +3,8 @@ package ar.com.kfgodel.nary.api.optionals;
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.Spliterator;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
@@ -17,13 +15,13 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
- * This type represents an optional with completed interface for absence of elements
- * and integration with nary type.<br>
- * Methods from stream are added to make optional pseudo-polymorphic with a stream
- * (no same type but similar semantics)
+ * This type defines the protocol Nary has to operate with its element, when we know it has just 1 element.<br>
+ *   It's based on {@link java.util.Optional} to be as compatible and intuitive as possible but it departs
+ *   from its concepts adding own.<br>
  *
  * Created by kfgodel on 06/11/14.
  */
+@Deprecated
 public interface Optional<T> extends InterfacedOptional<T>, Stream<T> {
 
   /**
@@ -524,103 +522,4 @@ public interface Optional<T> extends InterfacedOptional<T>, Stream<T> {
    */
   Set<T> toSet();
 
-
-  /**
-   * Creates an empty optional
-   * @param <T> The type of expected content
-   * @return The empty optional
-   */
-  static<T> Optional<T> empty(){
-    return Nary.empty();
-  }
-
-  /**
-   * Creates an optional with the indicated non null element
-   * @param nonNullValue The value for the non empty optional
-   * @param <T> The type of expected content
-   * @return The non empty optional
-   */
-  static<T> Optional<T> of(T nonNullValue) {
-    return Nary.of(nonNullValue);
-  }
-
-  /**
-   * Creates an optional with the given element if not null
-   * @param mayBeNullElement The element to contain in the optional
-   * @param <T> The type of expected content
-   * @return An enmpty optional if the element is null
-   */
-  static<T> Optional<T> ofNullable(T mayBeNullElement) {
-    return Nary.ofNullable(mayBeNullElement);
-  }
-
-  /**
-   * Creates an optional based on a native optional
-   * @param nativeOptional The java 8 optional
-   * @param <T> The type of expected content
-   * @return The same semantics optional
-   */
-  static<T> Optional<T> create(java.util.Optional<T> nativeOptional) {
-    return Nary.create(nativeOptional);
-  }
-
-  /**
-   * Creates an optional from a stream, assuming that it can only contain one or zero elements.<br>
-   *   If this assumption fails, the optional will throw an exception when one of the optional exclusive methods is used
-   *   (one of the methods that can only be used on an optional). Nary inherited methods may execute correctly
-   * @param stream The source element stream
-   * @param <T> The type of expected content
-   * @return The created optional wrapping the stream
-   */
-  static<T> Optional<T> create(Stream<T> stream) {
-    return Nary.create(stream);
-  }
-
-  /**
-   * Creates an optional from a spliterator, assuming that it can only contain one or zero elements.<br>
-   *   If this assumption fails, the optional will throw an exception when one of the optional exclusive methods is used
-   *   (one of the methods that can only be used on an optional). Nary inherited methods may execute correctly
-   * @param spliterator The source element spliterator
-   * @param <T> The type of expected content
-   * @return The created optional wrapping the stream
-   */
-  static<T> Optional<T> create(Spliterator<T> spliterator) {
-    return Nary.create(spliterator);
-  }
-
-  /**
-   * Creates an optional from an iterator, assuming that it can only contain one or zero elements.<br>
-   *   If this assumption fails, the optional will throw an exception when one of the optional exclusive methods is used
-   *   (one of the methods that can only be used on an optional). Nary inherited methods may execute correctly
-   * @param iterator The source element iterator
-   * @param <T> The type of expected content
-   * @return The created optional wrapping the stream
-   */
-  static<T> Optional<T> create(Iterator<T> iterator) {
-    return Nary.create(iterator);
-  }
-
-  /**
-   * Creates an optional from an iterable, assuming that it can only contain one or zero elements.<br>
-   *   If this assumption fails, the optional will throw an exception when one of the optional exclusive methods is used
-   *   (one of the methods that can only be used on an optional). Nary inherited methods may execute correctly
-   * @param iterable The source element iterable
-   * @param <T> The type of expected content
-   * @return The created optional wrapping the stream
-   */
-  static <T> Optional<T> create(Iterable<T> iterable) {
-    return Nary.create(iterable);
-  }
-
-  /**
-   * Creates an optional from an array, assuming that it can only contain one or zero elements.<br>
-   *   If this assumption fails, the optional will throw an exception when one of the optional exclusive methods is used
-   *   (one of the methods that can only be used on an optional). Nary inherited methods may execute correctly
-   * @param array The source element array
-   * @param <T> The type of expected content
-   * @return The created optional wrapping the stream
-   */
-  static<T> Optional<T> create(T[] array) {
-    return Nary.create(array);
-  }
 }

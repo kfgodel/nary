@@ -25,7 +25,7 @@ one element on the Nary, we use it as an optional calling `get()`
 
 **Optional example:**
 ```
-Optional.ofNullable(something)
+Nary.ofNullable(something)
   .ifAbsent(()-> LOG.warn("something is missing"))
   .ifPresent(nonNullSomething -> LOG.info("We got something: {}", nonNullSomething));
 ```
