@@ -32,10 +32,6 @@ import java.util.stream.Stream;
 public class OneElementNary<T> extends NarySupport<T> {
 
   private T element;
-  /**
-   * Because optionals are immutable, we can cache it to avoid instantiation
-   */
-  private Optional<T> cachedOptional;
 
   public static<T> OneElementNary<T> create(T element) {
     if(element == null){
@@ -67,10 +63,7 @@ public class OneElementNary<T> extends NarySupport<T> {
 
   @Override
   public Optional<T> asOptional() throws MoreThanOneElementException {
-    if(cachedOptional == null){ //NOSONAR This is only valid on the context of using the Optional typed variable as a cache
-      cachedOptional = createNativeOptional();
-    }
-    return cachedOptional;
+    return Optional.of(element);
   }
 
   private Optional<T> createNativeOptional() {
