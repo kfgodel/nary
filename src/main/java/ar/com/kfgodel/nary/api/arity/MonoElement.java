@@ -41,6 +41,14 @@ public interface MonoElement<T> {
   boolean isPresent() throws MoreThanOneElementException;
 
   /**
+   * Negation of isPresent(). Facility method
+   *
+   * @return true if there's no value to get
+   * @throws MoreThanOneElementException If there's more than one value to get as Optional
+   */
+  boolean isAbsent() throws MoreThanOneElementException;
+
+  /**
    * If the only value is present, invoke the specified consumer with the value,
    * otherwise do nothing.
    * This Nary as Stream is consumed.
@@ -220,4 +228,33 @@ public interface MonoElement<T> {
    * has one element
    */
   Optional<T> asOptional() throws MoreThanOneElementException;
+
+  /**
+   * Returns a native Optional instance to be used with native API
+   *
+   * @return The native instance that represents this Nary content
+   * @throws MoreThanOneElementException if there are more than one
+   */
+  java.util.Optional<T> asNativeOptional() throws MoreThanOneElementException;
+
+  /**
+   * If a value is present, apply the provided {@code Optional}-bearing
+   * mapping function to it, return that result, otherwise return an empty
+   * {@code Optional}.  This method is similar to {@link #mapOptional(Function)},
+   * but the provided mapper is one whose result is already an {@code Optional},
+   * and if invoked, {@code flatMapOptional} does not wrap it with an additional
+   * {@code Optional}.
+   *
+   * @param <U>    The type parameter to the {@code Optional} returned by
+   * @param mapper a mapping function to apply to the value, if present
+   *               the mapping function
+   * @return the result of applying an {@code Optional}-bearing mapping
+   * function to the value of this {@code Optional}, if a value is present,
+   * otherwise an empty {@code Optional}
+   * @throws NullPointerException if the mapping function is null or returns
+   *                              a null result
+   */
+  <U> Optional<U> flatMapOptionally(Function<? super T, Optional<U>> mapper);
+
+
 }

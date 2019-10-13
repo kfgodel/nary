@@ -1,6 +1,7 @@
 package ar.com.kfgodel.nary.api.arity;
 
 import ar.com.kfgodel.nary.api.Nary;
+import ar.com.kfgodel.nary.api.optionals.Optional;
 
 import java.util.Comparator;
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.Spliterator;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -377,4 +380,104 @@ public interface MultiElement<T> extends Iterable<T>, Stream<T> {
    * @return The set with the elements of this nary
    */
   Set<T> toSet();
+
+  /**
+   * Returns a nary consisting of the elements of this stream that match
+   * the given predicate.
+   *
+   * <p>This is an <a href="package-summary.html#StreamOps">intermediate
+   * operation</a>.
+   *
+   * @param predicate a <a href="package-summary.html#NonInterference">non-interfering</a>,
+   *                  <a href="package-summary.html#Statelessness">stateless</a>
+   *                  predicate to apply to each element to determine if it
+   *                  should be included
+   * @return the new stream
+   */
+  Nary<T> filterNary(Predicate<? super T> predicate);
+
+  /**
+   * Returns a nary consisting of the results of applying the given
+   * function to the elements of this stream.
+   *
+   * <p>This is an <a href="package-summary.html#StreamOps">intermediate
+   * operation</a>.
+   *
+   * @param <R> The element type of the new stream
+   * @param mapper a <a href="package-summary.html#NonInterference">non-interfering</a>,
+   *               <a href="package-summary.html#Statelessness">stateless</a>
+   *               function to apply to each element
+   * @return the new stream
+   */
+  <R> Nary<R> mapNary(Function<? super T, ? extends R> mapper);
+
+  /**
+   * Returns a nary consisting of the results of replacing each element of
+   * this stream with the contents of a mapped stream produced by applying
+   * the provided mapping function to each element.  Each mapped stream is
+   * {@link java.util.stream.BaseStream#close() closed} after its contents
+   * have been placed into this stream.  (If a mapped stream is {@code null}
+   * an empty stream is used, instead.)
+   *
+   * <p>This is an <a href="package-summary.html#StreamOps">intermediate
+   * operation</a>.
+   *
+   * The {@code flatMap()} operation has the effect of applying a one-to-many
+   * transformation to the elements of the stream, and then flattening the
+   * resulting elements into a new stream.
+   *
+   * <p><b>Examples.</b>
+   *
+   * <p>If {@code orders} is a stream of purchase orders, and each purchase
+   * order contains a collection of line items, then the following produces a
+   * stream containing all the line items in all the orders:
+   * <pre>{@code
+   *     orders.flatMap(order -> order.getLineItems().nary())...
+   * }</pre>
+   *
+   * <p>If {@code path} is the path to a file, then the following produces a
+   * stream of the {@code words} contained in that file:
+   * <pre>{@code
+   *     Stream<String> lines = Files.lines(path, StandardCharsets.UTF_8);
+   *     Stream<String> words = lines.flatMap(line -> Stream.of(line.split(" +")));
+   * }</pre>
+   * The {@code mapper} function passed to {@code flatMap} splits a line,
+   * using a simple regular expression, into an array of words, and then
+   * creates a stream of words from that array.
+   *
+   * @param <R> The element type of the new stream
+   * @param mapper a <a href="package-summary.html#NonInterference">non-interfering</a>,
+   *               <a href="package-summary.html#Statelessness">stateless</a>
+   *               function to apply to each element which produces a stream
+   *               of new values
+   * @return the new stream
+   */
+  <R> Nary<R> flatMapNary(Function<? super T, ? extends Nary<? extends R>> mapper);
+
+  /**
+   * Returns a stream of this optional containing the only element (if present)
+   * @return The empty stream if this is empty, a one element stream if not
+   */
+  Stream<T> asStream();
+
+  /**
+   * @return The nary that represents this optional
+   */
+  Nary<T> asNary();
+
+  /**
+   * Creates a concatenation of the elements of this optional and the given
+   * @param other The other optional to concat elements
+   * @return An empty nary if both are empty, a one element nary if one is empty,
+   * a two element naryif both have elements
+   */
+  Nary<T> concatOptional(Optional<? extends T> other);
+
+  /**
+   * Creates a concatenated stream of the element of this optional, and the given stream
+   * @param other The stream to combine after this
+   * @return An empty nary if both are empty, a nary with the argument stream if this optional
+   * is empty, a nary with this element plus the stream elements
+   */
+  Nary<T> concatStream(Stream<? extends T> other);
 }
