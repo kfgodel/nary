@@ -46,12 +46,12 @@ public class StreamBasedNary<T> extends NarySupport<T>  {
   }
 
   @Override
-  public List<T> toList() {
+  public List<T> collectToList() {
     return collect(Collectors.toList());
   }
 
   @Override
-  public Set<T> toSet() {
+  public Set<T> collectToSet() {
     return collect(Collectors.toSet());
   }
 

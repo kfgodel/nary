@@ -247,12 +247,12 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public List<Object> toList() {
+  public List<Object> collectToList() {
     return Collections.emptyList();
   }
 
   @Override
-  public Set<Object> toSet() {
+  public Set<Object> collectToSet() {
     return Collections.emptySet();
   }
 

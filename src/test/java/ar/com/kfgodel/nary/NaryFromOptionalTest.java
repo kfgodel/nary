@@ -164,11 +164,11 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
           assertThat(result).isEqualTo(Lists.newArrayList(8));
         });
         it("returns a list with only the value", () -> {
-          List<Integer> oneElementList = context().nary().toList();
+          List<Integer> oneElementList = context().nary().collectToList();
           assertThat(oneElementList).isEqualTo(Lists.newArrayList(3));
         });
         it("returns a set with only the value", () -> {
-          Set<Integer> oneElementSet = context().nary().toSet();
+          Set<Integer> oneElementSet = context().nary().collectToSet();
           assertThat(oneElementSet).isEqualTo(Sets.newHashSet(3));
         });
 

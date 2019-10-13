@@ -48,14 +48,14 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public List<T> toList() {
+  public List<T> collectToList() {
     List<T> lista = new ArrayList<>(1);
     lista.add(element);
     return lista;
   }
 
   @Override
-  public Set<T> toSet() {
+  public Set<T> collectToSet() {
     Set<T> set = new HashSet<>();
     set.add(element);
     return set;

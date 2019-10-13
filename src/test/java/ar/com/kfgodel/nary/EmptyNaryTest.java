@@ -163,10 +163,10 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
         });
 
         it("returns an empty list when toList() is called", () -> {
-          assertThat(context().nary().toList()).isEqualTo(Collections.emptyList());
+          assertThat(context().nary().collectToList()).isEqualTo(Collections.emptyList());
         });
         it("returns an empty set when toSet() is called", () -> {
-          assertThat(context().nary().toSet()).isEqualTo(Collections.emptySet());
+          assertThat(context().nary().collectToSet()).isEqualTo(Collections.emptySet());
         });
 
       });

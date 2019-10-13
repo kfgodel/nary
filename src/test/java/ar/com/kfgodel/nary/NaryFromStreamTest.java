@@ -204,11 +204,11 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           });
 
           it("returns a list with the values in the order they are present", () -> {
-            List<Integer> list = context().nary().toList();
+            List<Integer> list = context().nary().collectToList();
             assertThat(list).isEqualTo(Lists.newArrayList(3, 2, 1, 3));
           });
           it("returns a set with the values of the nary without duplicates or an order", () -> {
-            Set<Integer> set = context().nary().toSet();
+            Set<Integer> set = context().nary().collectToSet();
             assertThat(set).isEqualTo(Sets.newHashSet(1, 2, 3));
           });
 

@@ -40,7 +40,7 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
    * This method is a shorthand of calling collect(Collectors.toList())
    * @return The list with the elements of this nary
    */
-  List<T> toList();
+  List<T> collectToList();
 
   /**
    * Returns the content of this nary in a set.<br>
@@ -49,7 +49,7 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
    *
    * @return The set with the elements of this nary
    */
-  Set<T> toSet();
+  Set<T> collectToSet();
 
   /**
    * Returns a stream of this optional containing the only element (if present)
