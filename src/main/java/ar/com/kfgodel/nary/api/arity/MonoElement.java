@@ -12,7 +12,8 @@ import java.util.function.Supplier;
 /**
  * This type defines the additional protocol that can be used when we know there's only 1 element on the Nary instance.<br>
  *   It's based on {@link Optional} to be as compatible and intuitive as possible but it departs
- *   from its concepts adding own to simplify o complete use cases.<br>
+ *   from its concepts adding own to simplify o complete use cases, and making explicit differences when there's
+ *   a conceptual contradiction with {@link java.util.stream.Stream}.<br>
  *
  * Date: 12/10/19 - 21:21
  */
