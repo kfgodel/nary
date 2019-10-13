@@ -2,7 +2,6 @@ package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
-import ar.com.kfgodel.nary.api.optionals.Optional;
 import ar.com.kfgodel.nary.impl.others.OneElementIterator;
 import ar.com.kfgodel.nary.impl.others.OneElementSpliterator;
 
@@ -47,7 +46,7 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public Optional<T> asOptional() throws MoreThanOneElementException {
+  public Nary<T> asOptional() throws MoreThanOneElementException {
     return this;
   }
 
@@ -326,19 +325,19 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public <U> Optional<U> mapOptional(Function<? super T, ? extends U> mapper) throws MoreThanOneElementException {
+  public <U> Nary<U> mapOptional(Function<? super T, ? extends U> mapper) throws MoreThanOneElementException {
     U mapped = mapper.apply(element);
     return Nary.ofNullable(mapped);
   }
 
   @Override
-  public Optional<T> peekOptional(Consumer<? super T> action) {
+  public Nary<T> peekOptional(Consumer<? super T> action) {
     action.accept(element);
     return this;
   }
 
   @Override
-  public Optional<T> filterOptional(Predicate<? super T> predicate) throws MoreThanOneElementException {
+  public Nary<T> filterOptional(Predicate<? super T> predicate) throws MoreThanOneElementException {
     if(predicate.test(element)){
       return this;
     }else {
@@ -347,18 +346,18 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public <U> Optional<U> flatMapOptional(Function<? super T, java.util.Optional<U>> mapper) throws MoreThanOneElementException {
+  public <U> Nary<U> flatMapOptional(Function<? super T, java.util.Optional<U>> mapper) throws MoreThanOneElementException {
     java.util.Optional<U> mapped = mapper.apply(element);
     return Nary.create(mapped);
   }
 
   @Override
-  public <U> Optional<U> flatMapOptionally(Function<? super T, Optional<U>> mapper) {
+  public <U> Nary<U> flatMapOptionally(Function<? super T, Nary<U>> mapper) {
     return mapper.apply(element);
   }
 
   @Override
-  public Optional<T> ifAbsent(Runnable runnable) {
+  public Nary<T> ifAbsent(Runnable runnable) {
     // Nothing to do
     return this;
   }

@@ -44,6 +44,14 @@ public abstract class NarySupport<T> implements Nary<T> {
     return asOptional().isAbsent();
   }
 
+  /**
+   * Reduces this nary to an optional, trying to represent 0, or 1 element.
+   * If this nary contains more than one, then an exception is thrown
+   * @return an empty optional if this is empty, a non empty optional if this
+   * has one element
+   */
+  protected abstract Optional<T> asOptional() throws MoreThanOneElementException;
+
   @Override
   public Nary<T> peekNary(Consumer<? super T> action) {
     return returningNaryDo(peek(action));
@@ -90,32 +98,32 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public Optional<T> ifAbsent(Runnable runnable) {
+  public Nary<T> ifAbsent(Runnable runnable) {
     return asOptional().ifAbsent(runnable);
   }
 
   @Override
-  public Optional<T> peekOptional(Consumer<? super T> action) {
+  public Nary<T> peekOptional(Consumer<? super T> action) {
     return asOptional().peekOptional(action);
   }
 
   @Override
-  public Optional<T> filterOptional(Predicate<? super T> predicate) throws MoreThanOneElementException {
+  public Nary<T> filterOptional(Predicate<? super T> predicate) throws MoreThanOneElementException {
     return asOptional().filterNary(predicate);
   }
 
   @Override
-  public <U> Optional<U> mapOptional(Function<? super T, ? extends U> mapper) throws MoreThanOneElementException {
+  public <U> Nary<U> mapOptional(Function<? super T, ? extends U> mapper) throws MoreThanOneElementException {
     return asOptional().mapOptional(mapper);
   }
 
   @Override
-  public <U> Optional<U> flatMapOptional(Function<? super T, java.util.Optional<U>> mapper) throws MoreThanOneElementException {
+  public <U> Nary<U> flatMapOptional(Function<? super T, java.util.Optional<U>> mapper) throws MoreThanOneElementException {
     return asOptional().flatMapOptional(mapper);
   }
 
   @Override
-  public <U> Optional<U> flatMapOptionally(Function<? super T, Optional<U>> mapper) {
+  public <U> Nary<U> flatMapOptionally(Function<? super T, Nary<U>> mapper) {
     return asOptional().flatMapOptionally(mapper);
   }
 

@@ -2,7 +2,6 @@ package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
-import ar.com.kfgodel.nary.api.optionals.Optional;
 import ar.com.kfgodel.nary.impl.others.EmptyStream;
 
 import java.util.Collections;
@@ -64,13 +63,13 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public Optional<Object> ifAbsent(Runnable runnable) {
+  public Nary<Object> ifAbsent(Runnable runnable) {
     runnable.run();
     return this;
   }
 
   @Override
-  public Optional<Object> peekOptional(Consumer<? super Object> action) {
+  public Nary<Object> peekOptional(Consumer<? super Object> action) {
     // Ignore the action
     return instance();
   }
@@ -100,25 +99,25 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public Optional<Object> filterOptional(Predicate<? super Object> predicate) throws MoreThanOneElementException {
+  public Nary<Object> filterOptional(Predicate<? super Object> predicate) throws MoreThanOneElementException {
     // Ignore the argument
     return instance();
   }
 
   @Override
-  public <U> Optional<U> mapOptional(Function<? super Object, ? extends U> mapper) throws MoreThanOneElementException {
+  public <U> Nary<U> mapOptional(Function<? super Object, ? extends U> mapper) throws MoreThanOneElementException {
     // Ignore the argument
     return instance();
   }
 
   @Override
-  public <U> Optional<U> flatMapOptional(Function<? super Object, java.util.Optional<U>> mapper) throws MoreThanOneElementException {
+  public <U> Nary<U> flatMapOptional(Function<? super Object, java.util.Optional<U>> mapper) throws MoreThanOneElementException {
     // Ignore the mapper
     return instance();
   }
 
   @Override
-  public <U> Optional<U> flatMapOptionally(Function<? super Object, Optional<U>> mapper) {
+  public <U> Nary<U> flatMapOptionally(Function<? super Object, Nary<U>> mapper) {
     // Nothing to map
     return instance();
   }
@@ -259,7 +258,7 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public Optional<Object> asOptional() throws MoreThanOneElementException {
+  public Nary<Object> asOptional() throws MoreThanOneElementException {
     return this;
   }
 

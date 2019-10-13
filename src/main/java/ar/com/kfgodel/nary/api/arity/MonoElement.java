@@ -1,5 +1,6 @@
 package ar.com.kfgodel.nary.api.arity;
 
+import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 import ar.com.kfgodel.nary.api.optionals.Optional;
 
@@ -68,7 +69,7 @@ public interface MonoElement<T> {
    * @param runnable The code to execute if this optional is empty
    * @throws MoreThanOneElementException if there are more than one
    */
-  Optional<T> ifAbsent(Runnable runnable) throws MoreThanOneElementException;
+  Nary<T> ifAbsent(Runnable runnable) throws MoreThanOneElementException;
 
   /**
    * If the only value is present, apply the given action over it, returning self.<br>
@@ -82,7 +83,7 @@ public interface MonoElement<T> {
    * if a value is present and the value matches the given predicate,
    * otherwise an empty {@code Optional}
    */
-  Optional<T> peekOptional(Consumer<? super T> action);
+  Nary<T> peekOptional(Consumer<? super T> action);
 
   /**
    * If the only value is present, and the value matches the given predicate,
@@ -97,7 +98,7 @@ public interface MonoElement<T> {
    * @throws NullPointerException        if the predicate is null
    * @throws MoreThanOneElementException if there are more than one
    */
-  Optional<T> filterOptional(Predicate<? super T> predicate) throws MoreThanOneElementException;
+  Nary<T> filterOptional(Predicate<? super T> predicate) throws MoreThanOneElementException;
 
   /**
    * If the only value is present, apply the provided mapping function to it,
@@ -131,7 +132,7 @@ public interface MonoElement<T> {
    * @throws NullPointerException        if the mapping function is null
    * @throws MoreThanOneElementException if there are more than one
    */
-  <U> Optional<U> mapOptional(Function<? super T, ? extends U> mapper) throws MoreThanOneElementException;
+  <U> Nary<U> mapOptional(Function<? super T, ? extends U> mapper) throws MoreThanOneElementException;
 
   /**
    * If the only value is present, apply the provided {@code Optional}-bearing
@@ -152,7 +153,7 @@ public interface MonoElement<T> {
    *                                     a null result
    * @throws MoreThanOneElementException if there are more than one
    */
-  <U> Optional<U> flatMapOptional(Function<? super T, java.util.Optional<U>> mapper) throws MoreThanOneElementException;
+  <U> Nary<U> flatMapOptional(Function<? super T, java.util.Optional<U>> mapper) throws MoreThanOneElementException;
 
   /**
    * Return the only value if present, otherwise return {@code other}.
@@ -222,14 +223,6 @@ public interface MonoElement<T> {
   <X extends RuntimeException> T orElseThrowRuntime(Supplier<? extends X> exceptionSupplier) throws X, MoreThanOneElementException;
 
   /**
-   * Reduces this nary to an optional, trying to represent 0, or 1 element.
-   * If this nary contains more than one, then an exception is thrown
-   * @return an empty optional if this is empty, a non empty optional if this
-   * has one element
-   */
-  Optional<T> asOptional() throws MoreThanOneElementException;
-
-  /**
    * Returns a native Optional instance to be used with native API
    *
    * @return The native instance that represents this Nary content
@@ -254,7 +247,7 @@ public interface MonoElement<T> {
    * @throws NullPointerException if the mapping function is null or returns
    *                              a null result
    */
-  <U> Optional<U> flatMapOptionally(Function<? super T, Optional<U>> mapper);
+  <U> Nary<U> flatMapOptionally(Function<? super T, Nary<U>> mapper);
 
 
 }
