@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -131,19 +132,31 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
           List<Integer> result = context().nary().asStream().collect(Collectors.toList());
           assertThat(result).isEmpty();
         });
-        describe("#concatStream", () -> {
+        describe("#concat(Stream)", () -> {
           it("returns an empty nary if the stream is empty",()->{
             List<Integer> result = context().nary().concat(Nary.empty())
               .collect(Collectors.toList());
             assertThat(result).isEqualTo(Lists.newArrayList());
           });
           it("returns a nary with the stream elements if the stream is not empty",()->{
-            List<Integer> result = context().nary().concat(Nary.of(1,2, 3))
+            List<Integer> result = context().nary().concat(Nary.of(1, 2, 3))
               .collect(Collectors.toList());
             assertThat(result).isEqualTo(Lists.newArrayList(1, 2, 3));
           });
         });
-        
+        describe("#concat(Optional)", () -> {
+          it("returns an empty nary if the Optional is empty",()->{
+            List<Integer> result = context().nary().concat(Optional.empty())
+              .collect(Collectors.toList());
+            assertThat(result).isEqualTo(Lists.newArrayList());
+          });
+          it("returns a nary with the element from the Optional if it is not empty",()->{
+            List<Integer> result = context().nary().concat(Optional.of(1))
+              .collect(Collectors.toList());
+            assertThat(result).isEqualTo(Lists.newArrayList(1));
+          });
+        });
+
         it("returns an empty nary when #peek() is called", () -> {
           Variable<Integer> variable = Variable.create();
           List<Integer> result = context().nary().peek(newValue -> variable.set(1))

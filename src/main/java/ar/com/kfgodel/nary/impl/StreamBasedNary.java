@@ -24,14 +24,14 @@ import java.util.stream.Stream;
  */
 public class StreamBasedNary<T> extends NarySupport<T>  {
 
-  private Stream<T> sourceStream;
+  private Stream<? extends T> sourceStream;
   /**
    * Because optionals are not consumed, we can cache it to reuse everytime.
    * In this way, once the stream is consumed we still can act as an optional
    */
   private Nary<T> cachedOptional;
 
-  public static<T> StreamBasedNary<T> create(Stream<T> source) {
+  public static<T> StreamBasedNary<T> create(Stream<? extends T> source) {
     StreamBasedNary<T> nary = new StreamBasedNary<>();
     nary.sourceStream = source;
     return nary;
@@ -69,7 +69,7 @@ public class StreamBasedNary<T> extends NarySupport<T>  {
 
   @Override
   public Stream<T> asStream() {
-    return sourceStream;
+    return (Stream<T>) sourceStream;
   }
 
   @Override

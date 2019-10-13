@@ -120,7 +120,7 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
           List<Integer> result = context().nary().asStream().collect(Collectors.toList());
           assertThat(result).isEqualTo(Lists.newArrayList(3));
         });
-        describe("#concatStream", () -> {
+        describe("#concat(Stream)", () -> {
           it("returns a one element nary if the stream is empty",()->{
             List<Integer> result = context().nary().concat(Nary.empty())
               .collect(Collectors.toList());
@@ -130,6 +130,18 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
             List<Integer> result = context().nary().concat(Nary.of(1,2, 3))
               .collect(Collectors.toList());
             assertThat(result).isEqualTo(Lists.newArrayList(3, 1, 2, 3));
+          });
+        });
+        describe("#concat(Optional)", () -> {
+          it("returns a one element nary if the Optional is empty",()->{
+            List<Integer> result = context().nary().concat(Optional.empty())
+              .collect(Collectors.toList());
+            assertThat(result).isEqualTo(Lists.newArrayList(3));
+          });
+          it("returns a nary with the value and the element if the Optional is not empty",()->{
+            List<Integer> result = context().nary().concat(Optional.of(1))
+              .collect(Collectors.toList());
+            assertThat(result).isEqualTo(Lists.newArrayList(3, 1));
           });
         });
 

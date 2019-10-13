@@ -4,6 +4,7 @@ import ar.com.kfgodel.nary.api.Nary;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.function.BiConsumer;
@@ -66,6 +67,13 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
    * is empty, a nary with this element plus the stream elements
    */
   Nary<T> concat(Stream<? extends T> other);
+
+  /**
+   * Creates a concatenated Nary with the elements of this instance and the one (if any) on the given {@link Optional}
+   * @param other The optional to join elements with
+   * @return A new Nary with the elements from both instances
+   */
+  Nary<T> concat(Optional<? extends T> other);
 
   /**
    * Performs a <a href="package-summary.html#MutableReduction">mutable

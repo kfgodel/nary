@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Spliterator;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -47,6 +48,11 @@ public abstract class NarySupport<T> implements Nary<T> {
   @Override
   public Nary<T> concat(Stream<? extends T> other) {
     return returningNaryDo(Stream.concat(this, other));
+  }
+
+  @Override
+  public Nary<T> concat(Optional<? extends T> other) {
+    return concat(Nary.create(other));
   }
 
   @Override

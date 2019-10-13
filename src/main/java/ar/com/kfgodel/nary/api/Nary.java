@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
@@ -27,8 +28,8 @@ import java.util.stream.StreamSupport;
  * This allows a method to be used as returning an optional, or a stream based on the arguments (without having to change
  * the return type). Specially useful for query methods.<br>
  * <br>
- * Because java.util.Optional is a concrete class and has colliding method names, an alternative Optional with same semantics
- * is used instead. asNativeOptional() method is offered to get an java.util.Optional instance.<br>
+ * Because Optional is a concrete class and has colliding method names, an alternative Optional with same semantics
+ * is used instead. asNativeOptional() method is offered to get an Optional instance.<br>
  * <br>
  * When used as an Optional, because this object may contain more than one element, an exception could be thrown. If
  * the method returning this instance doesn't guarantee how many elements it contains, it is safest to use it as a Stream.<br>
@@ -79,12 +80,16 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
 
   /**
    * Creates a nary from a native stream. The operation on this nary will consume the stream
-   * @param nativeStream original stream
+   * @param stream original stream
    * @param <T> Expected type
    * @return A nre nary
    */
-  static<T> Nary<T> create(Stream<T> nativeStream){
-    return StreamBasedNary.create(nativeStream);
+  static<T> Nary<T> create(Stream<? extends T> stream){
+    if(stream instanceof Nary){
+      //To avoid unnecesary wrapping
+      return (Nary<T>) stream;
+    }
+    return StreamBasedNary.create(stream);
   }
 
   /**
@@ -94,10 +99,11 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
    * @param <T> The expected element type
    * @return A new nary
    */
-  static<T> Nary<T> create(java.util.Optional<T> nativeOptional){
-    return nativeOptional
-      .map((value)-> Nary.of(value))
-      .orElse(Nary.empty());
+  static<T> Nary<T> create(Optional<? extends T> nativeOptional){
+    if(nativeOptional.isPresent()){
+      return OneElementNary.create(nativeOptional.get());
+    }
+    return empty();
   }
 
   /**
