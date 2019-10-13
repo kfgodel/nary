@@ -139,19 +139,19 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public Stream<Object> filter(Predicate<? super Object> predicate) {
+  public Nary<Object> filter(Predicate<? super Object> predicate) {
     // Ignore the argument, return an empty nary
     return instance();
   }
 
   @Override
-  public <R> Stream<R> map(Function<? super Object, ? extends R> mapper) {
+  public <R> Nary<R> map(Function<? super Object, ? extends R> mapper) {
     // Ignore the argument, return an empty nary
     return instance();
   }
 
   @Override
-  public <R> Stream<R> flatMap(Function<? super Object, ? extends Stream<? extends R>> mapper) {
+  public <R> Nary<R> flatMap(Function<? super Object, ? extends Stream<? extends R>> mapper) {
     // Ignore the argument, return an empty nary
     return instance();
   }

@@ -173,7 +173,7 @@ public interface NaryStream<T> extends Stream<T> {
   Nary<T> filterNary(Predicate<? super T> predicate);
 
   @Override
-  Stream<T> filter(Predicate<? super T> predicate);
+  Nary<T> filter(Predicate<? super T> predicate);
 
   /**
    * Returns a nary consisting of the results of applying the given
@@ -191,7 +191,7 @@ public interface NaryStream<T> extends Stream<T> {
   <R> Nary<R> mapNary(Function<? super T, ? extends R> mapper);
 
   @Override
-  <R> Stream<R> map(Function<? super T, ? extends R> mapper);
+  <R> Nary<R> map(Function<? super T, ? extends R> mapper);
 
   /**
    * Returns a nary consisting of the results of replacing each element of
@@ -237,6 +237,6 @@ public interface NaryStream<T> extends Stream<T> {
   <R> Nary<R> flatMapNary(Function<? super T, ? extends Stream<? extends R>> mapper);
 
   @Override
-  <R> Stream<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper);
+  <R> Nary<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper);
 
 }

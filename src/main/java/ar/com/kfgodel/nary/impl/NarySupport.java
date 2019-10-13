@@ -141,13 +141,13 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public Stream<T> filter(Predicate<? super T> predicate) {
-    return asStream().filter(predicate);
+  public Nary<T> filter(Predicate<? super T> predicate) {
+    return returningNaryDo(asStream().filter(predicate));
   }
 
   @Override
-  public <R> Stream<R> map(Function<? super T, ? extends R> mapper) {
-    return asStream().map(mapper);
+  public <R> Nary<R> map(Function<? super T, ? extends R> mapper) {
+    return returningNaryDo(asStream().map(mapper));
   }
 
   @Override
@@ -166,8 +166,8 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public <R> Stream<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper) {
-    return asStream().flatMap(mapper);
+  public <R> Nary<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper) {
+    return returningNaryDo(asStream().flatMap(mapper));
   }
 
   @Override
