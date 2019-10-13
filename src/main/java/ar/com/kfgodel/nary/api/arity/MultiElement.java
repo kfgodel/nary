@@ -58,11 +58,6 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
   Stream<T> asStream();
 
   /**
-   * @return The nary that represents this optional
-   */
-  Nary<T> asNary();
-
-  /**
    * Creates a concatenated stream of the element of this optional, and the given stream
    * @param other The stream to combine after this
    * @return An empty nary if both are empty, a nary with the argument stream if this optional

@@ -33,11 +33,6 @@ import java.util.stream.Stream;
  */
 public abstract class NarySupport<T> implements Nary<T> {
 
-  @Override
-  public Nary<T> asNary() {
-    return this;
-  }
-
   /**
    * Forces this instance to contain only 1 element (or none).<br>
    *   If this nary contains more than one element the coercion fails. This method

@@ -133,10 +133,6 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
           });
         });
 
-        it("returns a one element nary when #asNary() is called",()->{
-          List<Integer> result = context().nary().asNary().collect(Collectors.toList());
-          assertThat(result).isEqualTo(Lists.newArrayList(3));
-        });
         it("applies the action to the value when #peekNary() is called", () -> {
           Variable<Object> variable = Variable.create();
           List<Integer> result = context().nary().peekNary(variable::set)
