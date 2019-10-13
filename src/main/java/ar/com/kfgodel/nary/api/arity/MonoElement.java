@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 
 /**
  * This type defines the additional protocol that can be used when we know there's only 1 element on the Nary instance.<br>
- *   It's based on {@link java.util.Optional} to be as compatible and intuitive as possible but it departs
+ *   It's based on {@link Optional} to be as compatible and intuitive as possible but it departs
  *   from its concepts adding own to simplify o complete use cases.<br>
  *
  * Date: 12/10/19 - 21:21
@@ -184,7 +184,7 @@ public interface MonoElement<T> {
    *                                     a null result
    * @throws MoreThanOneElementException if there are more than one
    */
-  <U> Nary<U> flatMapOptional(Function<? super T, java.util.Optional<U>> mapper) throws MoreThanOneElementException;
+  <U> Nary<U> flatMapOptional(Function<? super T, Optional<U>> mapper) throws MoreThanOneElementException;
 
   /**
    * If a value is present, apply the provided {@code Optional}-bearing

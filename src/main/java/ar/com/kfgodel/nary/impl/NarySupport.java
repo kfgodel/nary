@@ -65,7 +65,7 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public <R> Nary<R> flatMapNary(Function<? super T, ? extends Nary<? extends R>> mapper) {
+  public <R> Nary<R> flatMapNary(Function<? super T, ? extends Stream<? extends R>> mapper) {
     return returningNaryDo(flatMap(mapper));
   }
 

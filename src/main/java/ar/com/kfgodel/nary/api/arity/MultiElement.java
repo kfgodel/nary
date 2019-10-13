@@ -451,7 +451,7 @@ public interface MultiElement<T> extends Iterable<T>, Stream<T> {
    *               of new values
    * @return the new stream
    */
-  <R> Nary<R> flatMapNary(Function<? super T, ? extends Nary<? extends R>> mapper);
+  <R> Nary<R> flatMapNary(Function<? super T, ? extends Stream<? extends R>> mapper);
 
   /**
    * Returns a stream of this optional containing the only element (if present)
