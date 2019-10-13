@@ -134,8 +134,8 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public java.util.Optional<T> asNativeOptional() throws MoreThanOneElementException {
-    return coerceToMonoElement().asNativeOptional();
+  public java.util.Optional<T> asOptional() throws MoreThanOneElementException {
+    return coerceToMonoElement().asOptional();
   }
 
   @Override

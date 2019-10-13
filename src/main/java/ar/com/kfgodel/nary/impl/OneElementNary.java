@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.function.BiConsumer;
@@ -34,7 +35,7 @@ public class OneElementNary<T> extends NarySupport<T> {
   /**
    * Because optionals are immutable, we can cache it to avoid instantiation
    */
-  private java.util.Optional<T> cachedOptional;
+  private Optional<T> cachedOptional;
 
   public static<T> OneElementNary<T> create(T element) {
     if(element == null){
@@ -65,15 +66,15 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public java.util.Optional<T> asNativeOptional() throws MoreThanOneElementException {
-    if(cachedOptional == null){ //NOSONAR This is only valid on the context of using the variable as a cache
+  public Optional<T> asOptional() throws MoreThanOneElementException {
+    if(cachedOptional == null){ //NOSONAR This is only valid on the context of using the Optional typed variable as a cache
       cachedOptional = createNativeOptional();
     }
     return cachedOptional;
   }
 
-  private java.util.Optional<T> createNativeOptional() {
-    return java.util.Optional.of(element);
+  private Optional<T> createNativeOptional() {
+    return Optional.of(element);
   }
 
   @Override
@@ -123,8 +124,8 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public java.util.Optional<T> reduce(BinaryOperator<T> accumulator) {
-    return asNativeOptional();
+  public Optional<T> reduce(BinaryOperator<T> accumulator) {
+    return asOptional();
   }
 
   @Override
@@ -227,13 +228,13 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public java.util.Optional<T> findAny() {
-    return asNativeOptional();
+  public Optional<T> findAny() {
+    return asOptional();
   }
 
   @Override
-  public java.util.Optional<T> findFirst() {
-    return asNativeOptional();
+  public Optional<T> findFirst() {
+    return asOptional();
   }
 
   @Override
@@ -258,13 +259,13 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public java.util.Optional<T> max(Comparator<? super T> comparator) {
-    return asNativeOptional();
+  public Optional<T> max(Comparator<? super T> comparator) {
+    return asOptional();
   }
 
   @Override
-  public java.util.Optional<T> min(Comparator<? super T> comparator) {
-    return asNativeOptional();
+  public Optional<T> min(Comparator<? super T> comparator) {
+    return asOptional();
   }
 
   @Override
@@ -340,8 +341,8 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public <U> Nary<U> flatMapOptional(Function<? super T, java.util.Optional<U>> mapper) throws MoreThanOneElementException {
-    java.util.Optional<U> mapped = mapper.apply(element);
+  public <U> Nary<U> flatMapOptional(Function<? super T, Optional<U>> mapper) throws MoreThanOneElementException {
+    Optional<U> mapped = mapper.apply(element);
     return Nary.create(mapped);
   }
 

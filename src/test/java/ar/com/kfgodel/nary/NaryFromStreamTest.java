@@ -161,7 +161,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           });
           it("throws an exception when #asNativeOptional() is called",()->{
             try{
-              context().nary().asNativeOptional();
+              context().nary().asOptional();
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             }catch (MoreThanOneElementException e){
               assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");

@@ -75,43 +75,6 @@ public interface MonoElement<T> {
   Nary<T> ifAbsent(Runnable runnable) throws MoreThanOneElementException;
 
   /**
-   * This method maps each element on this element and filters null out.<br>
-   * If the result of mapping the elment produces a null result, then this
-   * method ignores that result reducing the elements contained.<br>
-   * <br>
-   * This is semantically equivalent to {@link Optional#map(Function)} and
-   * different from {@link java.util.stream.Stream#map(Function)} that takes null
-   * as valid results
-   *
-   * @param <U>    The type of the result of the mapping function
-   * @param mapper a mapping function to apply to the value, if present
-   * @return a Nary with the mapped results excluding the ones that returned null
-   * @throws NullPointerException        if the mapping function is null
-   */
-  <U> Nary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper);
-
-  /**
-   * If the only value is present, apply the provided {@code Optional}-bearing
-   * mapping function to it, return that result, otherwise return an empty
-   * {@code Optional}.  This method is similar to {@link #mapFilteringNullResult(Function)},
-   * but the provided mapper is one whose result is already an {@code Optional},
-   * and if invoked, {@code flatMapOptional} does not wrap it with an additional
-   * {@code Optional}.
-   * This Nary as Stream is consumed.
-   *
-   * @param <U>    The type parameter to the {@code Optional} returned by
-   * @param mapper a mapping function to apply to the value, if present
-   *               the mapping function
-   * @return the result of applying an {@code Optional}-bearing mapping
-   * function to the value of this {@code Optional}, if a value is present,
-   * otherwise an empty {@code Optional}
-   * @throws NullPointerException        if the mapping function is null or returns
-   *                                     a null result
-   * @throws MoreThanOneElementException if there are more than one
-   */
-  <U> Nary<U> flatMapOptional(Function<? super T, java.util.Optional<U>> mapper) throws MoreThanOneElementException;
-
-  /**
    * Return the only value if present, otherwise return {@code other}.
    * This Nary as Stream is consumed.
    *
@@ -179,12 +142,49 @@ public interface MonoElement<T> {
   <X extends RuntimeException> T orElseThrowRuntime(Supplier<? extends X> exceptionSupplier) throws X, MoreThanOneElementException;
 
   /**
-   * Returns a native Optional instance to be used with native API
+   * Returns a native Optional instance to be used with non Nary code
    *
    * @return The native instance that represents this Nary content
+   * @throws MoreThanOneElementException if there are more than one elements in this instance
+   */
+  Optional<T> asOptional() throws MoreThanOneElementException;
+
+  /**
+   * This method maps each element on this element and filters null out.<br>
+   * If the result of mapping the elment produces a null result, then this
+   * method ignores that result reducing the elements contained.<br>
+   * <br>
+   * This is semantically equivalent to {@link Optional#map(Function)} and
+   * different from {@link java.util.stream.Stream#map(Function)} that takes null
+   * as valid results
+   *
+   * @param <U>    The type of the result of the mapping function
+   * @param mapper a mapping function to apply to the value, if present
+   * @return a Nary with the mapped results excluding the ones that returned null
+   * @throws NullPointerException        if the mapping function is null
+   */
+  <U> Nary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper);
+
+  /**
+   * If the only value is present, apply the provided {@code Optional}-bearing
+   * mapping function to it, return that result, otherwise return an empty
+   * {@code Optional}.  This method is similar to {@link #mapFilteringNullResult(Function)},
+   * but the provided mapper is one whose result is already an {@code Optional},
+   * and if invoked, {@code flatMapOptional} does not wrap it with an additional
+   * {@code Optional}.
+   * This Nary as Stream is consumed.
+   *
+   * @param <U>    The type parameter to the {@code Optional} returned by
+   * @param mapper a mapping function to apply to the value, if present
+   *               the mapping function
+   * @return the result of applying an {@code Optional}-bearing mapping
+   * function to the value of this {@code Optional}, if a value is present,
+   * otherwise an empty {@code Optional}
+   * @throws NullPointerException        if the mapping function is null or returns
+   *                                     a null result
    * @throws MoreThanOneElementException if there are more than one
    */
-  java.util.Optional<T> asNativeOptional() throws MoreThanOneElementException;
+  <U> Nary<U> flatMapOptional(Function<? super T, java.util.Optional<U>> mapper) throws MoreThanOneElementException;
 
   /**
    * If a value is present, apply the provided {@code Optional}-bearing

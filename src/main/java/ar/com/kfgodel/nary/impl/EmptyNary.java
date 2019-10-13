@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
@@ -100,7 +101,7 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public <U> Nary<U> flatMapOptional(Function<? super Object, java.util.Optional<U>> mapper) throws MoreThanOneElementException {
+  public <U> Nary<U> flatMapOptional(Function<? super Object, Optional<U>> mapper) throws MoreThanOneElementException {
     // Ignore the mapper
     return instance();
   }
@@ -134,8 +135,8 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public java.util.Optional<Object> asNativeOptional() throws MoreThanOneElementException {
-    return java.util.Optional.empty();
+  public Optional<Object> asOptional() throws MoreThanOneElementException {
+    return Optional.empty();
   }
 
   @Override

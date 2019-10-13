@@ -115,7 +115,7 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
           assertThat(context().nary().toString()).isEqualTo("OneElementNary{ 3 }");
         });
         it("returns an equivalent optional when #asNativeOptional() is called",()->{
-          assertThat(context().nary().asNativeOptional()).isEqualTo(java.util.Optional.of(3));
+          assertThat(context().nary().asOptional()).isEqualTo(java.util.Optional.of(3));
         });
         it("returns a one element container when #collect(supplier, accumulator) is called",()->{
           List<Integer> result = context().nary().collect(ArrayList::new, ArrayList::add);
