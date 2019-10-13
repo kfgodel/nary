@@ -172,14 +172,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
             });
           });
 
-          it("applies the action when #peekNary() is called", () -> {
-            List<Integer> values = new ArrayList<>();
 
-            context().nary().peekNary(values::add)
-              .collect(Collectors.toList());
-
-            assertThat(values).isEqualTo(Lists.newArrayList(3, 2, 1, 3));
-          });
           it("applies the predicate to filter when #filterNary() is called",()->{
             List<Integer> result = context().nary().filterNary((value) -> value.equals(3))
               .collect(Collectors.toList());

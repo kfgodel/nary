@@ -18,29 +18,6 @@ import java.util.stream.Stream;
 public interface NaryStream<T> extends Stream<T> {
 
   /**
-   * Returns a Nary consisting of the elements of this Nary, additionally
-   * performing the provided action on each element as elements are consumed
-   * from the resulting Nary.
-   * <p>This is an <a href="package-summary.html#StreamOps">intermediate
-   * operation</a>.
-   * </p>
-   * <p>For parallel stream pipelines, the action may be called at
-   * whatever time and in whatever thread the element is made available by the
-   * upstream operation.  If the action modifies shared state,
-   * it is responsible for providing the required synchronization.
-   * </p>
-   *
-   * @param action a <a href="package-summary.html#NonInterference">
-   *               non-interfering</a> action to perform on the elements as
-   *               they are consumed from the stream
-   * @return the new Nary
-   */
-  Nary<T> peekNary(Consumer<? super T> action);
-
-  @Override
-  Nary<T> peek(Consumer<? super T> action);
-
-  /**
    * Returns a nary consisting of the distinct elements (according to
    * {@link Object#equals(Object)}) of this nary.
    *
@@ -156,6 +133,9 @@ public interface NaryStream<T> extends Stream<T> {
    * @throws IllegalArgumentException if {@code n} is negative
    */
   Nary<T> skip(long n);
+
+  @Override
+  Nary<T> peek(Consumer<? super T> action);
 
   /**
    * Returns a nary consisting of the elements of this stream that match

@@ -71,12 +71,6 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public Nary<Object> peekNary(Consumer<? super Object> action) {
-    // Ignore the action
-    return instance();
-  }
-
-  @Override
   public Nary<Object> filterNary(Predicate<? super Object> predicate) {
     // Ignore the predicate, return an empty nary
     return instance();

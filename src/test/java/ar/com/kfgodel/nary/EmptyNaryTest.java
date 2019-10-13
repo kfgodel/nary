@@ -132,9 +132,9 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
           });
         });
         
-        it("returns an empty nary when #peekNary() is called", () -> {
+        it("returns an empty nary when #peek() is called", () -> {
           Variable<Integer> variable = Variable.create();
-          List<Integer> result = context().nary().peekNary(variable::set)
+          List<Integer> result = context().nary().peek(newValue -> variable.set(1))
             .collect(Collectors.toList());
 
           assertThat(result).isEqualTo(Lists.newArrayList());
