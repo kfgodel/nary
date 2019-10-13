@@ -2,7 +2,6 @@ package ar.com.kfgodel.nary.api;
 
 import ar.com.kfgodel.nary.api.arity.MonoElement;
 import ar.com.kfgodel.nary.api.arity.MultiElement;
-import ar.com.kfgodel.nary.api.optionals.Optional;
 import ar.com.kfgodel.nary.impl.EmptyNary;
 import ar.com.kfgodel.nary.impl.OneElementNary;
 import ar.com.kfgodel.nary.impl.StreamBasedNary;
@@ -36,7 +35,7 @@ import java.util.stream.StreamSupport;
  * <br>
  * Created by kfgodel on 06/11/14.
  */
-public interface Nary<T> extends Optional<T>, MonoElement<T>, MultiElement<T> {
+public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
 
   /**
    * This method is redefined so two naries are equal if they contain equal elements when iterated together

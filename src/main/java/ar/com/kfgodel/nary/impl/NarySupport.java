@@ -2,7 +2,6 @@ package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
-import ar.com.kfgodel.nary.api.optionals.Optional;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -50,7 +49,7 @@ public abstract class NarySupport<T> implements Nary<T> {
    * @return an empty optional if this is empty, a non empty optional if this
    * has one element
    */
-  protected abstract Optional<T> asOptional() throws MoreThanOneElementException;
+  protected abstract Nary<T> asOptional() throws MoreThanOneElementException;
 
   @Override
   public Nary<T> peekNary(Consumer<? super T> action) {

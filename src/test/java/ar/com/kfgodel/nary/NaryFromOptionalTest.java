@@ -65,28 +65,28 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
         });
         it("applies the action when called to #peekOptional()", () -> {
           Variable<Integer> variable = Variable.create();
-          ar.com.kfgodel.nary.api.optionals.Optional<Integer> result = context().nary().peekOptional(variable::set);
+          Nary<Integer> result = context().nary().peekOptional(variable::set);
 
           assertThat(result.get()).isEqualTo(3);
           assertThat(variable.get()).isEqualTo(3);
         });
         it("applies the predicate when called to #filterOptional()",()->{
-          ar.com.kfgodel.nary.api.optionals.Optional<Integer> result = context().nary().filterOptional((value) -> value.equals(3));
+          Nary<Integer> result = context().nary().filterOptional((value) -> value.equals(3));
 
           assertThat(result.get()).isEqualTo(3);
         });
         it("transforms the value when called to #mapOptional()",()->{
-          ar.com.kfgodel.nary.api.optionals.Optional<Integer> result = context().nary().mapOptional((value) -> value + 1);
+          Nary<Integer> result = context().nary().mapOptional((value) -> value + 1);
 
           assertThat(result.get()).isEqualTo(4);
         });
         it("transforms  the value when called to #flatmapOptional()",()->{
-          ar.com.kfgodel.nary.api.optionals.Optional<Integer> result = context().nary().flatMapOptional((value)-> Optional.of(5));
+          Nary<Integer> result = context().nary().flatMapOptional((value)-> Optional.of(5));
 
           assertThat(result.get()).isEqualTo(5);
         });
         it("transforms  the value when called to #flatmapOptionally()",()->{
-          ar.com.kfgodel.nary.api.optionals.Optional<Integer> result = context().nary().flatMapOptionally((value)-> Nary.of(5));
+          Nary<Integer> result = context().nary().flatMapOptionally((value)-> Nary.of(5));
 
           assertThat(result.get()).isEqualTo(5);
         });

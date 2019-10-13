@@ -1,7 +1,6 @@
 package ar.com.kfgodel.nary;
 
 import ar.com.kfgodel.nary.api.Nary;
-import ar.com.kfgodel.nary.api.optionals.Optional;
 import ar.com.kfgodel.nary.impl.others.EmptyStream;
 import info.kfgodel.jspek.api.JavaSpec;
 import info.kfgodel.jspek.api.JavaSpecRunner;
@@ -61,28 +60,28 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
         });
         it("always returns an emtpy optional when called to #peekOptional()", () -> {
           Variable<Integer> variable = Variable.create();
-          Optional<Integer> result = context().nary().peekOptional(variable::set);
+          Nary<Integer> result = context().nary().peekOptional(variable::set);
 
           assertThat(result.isAbsent()).isTrue();
           assertThat(variable.get()).isNull();
         });
         it("always returns an empty optional when called to #filterOptional()",()->{
-          Optional<Integer> result = context().nary().filterOptional((value) -> true);
+          Nary<Integer> result = context().nary().filterOptional((value) -> true);
 
           assertThat(result.isAbsent()).isTrue();
         });
         it("always returns an empty optional when called to #mapOptional()",()->{
-          Optional<Integer> result = context().nary().mapOptional((value) -> value);
+          Nary<Integer> result = context().nary().mapOptional((value) -> value);
 
           assertThat(result.isAbsent()).isTrue();
         });
         it("always returns an empty optional when called to #flatmapOptional()",()->{
-          Optional<Integer> result = context().nary().flatMapOptional((value)-> Nary.of(value).asNativeOptional());
+          Nary<Integer> result = context().nary().flatMapOptional((value)-> Nary.of(value).asNativeOptional());
 
           assertThat(result.isAbsent()).isTrue();
         });
         it("always returns an empty optional when called to #flatmapOptionally()",()->{
-          Optional<Integer> result = context().nary().flatMapOptionally((value)-> Nary.of(value));
+          Nary<Integer> result = context().nary().flatMapOptionally((value)-> Nary.of(value));
 
           assertThat(result.isAbsent()).isTrue();
         });
