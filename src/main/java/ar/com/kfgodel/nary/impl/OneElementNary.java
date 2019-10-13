@@ -2,7 +2,6 @@ package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
-import ar.com.kfgodel.nary.api.optionals.Optional;
 import ar.com.kfgodel.nary.impl.others.OneElementIterator;
 import ar.com.kfgodel.nary.impl.others.OneElementSpliterator;
 
@@ -12,6 +11,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.function.BiConsumer;
@@ -32,10 +32,6 @@ import java.util.stream.Stream;
 public class OneElementNary<T> extends NarySupport<T> {
 
   private T element;
-  /**
-   * Because optionals are immutable, we can cache it to avoid instantiation
-   */
-  private java.util.Optional<T> cachedOptional;
 
   public static<T> OneElementNary<T> create(T element) {
     if(element == null){
@@ -47,34 +43,39 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public Optional<T> asOptional() throws MoreThanOneElementException {
+  public Nary<T> coerceToMonoElement() throws MoreThanOneElementException {
     return this;
   }
 
   @Override
-  public List<T> toList() {
+  public Nary<T> concat(Optional<? extends T> other) {
+    if(other.isPresent()){
+      return concat(Nary.create(other));
+    }
+    return this;
+  }
+
+  @Override
+  public List<T> collectToList() {
     List<T> lista = new ArrayList<>(1);
     lista.add(element);
     return lista;
   }
 
   @Override
-  public Set<T> toSet() {
+  public Set<T> collectToSet() {
     Set<T> set = new HashSet<>();
     set.add(element);
     return set;
   }
 
   @Override
-  public java.util.Optional<T> asNativeOptional() throws MoreThanOneElementException {
-    if(cachedOptional == null){ //NOSONAR This is only valid on the context of using the variable as a cache
-      cachedOptional = createNativeOptional();
-    }
-    return cachedOptional;
+  public Optional<T> asOptional() throws MoreThanOneElementException {
+    return Optional.of(element);
   }
 
-  private java.util.Optional<T> createNativeOptional() {
-    return java.util.Optional.of(element);
+  private Optional<T> createNativeOptional() {
+    return Optional.of(element);
   }
 
   @Override
@@ -124,8 +125,8 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public java.util.Optional<T> reduce(BinaryOperator<T> accumulator) {
-    return asNativeOptional();
+  public Optional<T> reduce(BinaryOperator<T> accumulator) {
+    return asOptional();
   }
 
   @Override
@@ -228,13 +229,13 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public java.util.Optional<T> findAny() {
-    return asNativeOptional();
+  public Optional<T> findAny() {
+    return asOptional();
   }
 
   @Override
-  public java.util.Optional<T> findFirst() {
-    return asNativeOptional();
+  public Optional<T> findFirst() {
+    return asOptional();
   }
 
   @Override
@@ -259,13 +260,13 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public java.util.Optional<T> max(Comparator<? super T> comparator) {
-    return asNativeOptional();
+  public Optional<T> max(Comparator<? super T> comparator) {
+    return asOptional();
   }
 
   @Override
-  public java.util.Optional<T> min(Comparator<? super T> comparator) {
-    return asNativeOptional();
+  public Optional<T> min(Comparator<? super T> comparator) {
+    return asOptional();
   }
 
   @Override
@@ -321,51 +322,31 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
+  public Nary<T> orElseUse(Supplier<? extends T> mapper) throws MoreThanOneElementException {
+    return this;
+  }
+
+  @Override
   public T orElse(T other) throws MoreThanOneElementException {
     return element;
   }
 
   @Override
-  public <U> Optional<U> mapOptional(Function<? super T, ? extends U> mapper) throws MoreThanOneElementException {
+  public <U> Nary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper) {
     U mapped = mapper.apply(element);
-    return Optional.ofNullable(mapped);
+    return Nary.ofNullable(mapped);
   }
 
   @Override
-  public Optional<T> peekOptional(Consumer<? super T> action) {
-    action.accept(element);
-    return this;
-  }
-
-  @Override
-  public Optional<T> filterOptional(Predicate<? super T> predicate) throws MoreThanOneElementException {
-    if(predicate.test(element)){
-      return this;
-    }else {
-      return Nary.empty();
-    }
-  }
-
-  @Override
-  public <U> Optional<U> flatMapOptional(Function<? super T, java.util.Optional<U>> mapper) throws MoreThanOneElementException {
-    java.util.Optional<U> mapped = mapper.apply(element);
-    return Nary.create(mapped);
-  }
-
-  @Override
-  public <U> Optional<U> flatMapOptionally(Function<? super T, Optional<U>> mapper) {
-    return mapper.apply(element);
-  }
-
-  @Override
-  public Optional<T> ifAbsent(Runnable runnable) {
+  public Nary<T> ifAbsent(Runnable runnable) {
     // Nothing to do
     return this;
   }
 
   @Override
-  public void ifPresent(Consumer<? super T> consumer) throws MoreThanOneElementException {
+  public Nary<T> ifPresent(Consumer<? super T> consumer) throws MoreThanOneElementException {
     consumer.accept(element);
+    return this;
   }
 
   @Override

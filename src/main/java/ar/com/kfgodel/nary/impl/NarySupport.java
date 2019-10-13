@@ -2,12 +2,12 @@ package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
-import ar.com.kfgodel.nary.api.optionals.Optional;
 
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Spliterator;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -34,104 +34,87 @@ import java.util.stream.Stream;
  */
 public abstract class NarySupport<T> implements Nary<T> {
 
-  @Override
-  public Nary<T> asNary() {
-    return this;
-  }
+  /**
+   * Forces this instance to contain only 1 element (or none).<br>
+   *   If this nary contains more than one element the coercion fails. This method
+   *   helps on checking the constraints that a mono element nary needs to have, that the user may
+   *   unintentionally violate
+   * @return an empty nary if this is empty, a non empty optional if this
+   * has only one element
+   * @throws MoreThanOneElementException If this nary has more than 1 element
+   */
+  protected abstract Nary<T> coerceToMonoElement() throws MoreThanOneElementException;
 
   @Override
-  public boolean isAbsent() throws MoreThanOneElementException {
-    return asOptional().isAbsent();
-  }
-
-  @Override
-  public Nary<T> peekNary(Consumer<? super T> action) {
-    return returningNaryDo(peek(action));
-  }
-
-  @Override
-  public Nary<T> filterNary(Predicate<? super T> predicate) {
-    return returningNaryDo(filter(predicate));
-  }
-
-  @Override
-  public <R> Nary<R> mapNary(Function<? super T, ? extends R> mapper) {
-    return returningNaryDo(map(mapper));
-  }
-
-  @Override
-  public <R> Nary<R> flatMapNary(Function<? super T, ? extends Nary<? extends R>> mapper) {
-    return returningNaryDo(flatMap(mapper));
-  }
-
-  @Override
-  public Nary<T> concatOptional(Optional<? extends T> other) {
-    return concatStream(other.asStream());
-  }
-
-  @Override
-  public Nary<T> concatStream(Stream<? extends T> other) {
+  public Nary<T> concat(Stream<? extends T> other) {
     return returningNaryDo(Stream.concat(this, other));
   }
 
   @Override
+  public Nary<T> concat(Optional<? extends T> other) {
+    return concat(Nary.create(other));
+  }
+
+  @Override
+  public Nary<T> add(T... others) {
+    return concat(Nary.create(others));
+  }
+
+  @Override
   public T get() throws NoSuchElementException {
-    return asOptional().get();
+    return coerceToMonoElement().get();
   }
 
   @Override
   public boolean isPresent() {
-    return asOptional().isPresent();
+    return coerceToMonoElement().isPresent();
   }
 
   @Override
-  public void ifPresent(Consumer<? super T> consumer) throws MoreThanOneElementException {
-    asOptional().ifPresent(consumer);
+  public Nary<T> ifPresent(Consumer<? super T> consumer) throws MoreThanOneElementException {
+    coerceToMonoElement().ifPresent(consumer);
+    return this;
   }
 
   @Override
-  public Optional<T> ifAbsent(Runnable runnable) {
-    return asOptional().ifAbsent(runnable);
+  public Nary<T> ifAbsent(Runnable runnable) {
+    return coerceToMonoElement().ifAbsent(runnable);
   }
 
   @Override
-  public Optional<T> peekOptional(Consumer<? super T> action) {
-    return asOptional().peekOptional(action);
+  public <U> Nary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper) {
+    return returningNaryDo(
+      this.<U>map(mapper)
+      .filter(Objects::nonNull)
+    );
   }
 
   @Override
-  public Optional<T> filterOptional(Predicate<? super T> predicate) throws MoreThanOneElementException {
-    return asOptional().filterNary(predicate);
-  }
-
-  @Override
-  public <U> Optional<U> mapOptional(Function<? super T, ? extends U> mapper) throws MoreThanOneElementException {
-    return asOptional().mapOptional(mapper);
-  }
-
-  @Override
-  public <U> Optional<U> flatMapOptional(Function<? super T, java.util.Optional<U>> mapper) throws MoreThanOneElementException {
-    return asOptional().flatMapOptional(mapper);
-  }
-
-  @Override
-  public <U> Optional<U> flatMapOptionally(Function<? super T, Optional<U>> mapper) {
-    return asOptional().flatMapOptionally(mapper);
+  public <U> Nary<U> flatMapOptional(Function<? super T, java.util.Optional<U>> mapper) throws MoreThanOneElementException {
+    return returningNaryDo(
+      map(mapper)
+      .flatMap(Nary::create)
+    );
   }
 
   @Override
   public T orElse(T other) throws MoreThanOneElementException {
-    return asOptional().orElse(other);
+    return coerceToMonoElement().orElse(other);
   }
 
   @Override
   public T orElseGet(Supplier<? extends T> other) throws MoreThanOneElementException {
-    return asOptional().orElseGet(other);
+    return coerceToMonoElement().orElseGet(other);
+  }
+
+  @Override
+  public Nary<T> orElseUse(Supplier<? extends T> mapper) throws MoreThanOneElementException {
+    return coerceToMonoElement().orElseUse(mapper);
   }
 
   @Override
   public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
-    return asOptional().orElseThrow(exceptionSupplier);
+    return coerceToMonoElement().orElseThrow(exceptionSupplier);
   }
 
   @Override
@@ -140,8 +123,8 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public java.util.Optional<T> asNativeOptional() throws MoreThanOneElementException {
-    return asOptional().asNativeOptional();
+  public java.util.Optional<T> asOptional() throws MoreThanOneElementException {
+    return coerceToMonoElement().asOptional();
   }
 
   @Override
@@ -154,13 +137,13 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public Stream<T> filter(Predicate<? super T> predicate) {
-    return asStream().filter(predicate);
+  public Nary<T> filter(Predicate<? super T> predicate) {
+    return returningNaryDo(asStream().filter(predicate));
   }
 
   @Override
-  public <R> Stream<R> map(Function<? super T, ? extends R> mapper) {
-    return asStream().map(mapper);
+  public <R> Nary<R> map(Function<? super T, ? extends R> mapper) {
+    return returningNaryDo(asStream().map(mapper));
   }
 
   @Override
@@ -179,8 +162,8 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public <R> Stream<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper) {
-    return asStream().flatMap(mapper);
+  public <R> Nary<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper) {
+    return returningNaryDo(asStream().flatMap(mapper));
   }
 
   @Override

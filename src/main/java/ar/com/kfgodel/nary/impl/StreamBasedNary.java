@@ -2,7 +2,6 @@ package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
-import ar.com.kfgodel.nary.api.optionals.Optional;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -25,21 +24,21 @@ import java.util.stream.Stream;
  */
 public class StreamBasedNary<T> extends NarySupport<T>  {
 
-  private Stream<T> sourceStream;
+  private Stream<? extends T> sourceStream;
   /**
    * Because optionals are not consumed, we can cache it to reuse everytime.
    * In this way, once the stream is consumed we still can act as an optional
    */
-  private Optional<T> cachedOptional;
+  private Nary<T> cachedOptional;
 
-  public static<T> StreamBasedNary<T> create(Stream<T> source) {
+  public static<T> StreamBasedNary<T> create(Stream<? extends T> source) {
     StreamBasedNary<T> nary = new StreamBasedNary<>();
     nary.sourceStream = source;
     return nary;
   }
 
   @Override
-  public Optional<T> asOptional() throws MoreThanOneElementException {
+  public Nary<T> coerceToMonoElement() throws MoreThanOneElementException {
     if(cachedOptional == null){
       this.cachedOptional = reduceStreamToOptional();
     }
@@ -47,16 +46,16 @@ public class StreamBasedNary<T> extends NarySupport<T>  {
   }
 
   @Override
-  public List<T> toList() {
+  public List<T> collectToList() {
     return collect(Collectors.toList());
   }
 
   @Override
-  public Set<T> toSet() {
+  public Set<T> collectToSet() {
     return collect(Collectors.toSet());
   }
 
-  private Optional<T> reduceStreamToOptional() {
+  private Nary<T> reduceStreamToOptional() {
     Iterator<T> iterator = asStream().iterator();
     if(!iterator.hasNext()){
       return Nary.empty();
@@ -65,12 +64,12 @@ public class StreamBasedNary<T> extends NarySupport<T>  {
     if(iterator.hasNext()){
       throw new MoreThanOneElementException("Expecting 1 element in the stream to create an optional but found at least 2: " + Arrays.asList(onlyElement, iterator.next()));
     }
-    return Optional.ofNullable(onlyElement);
+    return Nary.ofNullable(onlyElement);
   }
 
   @Override
   public Stream<T> asStream() {
-    return sourceStream;
+    return (Stream<T>) sourceStream;
   }
 
   @Override

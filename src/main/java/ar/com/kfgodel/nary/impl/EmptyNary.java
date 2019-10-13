@@ -2,7 +2,6 @@ package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
-import ar.com.kfgodel.nary.api.optionals.Optional;
 import ar.com.kfgodel.nary.impl.others.EmptyStream;
 
 import java.util.Collections;
@@ -10,6 +9,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
@@ -59,67 +59,26 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public void ifPresent(Consumer<? super Object> consumer) throws MoreThanOneElementException {
+  public Nary<Object> ifPresent(Consumer<? super Object> consumer) throws MoreThanOneElementException {
     //Ignore the consumer
+    return this;
   }
 
   @Override
-  public Optional<Object> ifAbsent(Runnable runnable) {
+  public Nary<Object> ifAbsent(Runnable runnable) {
     runnable.run();
     return this;
   }
 
   @Override
-  public Optional<Object> peekOptional(Consumer<? super Object> action) {
-    // Ignore the action
-    return instance();
-  }
-
-  @Override
-  public Nary<Object> peekNary(Consumer<? super Object> action) {
-    // Ignore the action
-    return instance();
-  }
-
-  @Override
-  public Nary<Object> filterNary(Predicate<? super Object> predicate) {
-    // Ignore the predicate, return an empty nary
-    return instance();
-  }
-
-  @Override
-  public <R> Nary<R> mapNary(Function<? super Object, ? extends R> mapper) {
-    // Ignore the mapper, return empty nary
-    return instance();
-  }
-
-  @Override
-  public <R> Nary<R> flatMapNary(Function<? super Object, ? extends Nary<? extends R>> mapper) {
-    // Ignore the mapper, return an empty nary
-    return instance();
-  }
-
-  @Override
-  public Optional<Object> filterOptional(Predicate<? super Object> predicate) throws MoreThanOneElementException {
+  public <U> Nary<U> mapFilteringNullResult(Function<? super Object, ? extends U> mapper) {
     // Ignore the argument
     return instance();
   }
 
   @Override
-  public <U> Optional<U> mapOptional(Function<? super Object, ? extends U> mapper) throws MoreThanOneElementException {
-    // Ignore the argument
-    return instance();
-  }
-
-  @Override
-  public <U> Optional<U> flatMapOptional(Function<? super Object, java.util.Optional<U>> mapper) throws MoreThanOneElementException {
+  public <U> Nary<U> flatMapOptional(Function<? super Object, Optional<U>> mapper) throws MoreThanOneElementException {
     // Ignore the mapper
-    return instance();
-  }
-
-  @Override
-  public <U> Optional<U> flatMapOptionally(Function<? super Object, Optional<U>> mapper) {
-    // Nothing to map
     return instance();
   }
 
@@ -135,6 +94,12 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
+  public Nary<Object> orElseUse(Supplier<?> mapper) throws MoreThanOneElementException {
+    final Object element = mapper.get();
+    return Nary.of(element);
+  }
+
+  @Override
   public <X extends Throwable> Object orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
     throw exceptionSupplier.get();
   }
@@ -146,8 +111,8 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public java.util.Optional<Object> asNativeOptional() throws MoreThanOneElementException {
-    return java.util.Optional.empty();
+  public Optional<Object> asOptional() throws MoreThanOneElementException {
+    return Optional.empty();
   }
 
   @Override
@@ -156,19 +121,19 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public Stream<Object> filter(Predicate<? super Object> predicate) {
+  public Nary<Object> filter(Predicate<? super Object> predicate) {
     // Ignore the argument, return an empty nary
     return instance();
   }
 
   @Override
-  public <R> Stream<R> map(Function<? super Object, ? extends R> mapper) {
+  public <R> Nary<R> map(Function<? super Object, ? extends R> mapper) {
     // Ignore the argument, return an empty nary
     return instance();
   }
 
   @Override
-  public <R> Stream<R> flatMap(Function<? super Object, ? extends Stream<? extends R>> mapper) {
+  public <R> Nary<R> flatMap(Function<? super Object, ? extends Stream<? extends R>> mapper) {
     // Ignore the argument, return an empty nary
     return instance();
   }
@@ -259,17 +224,23 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public Optional<Object> asOptional() throws MoreThanOneElementException {
+  public Nary<Object> coerceToMonoElement() throws MoreThanOneElementException {
     return this;
   }
 
   @Override
-  public List<Object> toList() {
+  public Nary<Object> concat(Stream<?> other) {
+    // This is empty. Only the other elements are relevant
+    return Nary.create(other);
+  }
+
+  @Override
+  public List<Object> collectToList() {
     return Collections.emptyList();
   }
 
   @Override
-  public Set<Object> toSet() {
+  public Set<Object> collectToSet() {
     return Collections.emptySet();
   }
 

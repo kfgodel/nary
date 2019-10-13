@@ -63,30 +63,13 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
 
           assertThat(executed.get()).isFalse();
         });
-        it("applies the action when called to #peekOptional()", () -> {
-          Variable<Integer> variable = Variable.create();
-          ar.com.kfgodel.nary.api.optionals.Optional<Integer> result = context().nary().peekOptional(variable::set);
-
-          assertThat(result.get()).isEqualTo(3);
-          assertThat(variable.get()).isEqualTo(3);
-        });
-        it("applies the predicate when called to #filterOptional()",()->{
-          ar.com.kfgodel.nary.api.optionals.Optional<Integer> result = context().nary().filterOptional((value) -> value.equals(3));
-
-          assertThat(result.get()).isEqualTo(3);
-        });
-        it("transforms the value when called to #mapOptional()",()->{
-          ar.com.kfgodel.nary.api.optionals.Optional<Integer> result = context().nary().mapOptional((value) -> value + 1);
+        it("transforms the value when called to #mapFilteringNullResult()",()->{
+          Nary<Integer> result = context().nary().mapFilteringNullResult((value) -> value + 1);
 
           assertThat(result.get()).isEqualTo(4);
         });
         it("transforms  the value when called to #flatmapOptional()",()->{
-          ar.com.kfgodel.nary.api.optionals.Optional<Integer> result = context().nary().flatMapOptional((value)-> Optional.of(5));
-
-          assertThat(result.get()).isEqualTo(5);
-        });
-        it("transforms  the value when called to #flatmapOptionally()",()->{
-          ar.com.kfgodel.nary.api.optionals.Optional<Integer> result = context().nary().flatMapOptionally((value)-> ar.com.kfgodel.nary.api.optionals.Optional.of(5));
+          Nary<Integer> result = context().nary().flatMapOptional((value)-> Optional.of(5));
 
           assertThat(result.get()).isEqualTo(5);
         });
@@ -97,6 +80,10 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
         it("never executes the supplier argument when #orElseGet() is called",()->{
           Integer result = context().nary().orElseGet(()-> 4);
           assertThat(result).isEqualTo(3);
+        });
+        it("never executes the supplier argument when #orElseUse() is called",()->{
+          final Nary<Integer> result = context().nary().orElseUse(() -> 4);
+          assertThat(result.get()).isEqualTo(3);
         });
         it("never throws the exception when #orElseThrow() is called",()->{
           Integer result = context().nary().orElseThrow(() -> new RuntimeException("Kaboom"));
@@ -126,8 +113,8 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
         it("returns a one element nary representation when #toString() is called",()->{
           assertThat(context().nary().toString()).isEqualTo("OneElementNary{ 3 }");
         });
-        it("returns an equivalent optional when #asNativeOptional() is called",()->{
-          assertThat(context().nary().asNativeOptional()).isEqualTo(java.util.Optional.of(3));
+        it("returns an equivalent optional when asOptional() is called",()->{
+          assertThat(context().nary().asOptional()).isEqualTo(java.util.Optional.of(3));
         });
         it("returns a one element container when #collect(supplier, accumulator) is called",()->{
           List<Integer> result = context().nary().collect(ArrayList::new, ArrayList::add);
@@ -137,67 +124,49 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
           List<Integer> result = context().nary().asStream().collect(Collectors.toList());
           assertThat(result).isEqualTo(Lists.newArrayList(3));
         });
-        describe("#concatOptional", () -> {
-          it("returns a one element nary if the other optional is empty",()->{
-            List<Integer> result = context().nary().concatOptional(Nary.empty())
-              .collect(Collectors.toList());
-            assertThat(result).isEqualTo(Lists.newArrayList(3));
-          });
-          it("returns a two element nary if the other optional is not empty",()->{
-            List<Integer> result = context().nary().concatOptional(Nary.of(4))
-              .collect(Collectors.toList());
-            assertThat(result).isEqualTo(Lists.newArrayList(3, 4));
-          });
-        });
-        describe("#concatStream", () -> {
+        describe("#concat(Stream)", () -> {
           it("returns a one element nary if the stream is empty",()->{
-            List<Integer> result = context().nary().concatStream(Nary.empty())
+            List<Integer> result = context().nary().concat(Nary.empty())
               .collect(Collectors.toList());
             assertThat(result).isEqualTo(Lists.newArrayList(3));
           });
           it("returns a nary with the value and the stream elements if the stream is not empty",()->{
-            List<Integer> result = context().nary().concatOptional(Nary.of(1,2, 3))
+            List<Integer> result = context().nary().concat(Nary.of(1,2, 3))
+              .collect(Collectors.toList());
+            assertThat(result).isEqualTo(Lists.newArrayList(3, 1, 2, 3));
+          });
+        });
+        describe("#concat(Optional)", () -> {
+          it("returns a one element nary if the Optional is empty",()->{
+            List<Integer> result = context().nary().concat(Optional.empty())
+              .collect(Collectors.toList());
+            assertThat(result).isEqualTo(Lists.newArrayList(3));
+          });
+          it("returns a nary with the value and the element if the Optional is not empty",()->{
+            List<Integer> result = context().nary().concat(Optional.of(1))
+              .collect(Collectors.toList());
+            assertThat(result).isEqualTo(Lists.newArrayList(3, 1));
+          });
+        });
+        describe("#add", () -> {
+          it("returns a one element nary if no arguments are passed",()->{
+            List<Integer> result = context().nary().add()
+              .collect(Collectors.toList());
+            assertThat(result).isEqualTo(Lists.newArrayList(3));
+          });
+          it("returns a nary with the value and the elements passed as arguments",()->{
+            List<Integer> result = context().nary().add(1, 2, 3)
               .collect(Collectors.toList());
             assertThat(result).isEqualTo(Lists.newArrayList(3, 1, 2, 3));
           });
         });
 
-        it("returns a one element nary when #asNary() is called",()->{
-          List<Integer> result = context().nary().asNary().collect(Collectors.toList());
-          assertThat(result).isEqualTo(Lists.newArrayList(3));
-        });
-        it("applies the action to the value when #peekNary() is called", () -> {
-          Variable<Object> variable = Variable.create();
-          List<Integer> result = context().nary().peekNary(variable::set)
-            .collect(Collectors.toList());
-
-          assertThat(result).isEqualTo(Lists.newArrayList(3));
-          assertThat(variable.get()).isEqualTo(3);
-        });
-        it("applies the predicate to filter when #filterNary() is called",()->{
-          List<Integer> result = context().nary().filterNary((value) -> value.equals(3))
-            .collect(Collectors.toList());
-
-          assertThat(result).isEqualTo(Lists.newArrayList(3));
-        });
-        it("transforms the value when #mapNary() is called",()->{
-          List<Integer> result = context().nary().mapNary((value) -> value + 1)
-            .collect(Collectors.toList());
-
-          assertThat(result).isEqualTo(Lists.newArrayList(4));
-        });
-        it("transforms the value when #flatMapNary() is called",()->{
-          List<Integer> result = context().nary().flatMapNary((value) -> Nary.of(8))
-            .collect(Collectors.toList());
-
-          assertThat(result).isEqualTo(Lists.newArrayList(8));
-        });
         it("returns a list with only the value", () -> {
-          List<Integer> oneElementList = context().nary().toList();
+          List<Integer> oneElementList = context().nary().collectToList();
           assertThat(oneElementList).isEqualTo(Lists.newArrayList(3));
         });
         it("returns a set with only the value", () -> {
-          Set<Integer> oneElementSet = context().nary().toSet();
+          Set<Integer> oneElementSet = context().nary().collectToSet();
           assertThat(oneElementSet).isEqualTo(Sets.newHashSet(3));
         });
 

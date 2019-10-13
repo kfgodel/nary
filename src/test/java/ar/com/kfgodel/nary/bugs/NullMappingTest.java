@@ -8,10 +8,11 @@ import info.kfgodel.jspek.api.JavaSpecRunner;
 import org.junit.runner.RunWith;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * Date: 20/12/17 - 17:37
@@ -22,25 +23,42 @@ public class NullMappingTest extends JavaSpec<NaryTestContext> {
   public void define() {
     describe("using null as map result", () -> {
 
-
-      it("it implicitly filters null as empty optional after map",()->{
-        Nary.of("algo")
-          .mapOptional((algo)-> null)
-          .mapOptional((algo)-> {
-            fail("It should never execute");
-            return "Never happens";
-          })
-          .ifPresent((nullied)-> fail("Should never run"));
+      describe("when using native streams", () -> {
+        it("takes null as valid result", () -> {
+          final List<Object> result = Stream.of("algo")
+            .map(algo -> null)
+            .collect(Collectors.toList());
+          assertThat(result).isEqualTo(Lists.newArrayList((Object)null));
+        });
       });
 
-      it("treats null from first map as empty nary for the second map",()->{
-        List<Object> mapped = Nary.of("algo")
-          .mapNary((algo) -> null)
-          .mapNary((algo) -> algo)
-          .collect(Collectors.toList());
+      describe("when using native optional", () -> {
+        it("implicitly filters null out as valid result", () -> {
+          final boolean result = Optional.of("algo")
+            .map(algo -> null)
+            .isPresent();
+          assertThat(result).isFalse();
+        });
+      });
 
-        assertThat(mapped).isEqualTo(Lists.newArrayList((Object)null));
-      });   
+      describe("when using nary", () -> {
+        it("takes null as valid result when #map() is used", () -> {
+          final List<Object> result = Nary.of("algo")
+            .map(algo -> null)
+            .collect(Collectors.toList());
+          assertThat(result).isEqualTo(Lists.newArrayList((Object)null));
+        });
+        it("explicitly filters null as valid result when #mapFilteringNullResult() is used",()->{
+          final List<Object> result = Nary.of("algo")
+            .mapFilteringNullResult(algo -> null)
+            .map((nullValue)-> {
+              throw new RuntimeException("This code is never executed");
+            })
+            .collect(Collectors.toList());
+          assertThat(result).isEmpty();
+        });
+      });
+
     });
 
   }

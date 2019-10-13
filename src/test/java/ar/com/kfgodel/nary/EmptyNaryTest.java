@@ -1,7 +1,6 @@
 package ar.com.kfgodel.nary;
 
 import ar.com.kfgodel.nary.api.Nary;
-import ar.com.kfgodel.nary.api.optionals.Optional;
 import ar.com.kfgodel.nary.impl.others.EmptyStream;
 import info.kfgodel.jspek.api.JavaSpec;
 import info.kfgodel.jspek.api.JavaSpecRunner;
@@ -13,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -59,30 +59,25 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
 
           assertThat(executed.get()).isTrue();
         });
-        it("always returns an emtpy optional when called to #peekOptional()", () -> {
-          Variable<Integer> variable = Variable.create();
-          Optional<Integer> result = context().nary().peekOptional(variable::set);
-
-          assertThat(result.isAbsent()).isTrue();
-          assertThat(variable.get()).isNull();
-        });
-        it("always returns an empty optional when called to #filterOptional()",()->{
-          Optional<Integer> result = context().nary().filterOptional((value) -> true);
+        it("always returns an empty optional when called to #mapFilteringNullResult()",()->{
+          Nary<Integer> result = context().nary().mapFilteringNullResult((value) -> value);
 
           assertThat(result.isAbsent()).isTrue();
         });
-        it("always returns an empty optional when called to #mapOptional()",()->{
-          Optional<Integer> result = context().nary().mapOptional((value) -> value);
+        it("returns an empty stream when #map() is called",()->{
+          List<Integer> result = context().nary().map((value) -> value)
+            .collectToList();
 
-          assertThat(result.isAbsent()).isTrue();
+          assertThat(result).isEqualTo(Lists.newArrayList());
+        });
+        it("returns an empty stream when #flatMap() is called",()->{
+          List<Integer> result = context().nary().flatMap((value) -> Nary.of(value))
+            .collectToList();
+
+          assertThat(result).isEqualTo(Lists.newArrayList());
         });
         it("always returns an empty optional when called to #flatmapOptional()",()->{
-          Optional<Integer> result = context().nary().flatMapOptional((value)-> Nary.of(value).asNativeOptional());
-
-          assertThat(result.isAbsent()).isTrue();
-        });
-        it("always returns an empty optional when called to #flatmapOptionally()",()->{
-          Optional<Integer> result = context().nary().flatMapOptionally((value)-> Optional.of(value));
+          Nary<Integer> result = context().nary().flatMapOptional((value)-> Nary.of(value).asOptional());
 
           assertThat(result.isAbsent()).isTrue();
         });
@@ -93,6 +88,10 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
         it("always executes the supplier argument when #orElseGet() is called",()->{
           Integer result = context().nary().orElseGet(()-> 4);
           assertThat(result).isEqualTo(4);
+        });
+        it("always uses the supplier argument when #orElseUse() is called",()->{
+          Nary<Integer> result = context().nary().orElseUse(()-> 4);
+          assertThat(result.get()).isEqualTo(4);
         });
         it("always throws the exception when #orElseThrow() is called",()->{
           try{
@@ -126,8 +125,8 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
         it("returns an empty nary representation when #toString() is called",()->{
             assertThat(context().nary().toString()).isEqualTo("EmptyNary");
         });
-        it("always returns the empty optional when #asNativeOptional() is called",()->{
-            assertThat(context().nary().asNativeOptional()).isEqualTo(java.util.Optional.empty());
+        it("always returns the empty optional when asOptional() is called",()->{
+            assertThat(context().nary().asOptional()).isEqualTo(java.util.Optional.empty());
         });
         it("always returns an empty container when #collect(supplier, accumulator) is called",()->{
           List<Object> result = context().nary().collect(ArrayList::new, ArrayList::add);
@@ -137,66 +136,63 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
           List<Integer> result = context().nary().asStream().collect(Collectors.toList());
           assertThat(result).isEmpty();
         });
-        describe("#concatOptional", () -> {
-          it("returns an empty nary if the other optional is empty",()->{
-            List<Integer> result = context().nary().concatOptional(Nary.empty())
-              .collect(Collectors.toList());
-            assertThat(result).isEqualTo(Lists.newArrayList());
-          });
-          it("returns a one element nary if the other optional is not empty",()->{
-            List<Integer> result = context().nary().concatOptional(Nary.of(1))
-              .collect(Collectors.toList());
-            assertThat(result).isEqualTo(Lists.newArrayList(1));
-          });
-        });
-        describe("#concatStream", () -> {
+        describe("#concat(Stream)", () -> {
           it("returns an empty nary if the stream is empty",()->{
-            List<Integer> result = context().nary().concatStream(Nary.empty())
+            List<Integer> result = context().nary().concat(Nary.empty())
               .collect(Collectors.toList());
             assertThat(result).isEqualTo(Lists.newArrayList());
           });
           it("returns a nary with the stream elements if the stream is not empty",()->{
-            List<Integer> result = context().nary().concatOptional(Nary.of(1,2, 3))
+            List<Integer> result = context().nary().concat(Nary.of(1, 2, 3))
               .collect(Collectors.toList());
             assertThat(result).isEqualTo(Lists.newArrayList(1, 2, 3));
           });
         });
-        
-        it("returns the empty nary when #asNary() is called",()->{
-            assertThat((Stream)context().nary().asNary()).isEqualTo(Nary.empty());
+        describe("#concat(Optional)", () -> {
+          it("returns an empty nary if the Optional is empty",()->{
+            List<Integer> result = context().nary().concat(Optional.empty())
+              .collect(Collectors.toList());
+            assertThat(result).isEqualTo(Lists.newArrayList());
+          });
+          it("returns a nary with the element from the Optional if it is not empty",()->{
+            List<Integer> result = context().nary().concat(Optional.of(1))
+              .collect(Collectors.toList());
+            assertThat(result).isEqualTo(Lists.newArrayList(1));
+          });
         });
-        it("returns an empty nary when #peekNary() is called", () -> {
+        describe("#add", () -> {
+          it("returns an empty nary if no arguments are passed",()->{
+            List<Integer> result = context().nary().add()
+              .collect(Collectors.toList());
+            assertThat(result).isEqualTo(Lists.newArrayList());
+          });
+          it("returns a nary with the elements from passed as arguments",()->{
+            List<Integer> result = context().nary().add(1 ,2 ,3)
+              .collect(Collectors.toList());
+            assertThat(result).isEqualTo(Lists.newArrayList(1, 2, 3));
+          });
+        });
+
+        it("returns an empty nary when #peek() is called", () -> {
           Variable<Integer> variable = Variable.create();
-          List<Integer> result = context().nary().peekNary(variable::set)
+          List<Integer> result = context().nary().peek(newValue -> variable.set(1))
             .collect(Collectors.toList());
 
           assertThat(result).isEqualTo(Lists.newArrayList());
           assertThat(variable.get()).isNull();
         });
-        it("returns an empty nary when #filterNary() is called",()->{
-          List<Integer> result = context().nary().filterNary((value) -> true)
-            .collect(Collectors.toList());
-
-          assertThat(result).isEqualTo(Lists.newArrayList());
-        });
-        it("returns an empty stream when #mapNary() is called",()->{
-          List<Integer> result = context().nary().mapNary((value) -> value)
-            .collect(Collectors.toList());
-
-          assertThat(result).isEqualTo(Lists.newArrayList());
-        });
-        it("returns an empty stream when #flatMapNary() is called",()->{
-          List<Integer> result = context().nary().flatMapNary((value) -> Nary.of(value))
-            .collect(Collectors.toList());
+        it("returns an empty nary when #filter() is called",()->{
+          List<Integer> result = context().nary().filter((value) -> true)
+            .collectToList();
 
           assertThat(result).isEqualTo(Lists.newArrayList());
         });
 
         it("returns an empty list when toList() is called", () -> {
-          assertThat(context().nary().toList()).isEqualTo(Collections.emptyList());
+          assertThat(context().nary().collectToList()).isEqualTo(Collections.emptyList());
         });
         it("returns an empty set when toSet() is called", () -> {
-          assertThat(context().nary().toSet()).isEqualTo(Collections.emptySet());
+          assertThat(context().nary().collectToSet()).isEqualTo(Collections.emptySet());
         });
 
       });
@@ -236,10 +232,6 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
         it("returns an empty nary when #maxNary() is called",()->{
           Nary<Integer> result = context().nary().maxNary(Integer::compareTo);
           assertThat((Stream)result).isEqualTo(Nary.empty());
-        });
-
-        it("always returns the empty optional when #asOptional() is called",()->{
-          assertThat(context().nary().asOptional()).isEqualTo(Nary.empty());
         });
 
       });
