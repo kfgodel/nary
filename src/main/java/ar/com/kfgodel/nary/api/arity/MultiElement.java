@@ -1,7 +1,6 @@
 package ar.com.kfgodel.nary.api.arity;
 
 import ar.com.kfgodel.nary.api.Nary;
-import ar.com.kfgodel.nary.api.optionals.Optional;
 
 import java.util.Comparator;
 import java.util.List;
@@ -464,14 +463,6 @@ public interface MultiElement<T> extends Iterable<T>, Stream<T> {
    * @return The nary that represents this optional
    */
   Nary<T> asNary();
-
-  /**
-   * Creates a concatenation of the elements of this optional and the given
-   * @param other The other optional to concat elements
-   * @return An empty nary if both are empty, a one element nary if one is empty,
-   * a two element naryif both have elements
-   */
-  Nary<T> concatOptional(Optional<? extends T> other);
 
   /**
    * Creates a concatenated stream of the element of this optional, and the given stream
