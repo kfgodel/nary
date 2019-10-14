@@ -1,6 +1,7 @@
 package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
+import ar.com.kfgodel.nary.api.Narys;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 import ar.com.kfgodel.nary.impl.others.OneElementIterator;
 import ar.com.kfgodel.nary.impl.others.OneElementSpliterator;
@@ -50,7 +51,7 @@ public class OneElementNary<T> extends NarySupport<T> {
   @Override
   public Nary<T> concat(Optional<? extends T> other) {
     if (other.isPresent()) {
-      return concat(Nary.from(other));
+      return concat(Narys.from(other));
     }
     return this;
   }
@@ -71,10 +72,6 @@ public class OneElementNary<T> extends NarySupport<T> {
 
   @Override
   public Optional<T> asOptional() throws MoreThanOneElementException {
-    return Optional.of(element);
-  }
-
-  private Optional<T> createNativeOptional() {
     return Optional.of(element);
   }
 
@@ -163,7 +160,7 @@ public class OneElementNary<T> extends NarySupport<T> {
   @Override
   public Nary<T> skip(long n) {
     if (n > 0) {
-      return Nary.empty();
+      return Narys.empty();
     } else {
       return this;
     }
@@ -174,7 +171,7 @@ public class OneElementNary<T> extends NarySupport<T> {
     if (maxSize > 0) {
       return this;
     } else {
-      return Nary.empty();
+      return Narys.empty();
     }
   }
 
@@ -208,13 +205,17 @@ public class OneElementNary<T> extends NarySupport<T> {
     }
     Nary that = (Nary) obj;
     Iterator thatIterator = that.iterator();
+    return compareToElement(thatIterator);
+  }
+
+  private boolean compareToElement(Iterator thatIterator) {
     if (!thatIterator.hasNext()) {
       // We are not equal if the other is empty
       return false;
     }
-    boolean firstIsEqualToElement = element.equals(thatIterator.next());
+    final Object otherElement = thatIterator.next();
     // We are equal if the first element is equal, and there are no more
-    return firstIsEqualToElement && !thatIterator.hasNext();
+    return this.element.equals(otherElement) && !thatIterator.hasNext();
   }
 
   @Override
@@ -334,7 +335,7 @@ public class OneElementNary<T> extends NarySupport<T> {
   @Override
   public <U> Nary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper) {
     U mapped = mapper.apply(element);
-    return Nary.of(mapped);
+    return Narys.of(mapped);
   }
 
   @Override

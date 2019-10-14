@@ -1,6 +1,7 @@
 package ar.com.kfgodel.nary;
 
 import ar.com.kfgodel.nary.api.Nary;
+import ar.com.kfgodel.nary.api.Narys;
 import ar.com.kfgodel.nary.impl.others.EmptyStream;
 import info.kfgodel.jspek.api.JavaSpec;
 import info.kfgodel.jspek.api.JavaSpecRunner;
@@ -30,7 +31,7 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
   @Override
   public void define() {
     describe("an empty nary", () -> {
-      context().nary(Nary::empty);
+      context().nary(Narys::empty);
 
       describe("as optional", () -> {
         it("throws an exception if get() is called", () -> {
@@ -73,13 +74,13 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
           assertThat(result).isEqualTo(Lists.newArrayList());
         });
         it("returns an empty stream when #flatMap() is called", () -> {
-          List<Integer> result = context().nary().flatMap((value) -> Nary.ofNonNullable(value))
+          List<Integer> result = context().nary().flatMap((value) -> Narys.ofNonNullable(value))
             .collectToList();
 
           assertThat(result).isEqualTo(Lists.newArrayList());
         });
         it("always returns an empty optional when called to #flatmapOptional()", () -> {
-          Nary<Integer> result = context().nary().flatMapOptional((value) -> Nary.ofNonNullable(value).asOptional());
+          Nary<Integer> result = context().nary().flatMapOptional((value) -> Narys.ofNonNullable(value).asOptional());
 
           assertThat(result.isAbsent()).isTrue();
         });
@@ -113,11 +114,11 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
         });
         describe("#equals", () -> {
           it("is true if other empty optional is passed", () -> {
-            boolean result = context().nary().equals(Nary.empty());
+            boolean result = context().nary().equals(Narys.empty());
             assertThat(result).isTrue();
           });
           it("is false if a non empty optional is passed", () -> {
-            boolean result = context().nary().equals(Nary.ofNonNullable(1));
+            boolean result = context().nary().equals(Narys.ofNonNullable(1));
             assertThat(result).isFalse();
           });
         });
@@ -140,12 +141,12 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
         });
         describe("#concat(Stream)", () -> {
           it("returns an empty nary if the stream is empty", () -> {
-            List<Integer> result = context().nary().concat(Nary.empty())
+            List<Integer> result = context().nary().concat(Narys.empty())
               .collect(Collectors.toList());
             assertThat(result).isEqualTo(Lists.newArrayList());
           });
           it("returns a nary with the stream elements if the stream is not empty", () -> {
-            List<Integer> result = context().nary().concat(Nary.ofNonNullable(1, 2, 3))
+            List<Integer> result = context().nary().concat(Narys.ofNonNullable(1, 2, 3))
               .collect(Collectors.toList());
             assertThat(result).isEqualTo(Lists.newArrayList(1, 2, 3));
           });
@@ -237,11 +238,11 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
 
         it("returns an empty nary when #minNary() is called", () -> {
           Nary<Integer> result = context().nary().minNary(Integer::compareTo);
-          assertThat((Stream) result).isEqualTo(Nary.empty());
+          assertThat((Stream) result).isEqualTo(Narys.empty());
         });
         it("returns an empty nary when #maxNary() is called", () -> {
           Nary<Integer> result = context().nary().maxNary(Integer::compareTo);
-          assertThat((Stream) result).isEqualTo(Nary.empty());
+          assertThat((Stream) result).isEqualTo(Narys.empty());
         });
 
       });

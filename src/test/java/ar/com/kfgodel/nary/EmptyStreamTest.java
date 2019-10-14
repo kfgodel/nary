@@ -1,6 +1,6 @@
 package ar.com.kfgodel.nary;
 
-import ar.com.kfgodel.nary.api.Nary;
+import ar.com.kfgodel.nary.api.Narys;
 import ar.com.kfgodel.nary.impl.others.EmptyStream;
 import info.kfgodel.jspek.api.JavaSpec;
 import info.kfgodel.jspek.api.JavaSpecRunner;
@@ -56,7 +56,7 @@ public class EmptyStreamTest extends JavaSpec<NaryTestContext> {
         assertThat(result).isEqualTo(0);
       });
       it("returns an empty stream when #flatMap() is called", () -> {
-        List<Integer> result = context().stream().flatMap((value) -> Nary.ofNonNullable(value))
+        List<Integer> result = context().stream().flatMap((value) -> Narys.ofNonNullable(value))
           .collect(Collectors.toList());
 
         assertThat(result).isEqualTo(Lists.newArrayList());

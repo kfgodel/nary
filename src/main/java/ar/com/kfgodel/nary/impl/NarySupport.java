@@ -1,6 +1,7 @@
 package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
+import ar.com.kfgodel.nary.api.Narys;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 import com.google.common.collect.Iterators;
 
@@ -54,12 +55,12 @@ public abstract class NarySupport<T> implements Nary<T> {
 
   @Override
   public Nary<T> concat(Optional<? extends T> other) {
-    return concat(Nary.from(other));
+    return concat(Narys.from(other));
   }
 
   @Override
   public Nary<T> add(T... others) {
-    return concat(Nary.from(others));
+    return concat(Narys.from(others));
   }
 
   @Override
@@ -95,7 +96,7 @@ public abstract class NarySupport<T> implements Nary<T> {
   public <U> Nary<U> flatMapOptional(Function<? super T, Optional<U>> mapper) throws MoreThanOneElementException {
     return returningNaryDo(
       map(mapper)
-        .flatMap(Nary::from)
+        .flatMap(Narys::from)
     );
   }
 
@@ -382,13 +383,11 @@ public abstract class NarySupport<T> implements Nary<T> {
     if (this == obj) {
       return true;
     }
-    if (!(obj instanceof Nary)) { // NOSONAR Nary is related to this type, the check is relevant
+    if (!(obj instanceof Nary)) {
       return false;
     }
     Nary that = (Nary) obj;
-    Iterator<T> thisIterator = this.iterator();
-    Iterator thatIterator = that.iterator();
-    return Iterators.elementsEqual(thisIterator, thatIterator);
+    return Iterators.elementsEqual(this.iterator(), that.iterator());
   }
 
   @Override
@@ -409,7 +408,7 @@ public abstract class NarySupport<T> implements Nary<T> {
    * @return The created nary
    */
   protected <R> Nary<R> returningNaryDo(Stream<R> nativeStream) {
-    return Nary.from(nativeStream);
+    return Narys.from(nativeStream);
   }
 
   /**
@@ -419,7 +418,7 @@ public abstract class NarySupport<T> implements Nary<T> {
    * @return The created nary
    */
   protected Nary<T> returningNaryDo(Optional<T> nativeOptional) {
-    return Nary.from(nativeOptional);
+    return Narys.from(nativeOptional);
   }
 
 }

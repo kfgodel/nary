@@ -1,6 +1,7 @@
 package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
+import ar.com.kfgodel.nary.api.Narys;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 import ar.com.kfgodel.nary.impl.others.EmptyStream;
 
@@ -97,7 +98,7 @@ public class EmptyNary extends NarySupport<Object> {
   @Override
   public Nary<Object> orElseUse(Supplier<?> mapper) throws MoreThanOneElementException {
     final Object element = mapper.get();
-    return Nary.ofNonNullable(element);
+    return Narys.ofNonNullable(element);
   }
 
   @Override
@@ -232,7 +233,7 @@ public class EmptyNary extends NarySupport<Object> {
   @Override
   public Nary<Object> concat(Stream<?> other) {
     // This is empty. Only the other elements are relevant
-    return Nary.from(other);
+    return Narys.from(other);
   }
 
   @Override
@@ -250,7 +251,7 @@ public class EmptyNary extends NarySupport<Object> {
     if (this == obj) {
       return true;
     }
-    if (!(obj instanceof Nary)) { //NOSONAR Nary is related to this class so the cast is relevant
+    if (!(obj instanceof Nary)) {
       return false;
     }
     Nary that = (Nary) obj;

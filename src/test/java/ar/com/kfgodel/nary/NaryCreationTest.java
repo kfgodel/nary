@@ -1,6 +1,7 @@
 package ar.com.kfgodel.nary;
 
 import ar.com.kfgodel.nary.api.Nary;
+import ar.com.kfgodel.nary.api.Narys;
 import info.kfgodel.jspek.api.JavaSpec;
 import info.kfgodel.jspek.api.JavaSpecRunner;
 import org.assertj.core.util.Lists;
@@ -30,47 +31,47 @@ public class NaryCreationTest extends JavaSpec<NaryTestContext> {
     describe("a nary creation", () -> {
 
       it("can be done without elements", () -> {
-        Nary<Integer> nary = Nary.empty();
+        Nary<Integer> nary = Narys.empty();
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(Lists.newArrayList());
       });
 
       it("can be done from a single element", () -> {
-        Nary<Integer> nary = Nary.ofNonNullable(1);
+        Nary<Integer> nary = Narys.ofNonNullable(1);
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(Lists.newArrayList(1));
       });
 
       it("can be done from variable elements", () -> {
-        Nary<Integer> nary = Nary.ofNonNullable(1, 2, 3);
+        Nary<Integer> nary = Narys.ofNonNullable(1, 2, 3);
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(Lists.newArrayList(1, 2, 3));
       });
 
       it("can be created from a nullable element", () -> {
-        assertThat((Stream) Nary.of(null)).isEmpty();
-        assertThat((Stream) Nary.of(1)).isNotEmpty();
+        assertThat((Stream) Narys.of(null)).isEmpty();
+        assertThat((Stream) Narys.of(1)).isNotEmpty();
       });
 
       it("can be done from a stream", () -> {
-        Nary<Integer> nary = Nary.from(Stream.of(1, 2, 3));
+        Nary<Integer> nary = Narys.from(Stream.of(1, 2, 3));
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(Lists.newArrayList(1, 2, 3));
       });
 
       it("can be done from an optional", () -> {
-        Nary<Integer> nary = Nary.from(Optional.of(1));
+        Nary<Integer> nary = Narys.from(Optional.of(1));
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(Lists.newArrayList(1));
       });
 
       it("can be done from a spliterator", () -> {
-        Nary<Integer> nary = Nary.from(Spliterators.spliterator(new int[]{1, 2, 3}, 0));
+        Nary<Integer> nary = Narys.from(Spliterators.spliterator(new int[]{1, 2, 3}, 0));
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(Lists.newArrayList(1, 2, 3));
@@ -78,27 +79,27 @@ public class NaryCreationTest extends JavaSpec<NaryTestContext> {
 
       it("can be done from an iterator", () -> {
         ArrayList<Integer> originalList = Lists.newArrayList(1, 2, 3);
-        Nary<Integer> nary = Nary.from(originalList.iterator());
+        Nary<Integer> nary = Narys.from(originalList.iterator());
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(originalList);
       });
 
       it("can be done from an iterable", () -> {
-        Nary<Integer> nary = Nary.from((Iterable) Lists.newArrayList(1, 2, 3));
+        Nary<Integer> nary = Narys.from((Iterable) Lists.newArrayList(1, 2, 3));
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(Lists.newArrayList(1, 2, 3));
       });
       it("can be done from a collection", () -> {
-        Nary<Integer> nary = Nary.from((Collection) Lists.newArrayList(1, 2, 3));
+        Nary<Integer> nary = Narys.from((Collection) Lists.newArrayList(1, 2, 3));
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(Lists.newArrayList(1, 2, 3));
       });
 
       it("can be made from an array", () -> {
-        Nary<Integer> nary = Nary.from(new Integer[]{1, 2, 3});
+        Nary<Integer> nary = Narys.from(new Integer[]{1, 2, 3});
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(Lists.newArrayList(1, 2, 3));
@@ -108,7 +109,7 @@ public class NaryCreationTest extends JavaSpec<NaryTestContext> {
         final Dictionary<String, String> dictionary = new Hashtable<>();
         dictionary.put("text", "123");
 
-        final List<String> elements = Nary.from(dictionary.keys())
+        final List<String> elements = Narys.from(dictionary.keys())
           .collectToList();
 
         assertThat(elements).containsExactly("text");
@@ -118,7 +119,7 @@ public class NaryCreationTest extends JavaSpec<NaryTestContext> {
         final LinkedHashMap<String, String> map = new LinkedHashMap<>();
         map.put("text", "123");
 
-        final List<String> elements = Nary.from(map)
+        final List<String> elements = Narys.from(map)
           .map(entry -> entry.getKey() + entry.getValue())
           .collectToList();
 
