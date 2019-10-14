@@ -56,7 +56,7 @@ public class EmptyStreamTest extends JavaSpec<NaryTestContext> {
         assertThat(result).isEqualTo(0);
       });
       it("returns an empty stream when #flatMap() is called",()->{
-        List<Integer> result = context().stream().flatMap((value) -> Nary.of(value))
+        List<Integer> result = context().stream().flatMap((value) -> Nary.ofNonNullable(value))
           .collect(Collectors.toList());
 
         assertThat(result).isEqualTo(Lists.newArrayList());

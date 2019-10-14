@@ -50,7 +50,7 @@ public class OneElementNary<T> extends NarySupport<T> {
   @Override
   public Nary<T> concat(Optional<? extends T> other) {
     if(other.isPresent()){
-      return concat(Nary.create(other));
+      return concat(Nary.from(other));
     }
     return this;
   }
@@ -334,7 +334,7 @@ public class OneElementNary<T> extends NarySupport<T> {
   @Override
   public <U> Nary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper) {
     U mapped = mapper.apply(element);
-    return Nary.ofNullable(mapped);
+    return Nary.of(mapped);
   }
 
   @Override

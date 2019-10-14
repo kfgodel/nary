@@ -7,7 +7,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-
 import java.util.Optional;
 import java.util.Spliterator;
 import java.util.function.BiConsumer;
@@ -91,7 +90,7 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public <U> Nary<U> flatMapOptional(Function<? super T, Optional<U>> mapper) throws MoreThanOneElementException {
+  public <U> Nary<U> flatMapOptional(Function<? super T, java.util.Optional<U>> mapper) throws MoreThanOneElementException {
     return returningNaryDo(
       map(mapper)
       .flatMap(Nary::from)
@@ -124,7 +123,7 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public Optional<T> asOptional() throws MoreThanOneElementException {
+  public java.util.Optional<T> asOptional() throws MoreThanOneElementException {
     return coerceToMonoElement().asOptional();
   }
 
@@ -208,7 +207,7 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public Optional<T> reduce(BinaryOperator<T> accumulator) {
+  public java.util.Optional<T> reduce(BinaryOperator<T> accumulator) {
     return asStream().reduce(accumulator);
   }
 
@@ -228,12 +227,12 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public Optional<T> min(Comparator<? super T> comparator) {
+  public java.util.Optional<T> min(Comparator<? super T> comparator) {
     return asStream().min(comparator);
   }
 
   @Override
-  public Optional<T> max(Comparator<? super T> comparator) {
+  public java.util.Optional<T> max(Comparator<? super T> comparator) {
     return asStream().max(comparator);
   }
 
@@ -258,12 +257,12 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public Optional<T> findFirst() {
+  public java.util.Optional<T> findFirst() {
     return asStream().findFirst();
   }
 
   @Override
-  public Optional<T> findAny() {
+  public java.util.Optional<T> findAny() {
     return asStream().findAny();
   }
 
@@ -420,7 +419,7 @@ public abstract class NarySupport<T> implements Nary<T> {
    * @param nativeOptional The native optional
    * @return The created nary
    */
-  protected Nary<T> returningNaryDo(Optional<T> nativeOptional) {
+  protected Nary<T> returningNaryDo(java.util.Optional<T> nativeOptional) {
     return Nary.from(nativeOptional);
   }
 
