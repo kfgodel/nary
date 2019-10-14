@@ -1,7 +1,7 @@
 package ar.com.kfgodel.nary;
 
 import ar.com.kfgodel.nary.api.Narys;
-import ar.com.kfgodel.nary.impl.others.EmptyStream;
+import ar.com.kfgodel.nary.impl.EmptyNary;
 import info.kfgodel.jspek.api.JavaSpec;
 import info.kfgodel.jspek.api.JavaSpecRunner;
 import info.kfgodel.jspek.api.variable.Variable;
@@ -10,10 +10,12 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Spliterator;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
+import java.util.stream.StreamSupport;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,11 +24,11 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Created by kfgodel on 07/03/16.
  */
 @RunWith(JavaSpecRunner.class)
-public class EmptyStreamTest extends JavaSpec<NaryTestContext> {
+public class EmptyNaryAsStreamTest extends JavaSpec<NaryTestContext> {
   @Override
   public void define() {
     describe("an empty stream", () -> {
-      context().stream(EmptyStream::instance);
+      context().stream(EmptyNary::instance);
 
       it("returns an empty stream when #filter() is called", () -> {
         List<Integer> result = context().stream().filter((value) -> true)
@@ -197,7 +199,14 @@ public class EmptyStreamTest extends JavaSpec<NaryTestContext> {
         java.util.Optional<Integer> result = context().stream().findAny();
         assertThat(result).isEqualTo(java.util.Optional.empty());
       });
+      it("returns an empty spliterator when called to #spliterator", () -> {
+        final Spliterator<Integer> spliterator = context().stream().spliterator();
 
+        final List<Integer> collected = StreamSupport.stream(spliterator, false)
+          .collect(Collectors.toList());
+
+        assertThat(collected).isEmpty();
+      });
     });
 
   }

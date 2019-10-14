@@ -2,7 +2,6 @@ package ar.com.kfgodel.nary;
 
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.Narys;
-import ar.com.kfgodel.nary.impl.others.EmptyStream;
 import info.kfgodel.jspek.api.JavaSpec;
 import info.kfgodel.jspek.api.JavaSpecRunner;
 import info.kfgodel.jspek.api.variable.Variable;
@@ -14,10 +13,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.Spliterator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
@@ -198,20 +195,6 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
           assertThat(context().nary().collectToSet()).isEqualTo(Collections.emptySet());
         });
 
-      });
-
-      describe("as stream", () -> {
-        it("behaves as an empty stream", () -> {
-          assertThat(context().nary().asStream()).isSameAs(EmptyStream.instance());
-        });
-        it("returns an empty spliterator when called to #spliterator", () -> {
-          final Spliterator<Integer> spliterator = context().nary().spliterator();
-
-          final List<Integer> collected = StreamSupport.stream(spliterator, false)
-            .collect(Collectors.toList());
-
-          assertThat(collected).isEmpty();
-        });
       });
 
       describe("as nary", () -> {

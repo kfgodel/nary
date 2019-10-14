@@ -279,13 +279,6 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super T> accumulator) {
-    R container = supplier.get();
-    accumulator.accept(container, element);
-    return container;
-  }
-
-  @Override
   public <A> A[] toArray(IntFunction<A[]> generator) {
     A[] oneElementArray = generator.apply(1);
     oneElementArray[0] = (A) element;
