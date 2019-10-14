@@ -30,7 +30,7 @@ public interface Narys {
    * @return The empty instance
    */
   static <T> Nary<T> empty() {
-    return EmptyNary.instance();
+    return EmptyNary.instance(); // NOSONAR Circular dep with empty is necessary to facilitate users experience
   }
 
   /**
