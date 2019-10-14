@@ -3,6 +3,7 @@ package ar.com.kfgodel.nary.impl;
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.Narys;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
+import ar.com.kfgodel.nary.impl.others.EmptySpliterator;
 import ar.com.kfgodel.nary.impl.others.EmptyStream;
 
 import java.util.Collections;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
+import java.util.Spliterator;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
@@ -168,6 +170,12 @@ public class EmptyNary extends NarySupport<Object> {
   @Override
   public Nary<Object> skip(long n) {
     return this;
+  }
+
+  @Override
+  public Spliterator<Object> spliterator() {
+    // Avoid intermediate step of converting to stream, return empty spliterator right away
+    return EmptySpliterator.instance();
   }
 
   @Override

