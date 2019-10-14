@@ -319,7 +319,7 @@ public abstract class NarySupport<T> implements Nary<T> {
    * Reductor operation that keeps the last element as result
    */
   private T keepLast(T previous, T current) {
-    return current;
+    return current; // NOSONAR fb-contrib:UP_UNUSED_PARAMETER previous is not used but mandatory
   }
 
 
