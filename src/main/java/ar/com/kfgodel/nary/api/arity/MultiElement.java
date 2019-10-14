@@ -14,14 +14,15 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
- * This type defines the protocol that nary has when its viewed as a container of elements
+ * This type defines the protocol that {@link Nary} offers to manipulate its elements beyond those of {@link Stream}
  *
  * Date: 12/10/19 - 21:42
  */
 public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
   /**
-   * Solves conflict between Iterable and Stream because Iterable uses a default implementation.<br>
-   * We use Iterable definition
+   * Solves conflict between {@link Iterable} and {@link Stream} because {@link Iterable} defines a default
+   * implementation.<br>
+   * We use {@link Iterable#spliterator()} definition
    */
   @Override
   default Spliterator<T> spliterator() {
@@ -29,8 +30,9 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
   }
 
   /**
-   * Solves conflict between Iterable and Stream because Iterable uses a default implementation.<br>
-   * We use Iterable definition
+   * Solves conflict between {@link Iterable} and {@link Stream} because {@link Iterable} defines a default 
+   * implementation.<br>
+   * We use {@link Iterable#forEach(Consumer)} definition
    */
   @Override
   default void forEach(Consumer<? super T> action) {
@@ -39,24 +41,26 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
 
   /**
    * Returns the content of this nary in a list.<br>
-   *   This nary, as stream, will be consumed in the operation.<br>
-   * This method is a shorthand of calling collect(Collectors.toList())
+   * This method is a shorthand of calling collect(Collectors.toList()).<br>
+   * <br>
+   * This nary, as stream, will be consumed in the operation.<br>
    * @return The list with the elements of this nary
    */
   List<T> collectToList();
 
   /**
    * Returns the content of this nary in a set.<br>
-   * This nary, as stream, will be consumed in the operation.<br>
    * This method is a shorthand of calling collect(Collectors.toSet())
-   *
+   * <br>
+   * This nary, as stream, will be consumed in the operation.<br>
    * @return The set with the elements of this nary
    */
   Set<T> collectToSet();
 
   /**
-   * Returns a stream of this optional containing the only element (if present)
-   * @return The empty stream if this is empty, a one element stream if not
+   * Returns a stream representation of this {@link Nary}.<br>
+   * Once the stream is consumed, this {@link Nary} may be useless
+   * @return A stream containing all the elements from this Nary
    */
   Stream<T> asStream();
 
@@ -128,9 +132,9 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
 
   /**
    * Returns the last element in this nary, if present.<br>
-   * Is empty if this is empty, it's the only element if this contains one, is the last if this is more than one
+   * Depending on the amount of elements on this Nary, the result may be empty or contain the last element
    *
-   * @return The optional last contained element
+   * @return The optional last element
    */
   Nary<T> findLast();
 
