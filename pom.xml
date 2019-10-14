@@ -3,16 +3,15 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-
-  <groupId>info.kfgodel</groupId>
-  <artifactId>nary</artifactId>
-  <version>3.0.0-SNAPSHOT</version>
-
   <parent>
     <groupId>info.kfgodel</groupId>
     <artifactId>java-pom</artifactId>
     <version>0.1.7</version>
   </parent>
+
+  <groupId>info.kfgodel</groupId>
+  <artifactId>nary</artifactId>
+  <version>3.0.0-SNAPSHOT</version>
 
   <name>Nary</name>
   <description>Small project that captures the concept of N-Ary an element that can reference 0, 1 or N elements  </description>
@@ -56,15 +55,13 @@
     <!-- Classes should not be coupled to too many other classes -->
     <!-- All Nary types need to depend on many classes due to its rich interface  -->
     <sonar.issue.ignore.multicriteria.j1.ruleKey>squid:S1200</sonar.issue.ignore.multicriteria.j1.ruleKey>
-    <sonar.issue.ignore.multicriteria.j1.resourceKey>**/*</sonar.issue.ignore.multicriteria.j1.resourceKey>
+    <sonar.issue.ignore.multicriteria.j1.resourceKey>**/EmptyNary.java,**/NarySupport.java,</sonar.issue.ignore.multicriteria.j1.resourceKey>
 
     <!-- Classes should not have too many methods -->
     <!-- Nary API has many methods on purpose to facilitate its usage on different context  -->
     <sonar.issue.ignore.multicriteria.j2.ruleKey>squid:S1448</sonar.issue.ignore.multicriteria.j2.ruleKey>
     <sonar.issue.ignore.multicriteria.j2.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.j2.resourceKey>
 
-
-    <version.javaspec>2.4.1</version.javaspec>
   </properties>
 
   <dependencies>
