@@ -126,7 +126,7 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
             assertThat(context().nary().toString()).isEqualTo("EmptyNary");
         });
         it("always returns the empty optional when asOptional() is called",()->{
-            assertThat(context().nary().asOptional()).isEqualTo(java.util.Optional.empty());
+            assertThat(context().nary().asOptional()).isEqualTo(Optional.empty());
         });
         it("always returns an empty container when #collect(supplier, accumulator) is called",()->{
           List<Object> result = context().nary().collect(ArrayList::new, ArrayList::add);

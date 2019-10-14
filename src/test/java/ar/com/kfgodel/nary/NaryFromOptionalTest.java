@@ -114,7 +114,7 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
           assertThat(context().nary().toString()).isEqualTo("OneElementNary{ 3 }");
         });
         it("returns an equivalent optional when asOptional() is called",()->{
-          assertThat(context().nary().asOptional()).isEqualTo(java.util.Optional.of(3));
+          assertThat(context().nary().asOptional()).isEqualTo(Optional.of(3));
         });
         it("returns a one element container when #collect(supplier, accumulator) is called",()->{
           List<Integer> result = context().nary().collect(ArrayList::new, ArrayList::add);
@@ -313,7 +313,7 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
           assertThat(result).isEqualTo(31);
         });
         it("returns the value when #reduce(accumulator) is called",()->{
-          java.util.Optional<Integer> result = context().nary().reduce((a, b) -> a + b);
+          Optional<Integer> result = context().nary().reduce((a, b) -> a + b);
           assertThat(result.get()).isEqualTo(3);
         });
         it("accumulates the value on the container when #collect(supplier, accumulator, combiner) is called ",()->{
@@ -325,12 +325,12 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
           assertThat(result).isEqualTo(Lists.newArrayList(3));
         });
         it("returns the native optional when #min() is called",()->{
-          java.util.Optional<Integer> result = context().nary().min(Integer::compareTo);
-          assertThat(result).isEqualTo(java.util.Optional.of(3));
+          Optional<Integer> result = context().nary().min(Integer::compareTo);
+          assertThat(result).isEqualTo(Optional.of(3));
         });
         it("returns the native optional when #max() is called",()->{
-          java.util.Optional<Integer> result = context().nary().max(Integer::compareTo);
-          assertThat(result).isEqualTo(java.util.Optional.of(3));
+          Optional<Integer> result = context().nary().max(Integer::compareTo);
+          assertThat(result).isEqualTo(Optional.of(3));
         });
         it("returns 1 when #count() is called",()->{
           long result = context().nary().count();
@@ -349,12 +349,12 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
           assertThat(result).isFalse();
         });
         it("returns the native optional when #findFirst() is called",()->{
-          java.util.Optional<Integer> result = context().nary().findFirst();
-          assertThat(result).isEqualTo(java.util.Optional.of(3));
+          Optional<Integer> result = context().nary().findFirst();
+          assertThat(result).isEqualTo(Optional.of(3));
         });
         it("returns the native optional when #findAny() is called",()->{
-          java.util.Optional<Integer> result = context().nary().findAny();
-          assertThat(result).isEqualTo(java.util.Optional.of(3));
+          Optional<Integer> result = context().nary().findAny();
+          assertThat(result).isEqualTo(Optional.of(3));
         });
 
       });
