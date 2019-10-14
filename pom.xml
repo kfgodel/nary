@@ -50,7 +50,7 @@
     <sonar.projectKey>ar.com.kfgodel:nary</sonar.projectKey>
 
     <!-- Disable rules per files -->
-    <sonar.issue.ignore.multicriteria>j1,j2,j3,j4</sonar.issue.ignore.multicriteria>
+    <sonar.issue.ignore.multicriteria>j1,j2</sonar.issue.ignore.multicriteria>
 
     <!-- Classes should not be coupled to too many other classes -->
     <!-- All Nary types need to depend on many classes due to its rich interface  -->
@@ -59,8 +59,8 @@
 
     <!-- Classes should not have too many methods -->
     <!-- Nary API has many methods on purpose to facilitate its usage on different context  -->
-    <sonar.issue.ignore.multicriteria.j3.ruleKey>squid:S1448</sonar.issue.ignore.multicriteria.j3.ruleKey>
-    <sonar.issue.ignore.multicriteria.j3.resourceKey>**/*Nary*.java</sonar.issue.ignore.multicriteria.j3.resourceKey>
+    <sonar.issue.ignore.multicriteria.j2.ruleKey>squid:S1448</sonar.issue.ignore.multicriteria.j2.ruleKey>
+    <sonar.issue.ignore.multicriteria.j2.resourceKey>**/*Nary*.java</sonar.issue.ignore.multicriteria.j2.resourceKey>
 
   </properties>
 
