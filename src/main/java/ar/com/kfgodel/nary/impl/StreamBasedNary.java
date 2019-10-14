@@ -13,17 +13,17 @@ import java.util.stream.Stream;
 
 /**
  * This type represents a Nary with a stream as a source of elements.<br>
- *   This implies the greatest level of uncertainty as we don't know if the stream
- *   is empty, contains one, or more than one elements until it's consumed. So the nary
- *   offers an interface that may be bigger that what the stream actually supports.<br>
- *   <br>
- *   That is why in Runtime, this type may throw exceptions depending on how it's used, but
- *   it's assumed that the user may have a better judgement to avoid unsafe methods at runtime.
- *   This brings much more flexibility on the type, than narrowing the interface on compile time
- *
+ * This implies the greatest level of uncertainty as we don't know if the stream
+ * is empty, contains one, or more than one elements until it's consumed. So the nary
+ * offers an interface that may be bigger that what the stream actually supports.<br>
+ * <br>
+ * That is why in Runtime, this type may throw exceptions depending on how it's used, but
+ * it's assumed that the user may have a better judgement to avoid unsafe methods at runtime.
+ * This brings much more flexibility on the type, than narrowing the interface on compile time
+ * <p>
  * Created by kfgodel on 07/03/16.
  */
-public class StreamBasedNary<T> extends NarySupport<T>  {
+public class StreamBasedNary<T> extends NarySupport<T> {
 
   private Stream<? extends T> sourceStream;
   /**
@@ -32,7 +32,7 @@ public class StreamBasedNary<T> extends NarySupport<T>  {
    */
   private Nary<T> cachedOptional;
 
-  public static<T> StreamBasedNary<T> create(Stream<? extends T> source) {
+  public static <T> StreamBasedNary<T> create(Stream<? extends T> source) {
     StreamBasedNary<T> nary = new StreamBasedNary<>();
     nary.sourceStream = source;
     return nary;
@@ -40,7 +40,7 @@ public class StreamBasedNary<T> extends NarySupport<T>  {
 
   @Override
   public Nary<T> coerceToMonoElement() throws MoreThanOneElementException {
-    if(cachedOptional == null){
+    if (cachedOptional == null) {
       this.cachedOptional = reduceStreamToOptional();
     }
     return cachedOptional;
@@ -58,17 +58,20 @@ public class StreamBasedNary<T> extends NarySupport<T>  {
 
   private Nary<T> reduceStreamToOptional() {
     Iterator<T> iterator = asStream().iterator();
-    if(!iterator.hasNext()){
+    if (!iterator.hasNext()) {
       return Nary.empty();
     }
     T onlyElement = iterator.next();
-    if(iterator.hasNext()){
-      throw new MoreThanOneElementException("Expecting 1 element in the stream to create an optional but found at least 2: " + Arrays.asList(onlyElement, iterator.next()));
+    if (iterator.hasNext()) {
+      throw new MoreThanOneElementException("Expecting 1 element in the stream to create an optional but " +
+        "found at least 2: " + Arrays.asList(onlyElement, iterator.next()));
     }
     return Nary.of(onlyElement);
   }
 
   @Override
+  // Given the stream produces subtypes of T AND its read only
+  @SuppressWarnings("unchecked")
   public Stream<T> asStream() {
     return (Stream<T>) sourceStream;
   }

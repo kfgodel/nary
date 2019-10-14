@@ -11,7 +11,7 @@ public class OneElementIterator<T> implements Iterator<T> {
 
   private T element;
 
-  public static<T> OneElementIterator<T> create(T element) {
+  public static <T> OneElementIterator<T> create(T element) {
     OneElementIterator iterator = new OneElementIterator();
     iterator.element = element;
     return iterator;
@@ -24,7 +24,7 @@ public class OneElementIterator<T> implements Iterator<T> {
 
   @Override
   public T next() {
-    if(!hasNext()){
+    if (!hasNext()) {
       throw new NoSuchElementException("This one element iterator was already iterated");
     }
     T iterated = element;

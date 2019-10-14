@@ -15,8 +15,10 @@ import java.util.stream.Stream;
 
 /**
  * This type defines the protocol that {@link Nary} offers to manipulate its elements beyond those of {@link Stream}
- *
+ * <br>
  * Date: 12/10/19 - 21:42
+ *
+ * @param <T> Type of contained elements
  */
 public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
   /**
@@ -30,7 +32,7 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
   }
 
   /**
-   * Solves conflict between {@link Iterable} and {@link Stream} because {@link Iterable} defines a default 
+   * Solves conflict between {@link Iterable} and {@link Stream} because {@link Iterable} defines a default
    * implementation.<br>
    * We use {@link Iterable#forEach(Consumer)} definition
    */
@@ -44,6 +46,7 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
    * This method is a shorthand of calling collect(Collectors.toList()).<br>
    * <br>
    * This nary, as stream, will be consumed in the operation.<br>
+   *
    * @return The list with the elements of this nary
    */
   List<T> collectToList();
@@ -53,6 +56,7 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
    * This method is a shorthand of calling collect(Collectors.toSet())
    * <br>
    * This nary, as stream, will be consumed in the operation.<br>
+   *
    * @return The set with the elements of this nary
    */
   Set<T> collectToSet();
@@ -60,12 +64,14 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
   /**
    * Returns a stream representation of this {@link Nary}.<br>
    * Once the stream is consumed, this {@link Nary} may be useless
+   *
    * @return A stream containing all the elements from this Nary
    */
   Stream<T> asStream();
 
   /**
    * Creates a concatenated stream of the element of this optional, and the given stream
+   *
    * @param other The stream to combine after this
    * @return An empty nary if both are empty, a nary with the argument stream if this optional
    * is empty, a nary with this element plus the stream elements
@@ -74,6 +80,7 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
 
   /**
    * Creates a concatenated Nary with the elements of this instance and the one (if any) on the given {@link Optional}
+   *
    * @param other The optional to join elements with
    * @return A new Nary with the elements from both instances
    */
@@ -81,6 +88,7 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
 
   /**
    * Creates a new Nary with the elements of this instance and the ones passed as var arg array
+   *
    * @param others The elements to append to this stream
    * @return A new Nary with the elements from this instance plus the ones on the given array
    */
@@ -102,7 +110,7 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
    *
    * <p>This is a <a href="package-summary.html#StreamOps">terminal
    * operation</a>.
-   *
+   * <p>
    * There are many existing classes in the JDK whose signatures are
    * well-suited for use with method references as arguments to {@code collect()}.
    * For example, the following will accumulate strings into an {@code ArrayList}:
@@ -117,10 +125,10 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
    *                                 .toString();
    * }</pre>
    *
-   * @param <R> type of the result
-   * @param supplier a function that creates a new result container. For a
-   *                 parallel execution, this function may be called
-   *                 multiple times and must return a fresh value each time.
+   * @param <R>         type of the result
+   * @param supplier    a function that creates a new result container. For a
+   *                    parallel execution, this function may be called
+   *                    multiple times and must return a fresh value each time.
    * @param accumulator an <a href="package-summary.html#Associativity">associative</a>,
    *                    <a href="package-summary.html#NonInterference">non-interfering</a>,
    *                    <a href="package-summary.html#Statelessness">stateless</a>
@@ -140,14 +148,16 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
 
   /**
    * Alternative to {@link Stream#reduce(BinaryOperator)} that returns {@link Nary} instead of {@link java.util.Optional}
-   * @see Stream#reduce(BinaryOperator) for a complete reference
+   *
    * @param accumulator The associative function to reduce the elements of this nary to a result of the same type
    * @return The optional result of the reduction (or an empty nary)
+   * @see Stream#reduce(BinaryOperator) for a complete reference
    */
   Nary<T> reduceNary(BinaryOperator<T> accumulator);
 
   /**
    * Alternative to {@link Stream#min(Comparator)} that returns {@link Nary} instead of {@link java.util.Optional}
+   *
    * @param comparator a <a href="package-summary.html#NonInterference">non-interfering</a>,
    *                   <a href="package-summary.html#Statelessness">stateless</a>
    *                   {@code Comparator} to compare elements of this stream
@@ -159,6 +169,7 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
 
   /**
    * Alternative to {@link Stream#max(Comparator)} that returns {@link Nary} instead of {@link java.util.Optional}
+   *
    * @param comparator a <a href="package-summary.html#NonInterference">non-interfering</a>,
    *                   <a href="package-summary.html#Statelessness">stateless</a>
    *                   {@code Comparator} to compare elements of this stream
@@ -170,6 +181,7 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
 
   /**
    * Alternative to {@link Stream#findFirst()} that returns {@link Nary} instead of {@link java.util.Optional}
+   *
    * @return a  {@code Nary} describing the first element of this stream,
    * or an empty {@code Nary} if the stream is empty
    * @throws NullPointerException if the element selected is null
@@ -178,6 +190,7 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
 
   /**
    * Alternative to {@link Stream#findAny()} that returns {@link Nary} instead of {@link java.util.Optional}
+   *
    * @return an {@code Nary} describing some element of this stream, or an
    * empty {@code Nary} if the stream is empty
    * @throws NullPointerException if the element selected is null

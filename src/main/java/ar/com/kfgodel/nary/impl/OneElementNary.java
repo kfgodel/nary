@@ -33,8 +33,8 @@ public class OneElementNary<T> extends NarySupport<T> {
 
   private T element;
 
-  public static<T> OneElementNary<T> create(T element) {
-    if(element == null){
+  public static <T> OneElementNary<T> create(T element) {
+    if (element == null) {
       throw new IllegalArgumentException("Element can't be null");
     }
     OneElementNary<T> nary = new OneElementNary<>();
@@ -49,7 +49,7 @@ public class OneElementNary<T> extends NarySupport<T> {
 
   @Override
   public Nary<T> concat(Optional<? extends T> other) {
-    if(other.isPresent()){
+    if (other.isPresent()) {
       return concat(Nary.from(other));
     }
     return this;
@@ -162,18 +162,18 @@ public class OneElementNary<T> extends NarySupport<T> {
 
   @Override
   public Nary<T> skip(long n) {
-    if(n > 0){
+    if (n > 0) {
       return Nary.empty();
-    }else{
+    } else {
       return this;
     }
   }
 
   @Override
   public Nary<T> limit(long maxSize) {
-    if(maxSize > 0){
+    if (maxSize > 0) {
       return this;
-    }else{
+    } else {
       return Nary.empty();
     }
   }
@@ -208,7 +208,7 @@ public class OneElementNary<T> extends NarySupport<T> {
     }
     Nary that = (Nary) obj;
     Iterator thatIterator = that.iterator();
-    if(!thatIterator.hasNext()){
+    if (!thatIterator.hasNext()) {
       // We are not equal if the other is empty
       return false;
     }
@@ -292,7 +292,7 @@ public class OneElementNary<T> extends NarySupport<T> {
   @Override
   public <A> A[] toArray(IntFunction<A[]> generator) {
     A[] oneElementArray = generator.apply(1);
-    oneElementArray[0]= (A) element;
+    oneElementArray[0] = (A) element;
     return oneElementArray;
   }
 

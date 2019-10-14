@@ -13,6 +13,8 @@ import java.util.stream.Stream;
  * The purpose of this type is to group all and only the methods from {@link java.util.stream.Stream} so they are separated
  * from the ones added to {@link java.util.stream.Stream} api (just for organization purpose).<br>
  * Date: 13/10/19 - 14:35
+ *
+ * @param <T> Type of contained elements
  */
 public interface NaryStream<T> extends Stream<T> {
 

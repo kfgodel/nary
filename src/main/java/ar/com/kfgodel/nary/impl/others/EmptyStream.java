@@ -4,21 +4,35 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Spliterator;
-import java.util.function.*;
-import java.util.stream.*;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.IntFunction;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.function.ToDoubleFunction;
+import java.util.function.ToIntFunction;
+import java.util.function.ToLongFunction;
+import java.util.stream.Collector;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 /**
  * This type represents an empty stream, and because it's immutable it's reusable.<br>
- *   We create this class to avoid stream instantiation where it's not needed. Current
- *   implementation of Stream.empty() instantiates every time
- *
+ * We create this class to avoid stream instantiation where it's not needed. Current
+ * implementation of Stream.empty() instantiates every time
+ * <br>
  * Created by kfgodel on 07/03/16.
  */
 public class EmptyStream implements Stream<Object> {
 
   private static final EmptyStream INSTANCE = new EmptyStream();
 
-  public static<T> Stream<T> instance(){
+  public static <T> Stream<T> instance() {
     return (Stream<T>) INSTANCE;
   }
 

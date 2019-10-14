@@ -6,8 +6,13 @@ package ar.com.kfgodel.nary.api.exceptions;
  */
 public class MoreThanOneElementException extends NaryException {
 
-    public MoreThanOneElementException(String message) {
-        super(message);
-    }
+  /**
+   * Creates a new instances without a previous cause
+   *
+   * @param message The error message describing what went wrong
+   */
+  public MoreThanOneElementException(String message) {
+    super(message);
+  }
 
 }

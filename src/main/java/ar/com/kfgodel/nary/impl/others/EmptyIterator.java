@@ -12,7 +12,7 @@ public class EmptyIterator implements Iterator<Object> {
 
   private static final EmptyIterator INSTACE = new EmptyIterator();
 
-  public static<T> Iterator<T> instance(){
+  public static <T> Iterator<T> instance() {
     return (Iterator<T>) INSTACE;
   }
 

@@ -11,7 +11,7 @@ public class EmptySpliterator implements Spliterator<Object> {
 
   private static final EmptySpliterator INSTANCE = new EmptySpliterator();
 
-  public static<T> Spliterator<T> instance(){
+  public static <T> Spliterator<T> instance() {
     return (Spliterator<T>) INSTANCE;
   }
 
@@ -33,7 +33,7 @@ public class EmptySpliterator implements Spliterator<Object> {
 
   @Override
   public int characteristics() {
-    return ORDERED | DISTINCT | SIZED | NONNULL | IMMUTABLE | CONCURRENT ;
+    return ORDERED | DISTINCT | SIZED | NONNULL | IMMUTABLE | CONCURRENT;
   }
 
   @Override

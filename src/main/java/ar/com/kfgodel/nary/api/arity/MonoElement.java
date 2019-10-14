@@ -12,12 +12,14 @@ import java.util.function.Supplier;
 /**
  * This type defines the protocol that {@link Nary} has to be used as an {@link Optional}.
  * Operations defined in this type makes sense when we know there's only 1 element on this instance.<br>
- *   It's based on {@link Optional} to be as compatible and intuitive as possible but it departs
- *   from its concepts adding own variants to simplify o complete use cases. Also makes explicit differences
- *   when there are similar methods between {@link java.util.stream.Stream} and {@link Optional} but they have
- *   different semantics.<br>
- *
+ * It's based on {@link Optional} to be as compatible and intuitive as possible but it departs
+ * from its concepts adding own variants to simplify o complete use cases. Also makes explicit differences
+ * when there are similar methods between {@link java.util.stream.Stream} and {@link Optional} but they have
+ * different semantics.<br>
+ * <br>
  * Date: 12/10/19 - 21:21
+ *
+ * @param <T> Type of contained element
  */
 public interface MonoElement<T> {
 
@@ -50,7 +52,7 @@ public interface MonoElement<T> {
    * @return true if there's no value to get
    * @throws MoreThanOneElementException If there's more than one value to get as Optional
    */
-  default boolean isAbsent() throws MoreThanOneElementException{
+  default boolean isAbsent() throws MoreThanOneElementException {
     return !isPresent();
   }
 
@@ -103,9 +105,10 @@ public interface MonoElement<T> {
 
   /**
    * Returns a Nary element that is populated with the given supplier only if this Nary is empty.<br>
-   *   This method allows defining a mapping function for nary that can be empty and keep chaining other
-   *   mapping definitions after that.<br>
-   *  This stream is consumed and it's assumed to have at most 1 element. It fails otherwise
+   * This method allows defining a mapping function for nary that can be empty and keep chaining other
+   * mapping definitions after that.<br>
+   * This stream is consumed and it's assumed to have at most 1 element. It fails otherwise
+   *
    * @param mapper The function that supplies a value if missing
    * @return A non empty nary with this instance element or the one given by the supplier
    * @throws MoreThanOneElementException If this instance has more than 1 element

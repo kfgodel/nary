@@ -11,7 +11,7 @@ public class OneElementSpliterator<T> implements Spliterator<T> {
 
   private T element;
 
-  public static<T> OneElementSpliterator<T> create(T element) {
+  public static <T> OneElementSpliterator<T> create(T element) {
     OneElementSpliterator<T> spliterator = new OneElementSpliterator<>();
     spliterator.element = element;
     return spliterator;
@@ -21,7 +21,7 @@ public class OneElementSpliterator<T> implements Spliterator<T> {
   @Override
   public boolean tryAdvance(Consumer<? super T> action) {
     boolean hadElement = hasElement();
-    if(hadElement){
+    if (hadElement) {
       action.accept(element);
       element = null;
     }
@@ -39,7 +39,7 @@ public class OneElementSpliterator<T> implements Spliterator<T> {
 
   @Override
   public long estimateSize() {
-    return hasElement()? 1 : 0;
+    return hasElement() ? 1 : 0;
   }
 
   @Override

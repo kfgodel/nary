@@ -30,16 +30,17 @@ import java.util.stream.Stream;
 
 /**
  * This type defines basic behavior for narys to be implemented
- *
+ * <p>
  * Created by kfgodel on 07/03/16.
  */
 public abstract class NarySupport<T> implements Nary<T> {
 
   /**
    * Forces this instance to contain only 1 element (or none).<br>
-   *   If this nary contains more than one element the coercion fails. This method
-   *   helps on checking the constraints that a mono element nary needs to have, that the user may
-   *   unintentionally violate
+   * If this nary contains more than one element the coercion fails. This method
+   * helps on checking the constraints that a mono element nary needs to have, that the user may
+   * unintentionally violate
+   *
    * @return an empty nary if this is empty, a non empty optional if this
    * has only one element
    * @throws MoreThanOneElementException If this nary has more than 1 element
@@ -86,7 +87,7 @@ public abstract class NarySupport<T> implements Nary<T> {
   public <U> Nary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper) {
     return returningNaryDo(
       this.<U>map(mapper)
-      .filter(Objects::nonNull)
+        .filter(Objects::nonNull)
     );
   }
 
@@ -94,7 +95,7 @@ public abstract class NarySupport<T> implements Nary<T> {
   public <U> Nary<U> flatMapOptional(Function<? super T, Optional<U>> mapper) throws MoreThanOneElementException {
     return returningNaryDo(
       map(mapper)
-      .flatMap(Nary::from)
+        .flatMap(Nary::from)
     );
   }
 
@@ -132,7 +133,7 @@ public abstract class NarySupport<T> implements Nary<T> {
   public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super T> accumulator) {
     R container = supplier.get();
     for (T element : this) {
-      accumulator.accept(container,element);
+      accumulator.accept(container, element);
     }
     return container;
   }
@@ -312,6 +313,7 @@ public abstract class NarySupport<T> implements Nary<T> {
   public Nary<T> findLast() {
     return reduceNary(this::keepLast);
   }
+
   /**
    * Reductor operation that keeps the last element as result
    */
@@ -401,16 +403,18 @@ public abstract class NarySupport<T> implements Nary<T> {
 
   /**
    * Wraps the native stream in a nary to conform to nary interface
+   *
    * @param nativeStream The stream to wrap
-   * @param <R> type of expected elements
+   * @param <R>          type of expected elements
    * @return The created nary
    */
-  protected<R> Nary<R> returningNaryDo(Stream<R> nativeStream) {
+  protected <R> Nary<R> returningNaryDo(Stream<R> nativeStream) {
     return Nary.from(nativeStream);
   }
 
   /**
    * Wraps the native optional in a nary to conform to nary interface
+   *
    * @param nativeOptional The native optional
    * @return The created nary
    */

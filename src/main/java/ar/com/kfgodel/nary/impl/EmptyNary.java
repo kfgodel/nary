@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 
 /**
  * This type represents the empty nary
- *
+ * <br>
  * Created by kfgodel on 07/03/16.
  */
 public class EmptyNary extends NarySupport<Object> {
@@ -30,11 +30,12 @@ public class EmptyNary extends NarySupport<Object> {
 
   /**
    * Accessor method for the only needed instance<br>
-   *   Generics help to make it appear multi-type
+   * Generics help to make it appear multi-type
+   *
    * @param <T> The expected element type
    * @return The empty instance
    */
-  public static<T> Nary<T> instance(){
+  public static <T> Nary<T> instance() {
     return (Nary<T>) INSTANCE;
   }
 
