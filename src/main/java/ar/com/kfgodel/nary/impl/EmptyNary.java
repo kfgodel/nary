@@ -58,11 +58,6 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public boolean isAbsent() throws MoreThanOneElementException {
-    return true;
-  }
-
-  @Override
   public Nary<Object> ifPresent(Consumer<? super Object> consumer) throws MoreThanOneElementException {
     //Ignore the consumer
     return this;

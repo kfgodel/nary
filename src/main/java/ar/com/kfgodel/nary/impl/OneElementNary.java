@@ -81,11 +81,6 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public boolean isAbsent() throws MoreThanOneElementException {
-    return false;
-  }
-
-  @Override
   public Stream<T> unordered() {
     return this;
   }
