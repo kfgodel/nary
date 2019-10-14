@@ -19,30 +19,30 @@ public class OneElementIteratorTest extends JavaSpec<NaryTestContext> {
   @Override
   public void define() {
     describe("a one element iterator", () -> {
-      context().iterator(()-> OneElementIterator.create(1));
+      context().iterator(() -> OneElementIterator.create(1));
 
-      it("has more elements",()->{
-          assertThat(context().iterator().hasNext()).isTrue();
+      it("has more elements", () -> {
+        assertThat(context().iterator().hasNext()).isTrue();
       });
-      
-      it("returns the element when next() is called",()->{
-          assertThat(context().iterator().next()).isEqualTo(1);
+
+      it("returns the element when next() is called", () -> {
+        assertThat(context().iterator().next()).isEqualTo(1);
       });
 
       describe("once iterated", () -> {
-        beforeEach(()->{
+        beforeEach(() -> {
           context().iterator().next();
         });
 
-        it("has no next elements",()->{
+        it("has no next elements", () -> {
           assertThat(context().iterator().hasNext()).isFalse();
         });
 
-        it("throws an exception when next() element is accessed",()->{
-          try{
+        it("throws an exception when next() element is accessed", () -> {
+          try {
             context().iterator().next();
             failBecauseExceptionWasNotThrown(NoSuchElementException.class);
-          }catch(NoSuchElementException e){
+          } catch (NoSuchElementException e) {
             assertThat(e).hasMessage("This one element iterator was already iterated");
           }
         });

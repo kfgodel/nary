@@ -28,7 +28,7 @@ public class NullMappingTest extends JavaSpec<NaryTestContext> {
           final List<Object> result = Stream.of("algo")
             .map(algo -> null)
             .collect(Collectors.toList());
-          assertThat(result).isEqualTo(Lists.newArrayList((Object)null));
+          assertThat(result).isEqualTo(Lists.newArrayList((Object) null));
         });
       });
 
@@ -46,12 +46,12 @@ public class NullMappingTest extends JavaSpec<NaryTestContext> {
           final List<Object> result = Nary.ofNonNullable("algo")
             .map(algo -> null)
             .collect(Collectors.toList());
-          assertThat(result).isEqualTo(Lists.newArrayList((Object)null));
+          assertThat(result).isEqualTo(Lists.newArrayList((Object) null));
         });
-        it("explicitly filters null as valid result when #mapFilteringNullResult() is used",()->{
+        it("explicitly filters null as valid result when #mapFilteringNullResult() is used", () -> {
           final List<Object> result = Nary.ofNonNullable("algo")
             .mapFilteringNullResult(algo -> null)
-            .map((nullValue)-> {
+            .map((nullValue) -> {
               throw new RuntimeException("This code is never executed");
             })
             .collect(Collectors.toList());

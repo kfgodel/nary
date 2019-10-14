@@ -85,13 +85,13 @@ public class NaryCreationTest extends JavaSpec<NaryTestContext> {
       });
 
       it("can be done from an iterable", () -> {
-        Nary<Integer> nary = Nary.from((Iterable)Lists.newArrayList(1, 2, 3));
+        Nary<Integer> nary = Nary.from((Iterable) Lists.newArrayList(1, 2, 3));
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(Lists.newArrayList(1, 2, 3));
       });
       it("can be done from a collection", () -> {
-        Nary<Integer> nary = Nary.from((Collection)Lists.newArrayList(1, 2, 3));
+        Nary<Integer> nary = Nary.from((Collection) Lists.newArrayList(1, 2, 3));
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(Lists.newArrayList(1, 2, 3));

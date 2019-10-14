@@ -22,35 +22,35 @@ public class EmptyIteratorTest extends JavaSpec<NaryTestContext> {
     describe("an empty iterator", () -> {
       context().iterator(EmptyIterator::instance);
 
-      it("has no next elements",()->{
-          assertThat(context().iterator().hasNext()).isFalse();
+      it("has no next elements", () -> {
+        assertThat(context().iterator().hasNext()).isFalse();
       });
 
-      it("throws an exception when next() element is accessed",()->{
-          try{
-            context().iterator().next();
-            failBecauseExceptionWasNotThrown(NoSuchElementException.class);
-          }catch(NoSuchElementException e){
-            assertThat(e).hasMessage("Next element can't be accessed on empty iterator");
-          }
+      it("throws an exception when next() element is accessed", () -> {
+        try {
+          context().iterator().next();
+          failBecauseExceptionWasNotThrown(NoSuchElementException.class);
+        } catch (NoSuchElementException e) {
+          assertThat(e).hasMessage("Next element can't be accessed on empty iterator");
+        }
       });
 
-      it("throws an exception if tried to remove",()->{
-        try{
+      it("throws an exception if tried to remove", () -> {
+        try {
           context().iterator().remove();
           failBecauseExceptionWasNotThrown(UnsupportedOperationException.class);
-        }catch(UnsupportedOperationException e){
+        } catch (UnsupportedOperationException e) {
           assertThat(e).hasMessage("Can't remove elements on an empty iterator");
         }
       });
-      
-      it("ignores the consumer argument when #forEachRemaining() called",()->{
-        Variable<Boolean> executed =Variable.of(false);
 
-        context().iterator().forEachRemaining((value)-> executed.set(true));
+      it("ignores the consumer argument when #forEachRemaining() called", () -> {
+        Variable<Boolean> executed = Variable.of(false);
+
+        context().iterator().forEachRemaining((value) -> executed.set(true));
 
         assertThat(executed.get()).isFalse();
-      });   
+      });
     });
   }
 }

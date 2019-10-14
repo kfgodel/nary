@@ -15,18 +15,23 @@ import java.util.stream.Stream;
 public interface NaryTestContext extends TestContext {
 
   Nary<Integer> nary();
+
   void nary(Supplier<Nary<Integer>> definition);
 
   Stream<Integer> stream();
+
   void stream(Supplier<Stream<Integer>> definition);
 
   Object[] array();
+
   void array(Supplier<Object[]> definition);
 
   Iterator<Integer> iterator();
+
   void iterator(Supplier<Iterator<Integer>> definition);
 
   Spliterator<Integer> spliterator();
+
   void spliterator(Supplier<Spliterator<Integer>> definition);
 
 }

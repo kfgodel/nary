@@ -16,16 +16,16 @@ public class EmptyArrayTest extends JavaSpec<NaryTestContext> {
   @Override
   public void define() {
     describe("the empty array", () -> {
-      context().array(()-> EmptyArray.INSTANCE);
+      context().array(() -> EmptyArray.INSTANCE);
 
-      it("has 0 size",()->{
-          assertThat(context().array()).hasSize(0);
+      it("has 0 size", () -> {
+        assertThat(context().array()).hasSize(0);
       });
-      
-      it("has an Object element type",()->{
+
+      it("has an Object element type", () -> {
         Class<?> elementType = context().array().getClass().getComponentType();
         assertThat(elementType).isEqualTo(Object.class);
-      });   
+      });
     });
 
   }

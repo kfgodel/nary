@@ -28,172 +28,172 @@ public class EmptyStreamTest extends JavaSpec<NaryTestContext> {
     describe("an empty stream", () -> {
       context().stream(EmptyStream::instance);
 
-      it("returns an empty stream when #filter() is called",()->{
+      it("returns an empty stream when #filter() is called", () -> {
         List<Integer> result = context().stream().filter((value) -> true)
           .collect(Collectors.toList());
 
         assertThat(result).isEqualTo(Lists.newArrayList());
       });
-      it("returns an empty stream when #map() is called",()->{
+      it("returns an empty stream when #map() is called", () -> {
         List<Integer> result = context().stream().map((value) -> value)
           .collect(Collectors.toList());
 
         assertThat(result).isEqualTo(Lists.newArrayList());
       });
-      it("returns an empty stream when #mapToInt() is called",()->{
+      it("returns an empty stream when #mapToInt() is called", () -> {
         long result = context().stream().mapToInt((value) -> 1).count();
 
         assertThat(result).isEqualTo(0);
       });
-      it("returns an empty stream when #mapToLong() is called",()->{
+      it("returns an empty stream when #mapToLong() is called", () -> {
         long result = context().stream().mapToLong((value) -> 1).count();
 
         assertThat(result).isEqualTo(0);
       });
-      it("returns an empty stream when #mapToDouble() is called",()->{
+      it("returns an empty stream when #mapToDouble() is called", () -> {
         long result = context().stream().mapToDouble((value) -> 1.0).count();
 
         assertThat(result).isEqualTo(0);
       });
-      it("returns an empty stream when #flatMap() is called",()->{
+      it("returns an empty stream when #flatMap() is called", () -> {
         List<Integer> result = context().stream().flatMap((value) -> Nary.ofNonNullable(value))
           .collect(Collectors.toList());
 
         assertThat(result).isEqualTo(Lists.newArrayList());
       });
-      it("returns an empty stream when #flatMapToInt() is called",()->{
+      it("returns an empty stream when #flatMapToInt() is called", () -> {
         long result = context().stream().flatMapToInt((value) -> IntStream.of(1))
           .count();
 
         assertThat(result).isEqualTo(0);
       });
-      it("returns an empty stream when #flatMapToLongs() is called",()->{
+      it("returns an empty stream when #flatMapToLongs() is called", () -> {
         long result = context().stream().flatMapToLong((value) -> LongStream.of(1))
           .count();
 
         assertThat(result).isEqualTo(0);
       });
-      it("returns an empty stream when #flatMapToDouble() is called",()->{
+      it("returns an empty stream when #flatMapToDouble() is called", () -> {
         long result = context().stream().flatMapToDouble((value) -> DoubleStream.of(1))
           .count();
 
         assertThat(result).isEqualTo(0);
       });
-      it("returns an empty stream when #distinct() is called",()->{
+      it("returns an empty stream when #distinct() is called", () -> {
         List<Integer> result = context().stream().distinct()
           .collect(Collectors.toList());
 
         assertThat(result).isEqualTo(Lists.newArrayList());
       });
-      it("returns an empty stream when #sorted() is called",()->{
+      it("returns an empty stream when #sorted() is called", () -> {
         List<Integer> result = context().stream().sorted()
           .collect(Collectors.toList());
 
         assertThat(result).isEqualTo(Lists.newArrayList());
       });
-      it("returns an empty stream when #sorted(Comparator) is called",()->{
+      it("returns an empty stream when #sorted(Comparator) is called", () -> {
         List<Integer> result = context().stream().sorted(Integer::compareTo)
           .collect(Collectors.toList());
 
         assertThat(result).isEqualTo(Lists.newArrayList());
       });
-      it("never calls the consumer when #peek() is called",()->{
+      it("never calls the consumer when #peek() is called", () -> {
         Variable<Boolean> executed = Variable.of(false);
-        List<Integer> result = context().stream().peek((value)-> executed.set(true))
+        List<Integer> result = context().stream().peek((value) -> executed.set(true))
           .collect(Collectors.toList());
 
         assertThat(executed.get()).isFalse();
       });
-      it("ignores calls to #limit() returning an empty stream",()->{
+      it("ignores calls to #limit() returning an empty stream", () -> {
         List<Integer> result = context().stream().limit(20)
           .collect(Collectors.toList());
 
         assertThat(result).isEqualTo(Lists.newArrayList());
       });
-      it("ignores calls to #skip() returning an empty stream",()->{
+      it("ignores calls to #skip() returning an empty stream", () -> {
         List<Integer> result = context().stream().skip(0)
           .collect(Collectors.toList());
 
         assertThat(result).isEqualTo(Lists.newArrayList());
       });
-      it("never calls the consumer when #forEach() is called",()->{
+      it("never calls the consumer when #forEach() is called", () -> {
         Variable<Boolean> executed = Variable.of(false);
 
-        context().stream().forEach((value)-> executed.set(true));
+        context().stream().forEach((value) -> executed.set(true));
 
         assertThat(executed.get()).isFalse();
       });
-      it("never calls the consumer when #forEachOrdered() is called",()->{
+      it("never calls the consumer when #forEachOrdered() is called", () -> {
         Variable<Boolean> executed = Variable.of(false);
 
-        context().stream().forEachOrdered((value)-> executed.set(true));
+        context().stream().forEachOrdered((value) -> executed.set(true));
 
         assertThat(executed.get()).isFalse();
       });
-      it("returns an empty object array when called to #toArray()",()->{
+      it("returns an empty object array when called to #toArray()", () -> {
         Object[] result = context().stream().toArray();
 
         assertThat(result).isEqualTo(new Object[0]);
       });
-      it("calls with 0 as size the intFunction argument of #toArray(IntFunction)",()->{
+      it("calls with 0 as size the intFunction argument of #toArray(IntFunction)", () -> {
         Variable<Integer> sizeUsed = Variable.create();
 
-        context().stream().toArray((size)->{
+        context().stream().toArray((size) -> {
           sizeUsed.set(size);
           return new Object[size];
         });
 
         assertThat(sizeUsed.get()).isEqualTo(0);
       });
-      it("returns the identity when #reduce(identity,accumulator) is called",()->{
+      it("returns the identity when #reduce(identity,accumulator) is called", () -> {
         Integer result = context().stream().reduce(23, (a, b) -> a + b);
         assertThat(result).isEqualTo(23);
       });
-      it("returns the identity when #reduce(identity,accumulator, combiner) is called",()->{
-        Integer result = context().stream().reduce(28, (a, b) -> a + b, (a, b)-> a+b);
+      it("returns the identity when #reduce(identity,accumulator, combiner) is called", () -> {
+        Integer result = context().stream().reduce(28, (a, b) -> a + b, (a, b) -> a + b);
         assertThat(result).isEqualTo(28);
       });
-      it("returns an empty optional when #reduce(accumulator) is called",()->{
+      it("returns an empty optional when #reduce(accumulator) is called", () -> {
         java.util.Optional<Integer> result = context().stream().reduce((a, b) -> a + b);
         assertThat(result.isPresent()).isFalse();
       });
-      it("returns the supplier result untouched when #collect(supplier, accumulator, combiner) is called ",()->{
-        List<Integer> result = context().stream().collect(ArrayList::new, (list, value)-> list.add(value), (list1, list2)-> list1.addAll(list2) );
+      it("returns the supplier result untouched when #collect(supplier, accumulator, combiner) is called ", () -> {
+        List<Integer> result = context().stream().collect(ArrayList::new, (list, value) -> list.add(value), (list1, list2) -> list1.addAll(list2));
         assertThat(result).isEmpty();
       });
-      it("returns an empty collection when #collect(collector) is called",()->{
+      it("returns an empty collection when #collect(collector) is called", () -> {
         List<Integer> result = context().stream().collect(Collectors.toList());
         assertThat(result).isEmpty();
       });
-      it("returns an empty optional when #min() is called",()->{
+      it("returns an empty optional when #min() is called", () -> {
         java.util.Optional<Integer> result = context().stream().min(Integer::compareTo);
         assertThat(result).isEqualTo(java.util.Optional.empty());
       });
-      it("returns an empty optional when #max() is called",()->{
+      it("returns an empty optional when #max() is called", () -> {
         java.util.Optional<Integer> result = context().stream().max(Integer::compareTo);
         assertThat(result).isEqualTo(java.util.Optional.empty());
       });
-      it("returns 0 when #count() is called",()->{
+      it("returns 0 when #count() is called", () -> {
         long result = context().stream().count();
         assertThat(result).isEqualTo(0);
       });
-      it("returns false when #anyMatch() is called",()->{
-        boolean result = context().stream().anyMatch((value)-> true);
+      it("returns false when #anyMatch() is called", () -> {
+        boolean result = context().stream().anyMatch((value) -> true);
         assertThat(result).isFalse();
       });
-      it("returns true when #allMatch() is called",()->{
-        boolean result = context().stream().allMatch((value)-> true);
+      it("returns true when #allMatch() is called", () -> {
+        boolean result = context().stream().allMatch((value) -> true);
         assertThat(result).isTrue();
       });
-      it("returns true when #noneMatch() is called",()->{
-        boolean result = context().stream().noneMatch((value)-> true);
+      it("returns true when #noneMatch() is called", () -> {
+        boolean result = context().stream().noneMatch((value) -> true);
         assertThat(result).isTrue();
       });
-      it("returns an empty optional when #findFirst() is called",()->{
+      it("returns an empty optional when #findFirst() is called", () -> {
         java.util.Optional<Integer> result = context().stream().findFirst();
         assertThat(result).isEqualTo(java.util.Optional.empty());
       });
-      it("returns an empty optional when #findAny() is called",()->{
+      it("returns an empty optional when #findAny() is called", () -> {
         java.util.Optional<Integer> result = context().stream().findAny();
         assertThat(result).isEqualTo(java.util.Optional.empty());
       });
