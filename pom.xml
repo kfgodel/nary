@@ -50,6 +50,17 @@
     <!-- Sonar properties to prevent unintentional id changes (Reference: https://docs.sonarqube.org/latest/analysis/analysis-parameters/) -->
     <sonar.projectKey>ar.com.kfgodel:nary</sonar.projectKey>
 
+    <!-- Classes should not be coupled to too many other classes -->
+    <!-- All Nary types need to depend on many classes due to its rich interface  -->
+    <sonar.issue.ignore.multicriteria.j1.ruleKey>squid:S1200</sonar.issue.ignore.multicriteria.j1.ruleKey>
+    <sonar.issue.ignore.multicriteria.j1.resourceKey>**/[EmptyNary|NarySupport|OneElementNary].java</sonar.issue.ignore.multicriteria.j1.resourceKey>
+
+    <!-- Classes should not have too many methods -->
+    <!-- Nary API has many methods on purpose to facilitate its usage on different context  -->
+    <sonar.issue.ignore.multicriteria.j1.ruleKey>squid:S1448</sonar.issue.ignore.multicriteria.j1.ruleKey>
+    <sonar.issue.ignore.multicriteria.j1.resourceKey>**/[EmptyNary|NarySupport|OneElementNary].java</sonar.issue.ignore.multicriteria.j1.resourceKey>
+
+
     <version.javaspec>2.4.1</version.javaspec>
   </properties>
 
