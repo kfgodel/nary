@@ -6,7 +6,12 @@ import info.kfgodel.jspek.api.JavaSpecRunner;
 import info.kfgodel.jspek.api.variable.Variable;
 import org.junit.runner.RunWith;
 
-import static java.util.Spliterator.*;
+import static java.util.Spliterator.CONCURRENT;
+import static java.util.Spliterator.DISTINCT;
+import static java.util.Spliterator.IMMUTABLE;
+import static java.util.Spliterator.NONNULL;
+import static java.util.Spliterator.ORDERED;
+import static java.util.Spliterator.SIZED;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -48,7 +53,7 @@ public class EmptySpliteratorTest extends JavaSpec<NaryTestContext> {
 
       it("has several characteristics to help combination with other spliterators",()->{
           assertThat(context().spliterator().characteristics())
-            .isEqualTo(ORDERED | DISTINCT | SORTED | SIZED | NONNULL | IMMUTABLE | CONCURRENT );
+            .isEqualTo(ORDERED | DISTINCT | SIZED | NONNULL | IMMUTABLE | CONCURRENT );
       });
 
       it("ignores the consumer argument when #forEachRemaining() called",()->{

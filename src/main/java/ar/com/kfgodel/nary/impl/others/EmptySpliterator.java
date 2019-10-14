@@ -33,7 +33,7 @@ public class EmptySpliterator implements Spliterator<Object> {
 
   @Override
   public int characteristics() {
-    return ORDERED | DISTINCT | SORTED | SIZED | NONNULL | IMMUTABLE | CONCURRENT ;
+    return ORDERED | DISTINCT | SIZED | NONNULL | IMMUTABLE | CONCURRENT ;
   }
 
   @Override

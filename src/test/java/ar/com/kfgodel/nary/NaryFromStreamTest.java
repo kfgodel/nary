@@ -13,11 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.Spliterator;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
@@ -457,6 +459,14 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
               .collect(Collectors.toList());
 
             assertThat(result).isEqualTo(Lists.newArrayList(1, 3));
+          });
+          it("returns an empty spliterator when called to #spliterator",()->{
+            final Spliterator<Integer> spliterator = context().nary().spliterator();
+
+            final List<Integer> collected = StreamSupport.stream(spliterator, false)
+              .collect(Collectors.toList());
+
+            assertThat(collected).containsExactly(3,2,1,3);
           });
           it("calls the consumer for each value when #forEach() is called",()->{
             List<Integer> list = new ArrayList<Integer>();

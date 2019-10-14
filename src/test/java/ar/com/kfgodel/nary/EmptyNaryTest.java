@@ -13,8 +13,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Spliterator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
@@ -200,6 +202,14 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
       describe("as stream", () -> {
         it("behaves as an empty stream",()->{
           assertThat(context().nary().asStream()).isSameAs(EmptyStream.instance());
+        });
+        it("returns an empty spliterator when called to #spliterator",()->{
+          final Spliterator<Integer> spliterator = context().nary().spliterator();
+
+          final List<Integer> collected = StreamSupport.stream(spliterator, false)
+            .collect(Collectors.toList());
+
+          assertThat(collected).isEmpty();
         });
       });
 
