@@ -10,10 +10,12 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * This type defines the additional protocol that can be used when we know there's only 1 element on the Nary instance.<br>
+ * This type defines the protocol that {@link Nary} has to be used as an {@link Optional}.
+ * Operations defined in this type makes sense when we know there's only 1 element on this instance.<br>
  *   It's based on {@link Optional} to be as compatible and intuitive as possible but it departs
- *   from its concepts adding own to simplify o complete use cases, and making explicit differences when there's
- *   a conceptual contradiction with {@link java.util.stream.Stream}.<br>
+ *   from its concepts adding own variants to simplify o complete use cases. Also makes explicit differences
+ *   when there are similar methods between {@link java.util.stream.Stream} and {@link Optional} but they have
+ *   different semantics.<br>
  *
  * Date: 12/10/19 - 21:21
  */
@@ -27,7 +29,7 @@ public interface MonoElement<T> {
    *
    * @return the non-null value held by this {@code Nary}
    * @throws java.util.NoSuchElementException if there is no value present
-   * @throws MoreThanOneElementException      if there are more than one
+   * @throws MoreThanOneElementException      if there are more than one values
    * @see Optional#get()
    */
   T get() throws NoSuchElementException, MoreThanOneElementException;
@@ -71,6 +73,7 @@ public interface MonoElement<T> {
    * This Nary as Stream is consumed.
    *
    * @param runnable The code to execute if this optional is empty
+   * @return this for easy method chaining
    * @throws MoreThanOneElementException if there are more than one
    */
   Nary<T> ifAbsent(Runnable runnable) throws MoreThanOneElementException;
@@ -94,8 +97,6 @@ public interface MonoElement<T> {
    * @param other a {@code Supplier} whose result is returned if no value
    *              is present
    * @return the value if present otherwise the result of {@code other.get()}
-   * @throws NullPointerException        if value is not present and {@code other} is
-   *                                     null
    * @throws MoreThanOneElementException if there are more than one
    */
   T orElseGet(Supplier<? extends T> other) throws MoreThanOneElementException;
@@ -113,13 +114,8 @@ public interface MonoElement<T> {
 
 
   /**
-   * Return the only contained value, if present, otherwise throw an exception
-   * to be created by the provided supplier.
+   * Return the only contained value, if present, otherwise throw an exception created by the provided supplier.
    * This Nary as Stream is consumed.
-   *
-   * A method reference to the exception constructor with an empty
-   * argument list can be used as the supplier. For example,
-   * {@code IllegalStateException::new}
    *
    * @param <X>               Type of the exception to be thrown
    * @param exceptionSupplier The supplier which will return the exception to
@@ -133,15 +129,8 @@ public interface MonoElement<T> {
   <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X, MoreThanOneElementException;
 
   /**
-   * Returns the only contained value, if present, otherwise throws a runtime exception
-   * to be created by the provided supplier.
-   * This method allows throwing runtime exception where the compiler cannot infer if it's runtime
-   * or compile time checked
-   * This Nary as Stream is consumed.
-   *
-   * A method reference to the exception constructor with an empty
-   * argument list can be used as the supplier. For example,
-   * {@code IllegalStateException::new}
+   * Variant of {@link MonoElement#orElseThrow(Supplier)} that bounds type parameter X to be a {@link RuntimeException}
+   * and avoid having to catch the exception if used inside a lambda block with bad inference.
    *
    * @param <X>               Type of the exception to be thrown
    * @param exceptionSupplier The supplier which will return the exception to
@@ -152,10 +141,11 @@ public interface MonoElement<T> {
    *                                     {@code exceptionSupplier} is null
    * @throws MoreThanOneElementException if there are more than one
    */
-  <X extends RuntimeException> T orElseThrowRuntime(Supplier<? extends X> exceptionSupplier) throws X, MoreThanOneElementException;
+  <X extends RuntimeException> T orElseThrowRuntime(Supplier<? extends X> exceptionSupplier)
+    throws X, MoreThanOneElementException;
 
   /**
-   * Returns a native Optional instance to be used with non Nary code
+   * Returns a native Optional instance to be used with Nary unaware code
    *
    * @return The native instance that represents this Nary content
    * @throws MoreThanOneElementException if there are more than one elements in this instance
@@ -163,9 +153,9 @@ public interface MonoElement<T> {
   Optional<T> asOptional() throws MoreThanOneElementException;
 
   /**
-   * This method maps each element on this element and filters null out.<br>
-   * If the result of mapping the elment produces a null result, then this
-   * method ignores that result reducing the elements contained.<br>
+   * Map each element on this instance and filter null results out.<br>
+   * If the result of mapping an element produces {@code null}, then it's skipped, reducing the
+   * amount of elements contained in the returned Nary.<br>
    * <br>
    * This is semantically equivalent to {@link Optional#map(Function)} and
    * different from {@link java.util.stream.Stream#map(Function)} that takes null
@@ -174,15 +164,14 @@ public interface MonoElement<T> {
    * @param <U>    The type of the result of the mapping function
    * @param mapper a mapping function to apply to the value, if present
    * @return a Nary with the mapped results excluding the ones that returned null
-   * @throws NullPointerException        if the mapping function is null
    */
   <U> Nary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper);
 
   /**
-   * Makes a normal flat-map transformation but accepts {@link Optional} as the mapper
-   * result instead of {@link java.util.stream.Stream}.<br>
-   * This method is the semantic equivalent of {@link Optional#flatMap(Function)} but it can
-   * be applied in more than one element.<br>
+   * Makes a normal {@link java.util.stream.Stream#flatMap(Function)} transformation but accepts {@link Optional}
+   * as result for the mapper instead of {@link java.util.stream.Stream}.<br>
+   * This method is the semantic equivalent of {@link Optional#flatMap(Function)} but it can be applied to more
+   * than one element.<br>
    * <br>
    *
    * @param <U>    The type parameter to the {@code Optional} returned by
@@ -190,8 +179,6 @@ public interface MonoElement<T> {
    *               the mapping function
    * @return the result of applying an {@code Optional}-bearing mapping
    * function to the elements of this instance which may be 0, 1, or more elements
-   * @throws NullPointerException        if the mapping function is null or returns
-   *                                     a null result
    */
   <U> Nary<U> flatMapOptional(Function<? super T, Optional<U>> mapper);
 }

@@ -19,51 +19,48 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- * This type represents an uncertain set of elements, without any assumptions about order, uniqueness, or quantity.<br>
- * A nary, as a stream, cannot be modified, but it can be consumed. It's the least structure-coupled container,
- * allowing it to be used as return type when there's no guarantee about collection types, element sources,
- * element quantities, element presence, etc. <br>
+ * This type represents an uncertain amount of elements<br>
+ * A Nary is the compile time type that can be used in runtime as a {@link Stream} or an {@link Optional}, allowing you
+ * to switch from one to the other in runtime.<br>
  * <br>
- * Joint of a stream and an optional, offers an interface that is the mix of both (with minor modifications to Optional).<br>
+ * Union of a stream and an optional, offers an interface that is the mix of both (with minor modifications).<br>
  * It represents an object that can contain 0, 1, or N elements, and can be accessed assuming one of the scenarios.<br>
- * This allows a method to be used as returning an optional, or a stream based on the arguments (without having to change
- * the return type). Specially useful for query methods.<br>
+ * Allows a method to behave as returning Optional or Stream depending on the arguments
+ * (specially useful for query methods).<br>
  * <br>
- * Because Optional is a concrete class and has colliding method names, an alternative Optional with same semantics
- * is used instead. asNativeOptional() method is offered to get an Optional instance.<br>
- * <br>
- * When used as an Optional, because this object may contain more than one element, an exception could be thrown. If
- * the method returning this instance doesn't guarantee how many elements it contains, it is safest to use it as a Stream.<br>
+ * When used as an Optional, because this object may contain more than one element, it is coerced and an exception
+ * could be thrown. If the method returning this instance doesn't guarantee how many elements it contains,
+ * this instance should be used as a Stream.<br>
  * <br>
  * Created by kfgodel on 06/11/14.
  */
 public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
 
   /**
-   * This method is redefined so two naries are equal if they contain equal elements when iterated together
+   * This method is redefined so two instances of {@link Nary} are equal only if they contain
+   * equal elements, comparing them in iteration order
    * @see java.lang.Object#equals(Object)
    */
   @Override
   boolean equals(Object obj);
 
   /**
-   * This method is redefined so the hashcode of a nary is based on its contained elements.
+   * This method is redefined so the hashcode of a {@link Nary} is based on its contained elements.
    * @see Object#hashCode()
    */
   @Override
   int hashCode();
 
   /**
-   * This method is redefined so whenever posible, the contained elements are peeked
+   * This method is redefined so whenever possible, the contained elements are printed
    * @see Object#toString()
    */
   @Override
   String toString();
 
-
   /**
-   * Creates an empty nary to represent an empty set
-   * @param <T> Expected type
+   * Gets an empty nary to represent a 0 element Nary.<br>
+   * @param <T> Expected type of elements
    * @return The empty instance
    */
   static<T> Nary<T> empty(){
@@ -71,10 +68,11 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
   }
 
   /**
-   * Creates a nary from a native stream. The operation on this nary will consume the stream
+   * Creates a nary from a native stream. Any {@link Stream} operation on this instance will consume the stream.<br>
+   *   So it should be later discarded (it can't be reused unless the stream contains only 1 element)
    * @param stream original stream
-   * @param <T> Expected type
-   * @return A nre nary
+   * @param <T> Expected type of elements
+   * @return A new nary instance
    */
   static<T> Nary<T> from(Stream<? extends T> stream){
     if(stream instanceof Nary){
@@ -85,7 +83,7 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
   }
 
   /**
-   * Creates a nary with a single element.<br>
+   * Creates a nary containing a single non null element.<br>
    *
    * @param element     The non null element
    * @param <T>         The type of expected nary content
@@ -96,7 +94,7 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
   }
 
   /**
-   * Creates a nary enumerating its elements.<br>
+   * Creates a nary containing the given elements.<br>
    *
    * @param element     The first mandatory element
    * @param additionals The optional extra elements
@@ -114,10 +112,11 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
   }
 
   /**
-   * Creates a nary from an element whose absence is represented by null
+   * Creates a nary from an element whose absence is represented by null.<br>
+   *   If null is passed then an empty Nary is returned
    * @param nullableElement An unknown value
    * @param <T> The expected element type
-   * @return A nary with the given element or empty if it was null
+   * @return A nary with the given element or empty if null was passed
    */
   static<T> Nary<T> of(T nullableElement){
     if(nullableElement == null){
@@ -128,11 +127,10 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
   }
 
   /**
-   * Creates a nary from a native optional. Stream like operations will generate a stream from the
-   * optional
+   * Creates a nary from a native optional. If the optional is empty, the empty Nary is returned
    * @param nativeOptional original optional
    * @param <T> The expected element type
-   * @return A new nary
+   * @return A reusable nary
    */
   static<T> Nary<T> from(Optional<? extends T> nativeOptional){
     return nativeOptional
