@@ -284,7 +284,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           });
           it("returns a nary representation when #toString() is called",()->{
             assertThat(context().nary().toString())
-              .startsWith("StreamBasedNary{stream: java.util.stream.ReferencePipeline")
+              .startsWith("StreamBasedNary{cachedOptional=null, sourceStream=java.util.stream.ReferencePipeline")
               .endsWith("}");
           });
           it("throws an exception when asOptional() is called",()->{

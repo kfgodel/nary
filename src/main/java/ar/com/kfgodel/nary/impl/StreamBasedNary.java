@@ -2,6 +2,7 @@ package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
+import com.google.common.base.MoreObjects;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -72,13 +73,12 @@ public class StreamBasedNary<T> extends NarySupport<T>  {
     return (Stream<T>) sourceStream;
   }
 
+
   @Override
   public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append(getClass().getSimpleName());
-    builder.append("{stream: ");
-    builder.append(sourceStream);
-    builder.append("}");
-    return builder.toString();
+    return MoreObjects.toStringHelper(this)
+      .add("cachedOptional", cachedOptional)
+      .add("sourceStream", sourceStream)
+      .toString();
   }
 }
