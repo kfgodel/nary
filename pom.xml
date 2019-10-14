@@ -50,17 +50,23 @@
     <sonar.projectKey>ar.com.kfgodel:nary</sonar.projectKey>
 
     <!-- Disable rules per files -->
-    <sonar.issue.ignore.multicriteria>j1,j2</sonar.issue.ignore.multicriteria>
+    <sonar.issue.ignore.multicriteria>j1,j2,j3,j4</sonar.issue.ignore.multicriteria>
 
     <!-- Classes should not be coupled to too many other classes -->
     <!-- All Nary types need to depend on many classes due to its rich interface  -->
     <sonar.issue.ignore.multicriteria.j1.ruleKey>squid:S1200</sonar.issue.ignore.multicriteria.j1.ruleKey>
-    <sonar.issue.ignore.multicriteria.j1.resourceKey>**/NarySupport.java,**/EmptyNary.java</sonar.issue.ignore.multicriteria.j1.resourceKey>
+    <sonar.issue.ignore.multicriteria.j1.resourceKey>**/*Nary*.java</sonar.issue.ignore.multicriteria.j1.resourceKey>
+    <!-- Same with stream impl  -->
+    <sonar.issue.ignore.multicriteria.j2.ruleKey>squid:S1200</sonar.issue.ignore.multicriteria.j2.ruleKey>
+    <sonar.issue.ignore.multicriteria.j2.resourceKey>**/EmptyStream.java</sonar.issue.ignore.multicriteria.j2.resourceKey>
 
     <!-- Classes should not have too many methods -->
     <!-- Nary API has many methods on purpose to facilitate its usage on different context  -->
-    <sonar.issue.ignore.multicriteria.j2.ruleKey>squid:S1448</sonar.issue.ignore.multicriteria.j2.ruleKey>
-    <sonar.issue.ignore.multicriteria.j2.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.j2.resourceKey>
+    <sonar.issue.ignore.multicriteria.j3.ruleKey>squid:S1448</sonar.issue.ignore.multicriteria.j3.ruleKey>
+    <sonar.issue.ignore.multicriteria.j3.resourceKey>**/*Nary*.java</sonar.issue.ignore.multicriteria.j3.resourceKey>
+    <!-- Same with stream  -->
+    <sonar.issue.ignore.multicriteria.j4.ruleKey>squid:S1448</sonar.issue.ignore.multicriteria.j4.ruleKey>
+    <sonar.issue.ignore.multicriteria.j4.resourceKey>**/EmptyStream.java</sonar.issue.ignore.multicriteria.j4.resourceKey>
 
   </properties>
 
