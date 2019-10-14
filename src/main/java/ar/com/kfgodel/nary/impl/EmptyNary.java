@@ -249,7 +249,7 @@ public class EmptyNary extends NarySupport<Object> {
     if (this == obj) {
       return true;
     }
-    if (!(obj instanceof Nary)) {
+    if (!(obj instanceof Nary)) { //NOSONAR Nary is related to this class so the cast is relevant
       return false;
     }
     Nary that = (Nary) obj;

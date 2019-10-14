@@ -2,6 +2,7 @@ package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
+import com.google.common.collect.Iterators;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -336,7 +337,7 @@ public abstract class NarySupport<T> implements Nary<T> {
 
   @Override
   public Nary<T> peek(Consumer<? super T> action) {
-    return returningNaryDo(asStream().peek(action));
+    return returningNaryDo(asStream().peek(action)); // NOSONAR squid:S3864 this methods needs to call peek()
   }
 
   @Override
@@ -379,28 +380,22 @@ public abstract class NarySupport<T> implements Nary<T> {
     if (this == obj) {
       return true;
     }
-    if (!(obj instanceof Nary)) {
+    if (!(obj instanceof Nary)) { // NOSONAR Nary is related to this type, the check is relevant
       return false;
     }
     Nary that = (Nary) obj;
     Iterator<T> thisIterator = this.iterator();
     Iterator thatIterator = that.iterator();
-    while (thisIterator.hasNext() && thatIterator.hasNext()) {
-      T thisElement = thisIterator.next();
-      Object thatElement = thatIterator.next();
-      if (!Objects.equals(thisElement, thatElement)) {
-        return false;
-      }
-    }
-    return !thisIterator.hasNext() && !thatIterator.hasNext();
+    return Iterators.elementsEqual(thisIterator, thatIterator);
   }
 
   @Override
   public int hashCode() {
     // Taken from arrayList implementation
     int hashCode = 1;
-    for (T e : this)
-      hashCode = 31 * hashCode + (e == null ? 0 : e.hashCode());
+    for (T e : this) {
+      hashCode = 31 * hashCode + Objects.hashCode(e);
+    }
     return hashCode;
   }
 
