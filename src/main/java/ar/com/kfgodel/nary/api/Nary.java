@@ -71,7 +71,7 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
    * @return The empty instance
    */
   static <T> Nary<T> empty() {
-    return EmptyNary.instance();
+    return EmptyNary.instance(); // NOSONAR Circular dependency with Nary on purpose to facilitate usage
   }
 
   /**
