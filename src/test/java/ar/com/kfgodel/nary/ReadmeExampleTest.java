@@ -24,10 +24,10 @@ public class ReadmeExampleTest extends JavaSpec<ReadmeExampleTestContext> {
         final List<Integer> even = integersUpTo(4)
           .filter(number -> number % 2 == 0)
           .collectToList();
-        assertThat(even).containsExactly(2,4);
+        assertThat(even).containsExactly(2, 4);
       });
 
-      it("can be used as an Optional",()->{
+      it("can be used as an Optional", () -> {
         final Integer result = integersUpTo(1)
           .get();  // Assume there's only one element
         assertThat(result).isEqualTo(1);
@@ -40,7 +40,7 @@ public class ReadmeExampleTest extends JavaSpec<ReadmeExampleTestContext> {
   private Nary<Integer> integersUpTo(int number) {
     List<Integer> returned = new ArrayList<>();
     for (int i = 1; i <= number; i++) {
-       returned.add(i);
+      returned.add(i);
     }
     return Narys.from(returned);
   }

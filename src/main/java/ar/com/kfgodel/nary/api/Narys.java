@@ -19,7 +19,7 @@ import java.util.stream.StreamSupport;
 /**
  * Interface with creation methods to get instances of {@link Nary} <br>
  * This type defines the different ways to create a {@link Nary} and how to interact with other types
- *
+ * <p>
  * Date: 14/10/19 - 12:34
  */
 public interface Narys {
