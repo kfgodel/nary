@@ -34,13 +34,30 @@ public class OneElementNary<T> extends NarySupport<T> {
 
   private T element;
 
-  public static <T> OneElementNary<T> create(T element) {
-    if (element == null) {
-      throw new IllegalArgumentException("Element can't be null");
-    }
-    OneElementNary<T> nary = new OneElementNary<>();
-    nary.element = element;
-    return nary;
+  @Override
+  public boolean allMatch(Predicate<? super T> predicate) {
+    // Because there's only one
+    return predicate.test(element);
+  }
+
+  @Override
+  public boolean anyMatch(Predicate<? super T> predicate) {
+    return predicate.test(element);
+  }
+
+  @Override
+  public Optional<T> asOptional() throws MoreThanOneElementException {
+    return Optional.of(element);
+  }
+
+  @Override
+  public Stream<T> asStream() {
+    return Stream.of(this.element);
+  }
+
+  @Override
+  public void close() {
+    // We have nothing to close
   }
 
   @Override
@@ -49,11 +66,17 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public Nary<T> concat(Optional<? extends T> other) {
-    if (other.isPresent()) {
-      return concat(Narys.from(other));
-    }
-    return this;
+  public <R, A> R collect(Collector<? super T, A, R> collector) {
+    // Combiner can be ignored when there's 1 element bc there's no combination
+    A container = collect(collector.supplier(), collector.accumulator());
+    R result = collector.finisher().apply(container);
+    return result;
+  }
+
+  @Override
+  public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super T> accumulator, BiConsumer<R, R> combiner) {
+    // We ignore the combiner because there's nothing to combine when there's only 1 element
+    return collect(supplier, accumulator);
   }
 
   @Override
@@ -70,28 +93,102 @@ public class OneElementNary<T> extends NarySupport<T> {
     return set;
   }
 
-  @Override
-  public Optional<T> asOptional() throws MoreThanOneElementException {
-    return Optional.of(element);
+  private boolean compareToElement(Iterator thatIterator) {
+    if (!thatIterator.hasNext()) {
+      // We are not equal if the other is empty
+      return false;
+    }
+    final Object otherElement = thatIterator.next();
+    // We are equal if the first element is equal, and there are no more
+    return this.element.equals(otherElement) && !thatIterator.hasNext();
   }
 
   @Override
-  public Stream<T> asStream() {
-    return Stream.of(this.element);
-  }
-
-  @Override
-  public Stream<T> unordered() {
+  public Nary<T> concat(Optional<? extends T> other) {
+    if (other.isPresent()) {
+      return concat(Narys.ofNonNullable(other.get()));
+    }
     return this;
   }
 
   @Override
-  public Stream<T> parallel() {
+  public long count() {
+    return 1;
+  }
+
+  @Override
+  public Nary<T> distinct() {
     return this;
   }
 
   @Override
-  public Stream<T> sequential() {
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (!(obj instanceof Nary)) {
+      return false;
+    }
+    Nary that = (Nary) obj;
+    Iterator thatIterator = that.iterator();
+    return compareToElement(thatIterator);
+  }
+
+  @Override
+  public Optional<T> findAny() {
+    return asOptional();
+  }
+
+  @Override
+  public Nary<T> findAnyNary() {
+    return this;
+  }
+
+  @Override
+  public Optional<T> findFirst() {
+    return asOptional();
+  }
+
+  @Override
+  public Nary<T> findFirstNary() {
+    return this;
+  }
+
+  @Override
+  public Nary<T> findLast() {
+    return this;
+  }
+
+  @Override
+  public void forEach(Consumer<? super T> action) {
+    action.accept(element);
+  }
+
+  @Override
+  public void forEachOrdered(Consumer<? super T> action) {
+    forEach(action);
+  }
+
+  @Override
+  public T get() throws NoSuchElementException {
+    return element;
+  }
+
+  @Override
+  public int hashCode() {
+    // Based on arrayList implementation with one element
+    return 31 + element.hashCode();
+  }
+
+  @Override
+  public Nary<T> ifAbsent(Runnable runnable) {
+    // Nothing to do
+    return this;
+  }
+
+  @Override
+  public Nary<T> ifPresent(Consumer<? super T> consumer) throws MoreThanOneElementException {
+    consumer.accept(element);
     return this;
   }
 
@@ -101,13 +198,78 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public Spliterator<T> spliterator() {
-    return OneElementSpliterator.create(element);
+  public boolean isPresent() {
+    return true;
   }
 
   @Override
   public Iterator<T> iterator() {
     return OneElementIterator.create(element);
+  }
+
+  @Override
+  public Nary<T> limit(long maxSize) {
+    if (maxSize > 0) {
+      return this;
+    } else {
+      return Narys.empty();
+    }
+  }
+
+  @Override
+  public <U> Nary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper) {
+    U mapped = mapper.apply(element);
+    return Narys.of(mapped);
+  }
+
+  @Override
+  public Optional<T> max(Comparator<? super T> comparator) {
+    return asOptional();
+  }
+
+  @Override
+  public Nary<T> maxNary(Comparator<? super T> comparator) {
+    return this;
+  }
+
+  @Override
+  public Optional<T> min(Comparator<? super T> comparator) {
+    return asOptional();
+  }
+
+  @Override
+  public Nary<T> minNary(Comparator<? super T> comparator) {
+    return this;
+  }
+
+  @Override
+  public boolean noneMatch(Predicate<? super T> predicate) {
+    return !predicate.test(element);
+  }
+
+  @Override
+  public T orElse(T other) throws MoreThanOneElementException {
+    return element;
+  }
+
+  @Override
+  public T orElseGet(Supplier<? extends T> other) throws MoreThanOneElementException {
+    return element;
+  }
+
+  @Override
+  public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) {
+    return element;
+  }
+
+  @Override
+  public Nary<T> orElseUse(Supplier<? extends T> mapper) throws MoreThanOneElementException {
+    return this;
+  }
+
+  @Override
+  public Stream<T> parallel() {
+    return this;
   }
 
   @Override
@@ -133,22 +295,7 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public Nary<T> maxNary(Comparator<? super T> comparator) {
-    return this;
-  }
-
-  @Override
-  public Nary<T> minNary(Comparator<? super T> comparator) {
-    return this;
-  }
-
-  @Override
-  public Nary<T> findAnyNary() {
-    return this;
-  }
-
-  @Override
-  public Nary<T> findFirstNary() {
+  public Stream<T> sequential() {
     return this;
   }
 
@@ -158,15 +305,6 @@ public class OneElementNary<T> extends NarySupport<T> {
       return Narys.empty();
     } else {
       return this;
-    }
-  }
-
-  @Override
-  public Nary<T> limit(long maxSize) {
-    if (maxSize > 0) {
-      return this;
-    } else {
-      return Narys.empty();
     }
   }
 
@@ -181,101 +319,8 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public Nary<T> distinct() {
-    return this;
-  }
-
-  @Override
-  public Nary<T> findLast() {
-    return this;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (!(obj instanceof Nary)) {
-      return false;
-    }
-    Nary that = (Nary) obj;
-    Iterator thatIterator = that.iterator();
-    return compareToElement(thatIterator);
-  }
-
-  private boolean compareToElement(Iterator thatIterator) {
-    if (!thatIterator.hasNext()) {
-      // We are not equal if the other is empty
-      return false;
-    }
-    final Object otherElement = thatIterator.next();
-    // We are equal if the first element is equal, and there are no more
-    return this.element.equals(otherElement) && !thatIterator.hasNext();
-  }
-
-  @Override
-  public int hashCode() {
-    // Based on arrayList implementation with one element
-    return 31 + element.hashCode();
-  }
-
-  @Override
-  public void close() {
-    // We have nothing to close
-  }
-
-  @Override
-  public Optional<T> findAny() {
-    return asOptional();
-  }
-
-  @Override
-  public Optional<T> findFirst() {
-    return asOptional();
-  }
-
-  @Override
-  public boolean noneMatch(Predicate<? super T> predicate) {
-    return !anyMatch(predicate);
-  }
-
-  @Override
-  public boolean allMatch(Predicate<? super T> predicate) {
-    // Because there's only one
-    return anyMatch(predicate);
-  }
-
-  @Override
-  public boolean anyMatch(Predicate<? super T> predicate) {
-    return predicate.test(element);
-  }
-
-  @Override
-  public long count() {
-    return 1;
-  }
-
-  @Override
-  public Optional<T> max(Comparator<? super T> comparator) {
-    return asOptional();
-  }
-
-  @Override
-  public Optional<T> min(Comparator<? super T> comparator) {
-    return asOptional();
-  }
-
-  @Override
-  public <R, A> R collect(Collector<? super T, A, R> collector) {
-    A container = collect(collector.supplier(), collector.accumulator());
-    R result = collector.finisher().apply(container);
-    return result;
-  }
-
-  @Override
-  public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super T> accumulator, BiConsumer<R, R> combiner) {
-    // We ignore the combiner
-    return collect(supplier, accumulator);
+  public Spliterator<T> spliterator() {
+    return OneElementSpliterator.create(element);
   }
 
   @Override
@@ -291,64 +336,6 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public void forEach(Consumer<? super T> action) {
-    action.accept(element);
-  }
-
-  @Override
-  public void forEachOrdered(Consumer<? super T> action) {
-    forEach(action);
-  }
-
-  @Override
-  public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) {
-    return element;
-  }
-
-  @Override
-  public T orElseGet(Supplier<? extends T> other) throws MoreThanOneElementException {
-    return element;
-  }
-
-  @Override
-  public Nary<T> orElseUse(Supplier<? extends T> mapper) throws MoreThanOneElementException {
-    return this;
-  }
-
-  @Override
-  public T orElse(T other) throws MoreThanOneElementException {
-    return element;
-  }
-
-  @Override
-  public <U> Nary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper) {
-    U mapped = mapper.apply(element);
-    return Narys.of(mapped);
-  }
-
-  @Override
-  public Nary<T> ifAbsent(Runnable runnable) {
-    // Nothing to do
-    return this;
-  }
-
-  @Override
-  public Nary<T> ifPresent(Consumer<? super T> consumer) throws MoreThanOneElementException {
-    consumer.accept(element);
-    return this;
-  }
-
-  @Override
-  public boolean isPresent() {
-    return true;
-  }
-
-  @Override
-  public T get() throws NoSuchElementException {
-    return element;
-  }
-
-  @Override
   public String toString() {
     StringBuilder builder = new StringBuilder();
     builder.append(getClass().getSimpleName());
@@ -356,5 +343,19 @@ public class OneElementNary<T> extends NarySupport<T> {
     builder.append(element);
     builder.append(" }");
     return builder.toString();
+  }
+
+  @Override
+  public Stream<T> unordered() {
+    return this;
+  }
+
+  public static <T> OneElementNary<T> create(T element) {
+    if (element == null) {
+      throw new IllegalArgumentException("Element can't be null");
+    }
+    OneElementNary<T> nary = new OneElementNary<>();
+    nary.element = element;
+    return nary;
   }
 }

@@ -74,16 +74,16 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super Object> accumulator, BiConsumer<R, R> combiner) {
-    R container = supplier.get();
-    return container;
-  }
-
-  @Override
   public <R, A> R collect(Collector<? super Object, A, R> collector) {
     A container = collector.supplier().get();
     R result = collector.finisher().apply(container);
     return result;
+  }
+
+  @Override
+  public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super Object> accumulator, BiConsumer<R, R> combiner) {
+    R container = supplier.get();
+    return container;
   }
 
   @Override
@@ -94,6 +94,12 @@ public class EmptyNary extends NarySupport<Object> {
   @Override
   public Set<Object> collectToSet() {
     return Collections.emptySet();
+  }
+
+  @Override
+  public Nary<Object> concat(Optional<?> other) {
+    // If we are empty, only the other content matters for result
+    return Narys.from(other);
   }
 
   @Override
@@ -321,9 +327,9 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public Nary<Object> orElseUse(Supplier<?> mapper) throws MoreThanOneElementException {
-    final Object element = mapper.get();
-    return Narys.ofNonNullable(element);
+  public Nary<Object> orElseUse(Supplier<?> replacer) throws MoreThanOneElementException {
+    final Object element = replacer.get();
+    return Narys.of(element);
   }
 
   @Override
