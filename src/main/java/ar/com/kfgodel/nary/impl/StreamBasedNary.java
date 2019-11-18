@@ -1,7 +1,6 @@
 package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
-import ar.com.kfgodel.nary.api.Narys;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 import com.google.common.base.MoreObjects;
 
@@ -60,14 +59,14 @@ public class StreamBasedNary<T> extends NarySupport<T> {
   private Nary<T> reduceStreamToOptional() {
     Iterator<T> iterator = asStream().iterator();
     if (!iterator.hasNext()) {
-      return Narys.empty();
+      return Nary.empty();
     }
     T onlyElement = iterator.next();
     if (iterator.hasNext()) {
       throw new MoreThanOneElementException("Expecting 1 element in the stream to create an optional but " +
         "found at least 2: " + Arrays.asList(onlyElement, iterator.next()));
     }
-    return Narys.of(onlyElement);
+    return Nary.of(onlyElement);
   }
 
   @Override

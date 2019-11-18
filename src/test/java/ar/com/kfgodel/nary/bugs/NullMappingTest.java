@@ -1,7 +1,7 @@
 package ar.com.kfgodel.nary.bugs;
 
 import ar.com.kfgodel.nary.NaryTestContext;
-import ar.com.kfgodel.nary.api.Narys;
+import ar.com.kfgodel.nary.api.Nary;
 import com.google.common.collect.Lists;
 import info.kfgodel.jspek.api.JavaSpec;
 import info.kfgodel.jspek.api.JavaSpecRunner;
@@ -43,13 +43,13 @@ public class NullMappingTest extends JavaSpec<NaryTestContext> {
 
       describe("when using nary", () -> {
         it("takes null as valid result when #map() is used", () -> {
-          final List<Object> result = Narys.ofNonNullable("algo")
+          final List<Object> result = Nary.ofNonNullable("algo")
             .map(algo -> null)
             .collect(Collectors.toList());
           assertThat(result).isEqualTo(Lists.newArrayList((Object) null));
         });
         it("explicitly filters null as valid result when #mapFilteringNullResult() is used", () -> {
-          final List<Object> result = Narys.ofNonNullable("algo")
+          final List<Object> result = Nary.ofNonNullable("algo")
             .mapFilteringNullResult(algo -> null)
             .map((nullValue) -> {
               throw new RuntimeException("This code is never executed");

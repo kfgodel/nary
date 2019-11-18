@@ -1,7 +1,6 @@
 package ar.com.kfgodel.nary;
 
 import ar.com.kfgodel.nary.api.Nary;
-import ar.com.kfgodel.nary.api.Narys;
 import info.kfgodel.jspek.api.JavaSpec;
 import info.kfgodel.jspek.api.JavaSpecRunner;
 import org.junit.runner.RunWith;
@@ -42,6 +41,6 @@ public class ReadmeExampleTest extends JavaSpec<ReadmeExampleTestContext> {
     for (int i = 1; i <= number; i++) {
       returned.add(i);
     }
-    return Narys.from(returned);
+    return Nary.from(returned);
   }
 }

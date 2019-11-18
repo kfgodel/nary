@@ -1,7 +1,6 @@
 package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
-import ar.com.kfgodel.nary.api.Narys;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 import ar.com.kfgodel.nary.impl.others.EmptyArray;
 import ar.com.kfgodel.nary.impl.others.EmptyIterator;
@@ -99,13 +98,13 @@ public class EmptyNary extends NarySupport<Object> {
   @Override
   public Nary<Object> concat(Optional<?> other) {
     // If we are empty, only the other content matters for result
-    return Narys.from(other);
+    return Nary.from(other);
   }
 
   @Override
   public Nary<Object> concat(Stream<?> other) {
     // This is empty. Only the other elements are relevant
-    return Narys.from(other);
+    return Nary.from(other);
   }
 
   @Override
@@ -329,7 +328,7 @@ public class EmptyNary extends NarySupport<Object> {
   @Override
   public Nary<Object> orElseUse(Supplier<?> replacer) throws MoreThanOneElementException {
     final Object element = replacer.get();
-    return Narys.of(element);
+    return Nary.of(element);
   }
 
   @Override

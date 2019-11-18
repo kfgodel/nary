@@ -1,7 +1,6 @@
 package ar.com.kfgodel.nary;
 
 import ar.com.kfgodel.nary.api.Nary;
-import ar.com.kfgodel.nary.api.Narys;
 import com.google.common.collect.Sets;
 import info.kfgodel.jspek.api.JavaSpec;
 import info.kfgodel.jspek.api.JavaSpecRunner;
@@ -35,11 +34,11 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
     describe("an optional based nary", () -> {
 
       it("behaves like an empty nary when the optional is empty", () -> {
-        Nary<Object> nary = Narys.from(Optional.empty());
-        assertThat((Stream) nary).isSameAs(Narys.empty());
+        Nary<Object> nary = Nary.from(Optional.empty());
+        assertThat((Stream) nary).isSameAs(Nary.empty());
       });
 
-      context().nary(() -> Narys.from(Optional.of(3)));
+      context().nary(() -> Nary.from(Optional.of(3)));
 
       describe("as non empty optional", () -> {
         it("returns the value when get() is called", () -> {
@@ -98,15 +97,15 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
         });
         describe("#equals", () -> {
           it("is true if other optional has the same value", () -> {
-            boolean result = context().nary().equals(Narys.ofNonNullable(3));
+            boolean result = context().nary().equals(Nary.ofNonNullable(3));
             assertThat(result).isTrue();
           });
           it("is false if the other optional has different value", () -> {
-            boolean result = context().nary().equals(Narys.ofNonNullable(1));
+            boolean result = context().nary().equals(Nary.ofNonNullable(1));
             assertThat(result).isFalse();
           });
           it("is false if the other optional is empty", () -> {
-            boolean result = context().nary().equals(Narys.empty());
+            boolean result = context().nary().equals(Nary.empty());
             assertThat(result).isFalse();
           });
         });
@@ -129,12 +128,12 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
         });
         describe("#concat(Stream)", () -> {
           it("returns a one element nary if the stream is empty", () -> {
-            List<Integer> result = context().nary().concat(Narys.empty())
+            List<Integer> result = context().nary().concat(Nary.empty())
               .collect(Collectors.toList());
             assertThat(result).isEqualTo(Lists.newArrayList(3));
           });
           it("returns a nary with the value and the stream elements if the stream is not empty", () -> {
-            List<Integer> result = context().nary().concat(Narys.ofNonNullable(1, 2, 3))
+            List<Integer> result = context().nary().concat(Nary.ofNonNullable(1, 2, 3))
               .collect(Collectors.toList());
             assertThat(result).isEqualTo(Lists.newArrayList(3, 1, 2, 3));
           });
@@ -207,7 +206,7 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
           assertThat(result).isEqualTo(Lists.newArrayList(7.0));
         });
         it("transforms the value when #flatMap() is called", () -> {
-          List<Integer> result = context().nary().flatMap((value) -> Narys.ofNonNullable(8))
+          List<Integer> result = context().nary().flatMap((value) -> Nary.ofNonNullable(8))
             .collect(Collectors.toList());
 
           assertThat(result).isEqualTo(Lists.newArrayList(8));
@@ -385,19 +384,19 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
 
         it("returns itself when #findFirstNary() is called", () -> {
           Nary<Integer> result = context().nary().findFirstNary();
-          assertThat((Object) result).isEqualTo(Narys.ofNonNullable(3));
+          assertThat((Object) result).isEqualTo(Nary.ofNonNullable(3));
         });
         it("returns itself when #findAnyNary() is called", () -> {
           Nary<Integer> result = context().nary().findAnyNary();
-          assertThat((Object) result).isEqualTo(Narys.ofNonNullable(3));
+          assertThat((Object) result).isEqualTo(Nary.ofNonNullable(3));
         });
         it("returns itself when #minNary() is called", () -> {
           Nary<Integer> result = context().nary().minNary(Integer::compareTo);
-          assertThat((Object) result).isEqualTo(Narys.ofNonNullable(3));
+          assertThat((Object) result).isEqualTo(Nary.ofNonNullable(3));
         });
         it("returns itself when #maxNary() is called", () -> {
           Nary<Integer> result = context().nary().maxNary(Integer::compareTo);
-          assertThat((Object) result).isEqualTo(Narys.ofNonNullable(3));
+          assertThat((Object) result).isEqualTo(Nary.ofNonNullable(3));
         });
 
       });

@@ -1,7 +1,6 @@
 package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
-import ar.com.kfgodel.nary.api.Narys;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 import ar.com.kfgodel.nary.impl.others.OneElementIterator;
 import ar.com.kfgodel.nary.impl.others.OneElementSpliterator;
@@ -106,7 +105,7 @@ public class OneElementNary<T> extends NarySupport<T> {
   @Override
   public Nary<T> concat(Optional<? extends T> other) {
     if (other.isPresent()) {
-      return concat(Narys.ofNonNullable(other.get()));
+      return concat(Nary.ofNonNullable(other.get()));
     }
     return this;
   }
@@ -212,14 +211,14 @@ public class OneElementNary<T> extends NarySupport<T> {
     if (maxSize > 0) {
       return this;
     } else {
-      return Narys.empty();
+      return Nary.empty();
     }
   }
 
   @Override
   public <U> Nary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper) {
     U mapped = mapper.apply(element);
-    return Narys.of(mapped);
+    return Nary.of(mapped);
   }
 
   @Override
@@ -302,7 +301,7 @@ public class OneElementNary<T> extends NarySupport<T> {
   @Override
   public Nary<T> skip(long n) {
     if (n > 0) {
-      return Narys.empty();
+      return Nary.empty();
     } else {
       return this;
     }

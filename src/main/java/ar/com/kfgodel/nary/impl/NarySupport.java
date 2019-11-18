@@ -1,7 +1,6 @@
 package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
-import ar.com.kfgodel.nary.api.Narys;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 import com.google.common.collect.Iterators;
 
@@ -55,12 +54,12 @@ public abstract class NarySupport<T> implements Nary<T> {
 
   @Override
   public Nary<T> concat(Optional<? extends T> other) {
-    return concat(Narys.from(other));
+    return concat(Nary.from(other));
   }
 
   @Override
   public Nary<T> add(T... others) {
-    return concat(Narys.from(others));
+    return concat(Nary.from(others));
   }
 
   @Override
@@ -96,7 +95,7 @@ public abstract class NarySupport<T> implements Nary<T> {
   public <U> Nary<U> flatMapOptional(Function<? super T, Optional<U>> mapper) throws MoreThanOneElementException {
     return returningNaryDo(
       map(mapper)
-        .flatMap(Narys::from)
+        .flatMap(Nary::from)
     );
   }
 
@@ -408,7 +407,7 @@ public abstract class NarySupport<T> implements Nary<T> {
    * @return The created nary
    */
   protected <R> Nary<R> returningNaryDo(Stream<R> nativeStream) {
-    return Narys.from(nativeStream);
+    return Nary.from(nativeStream);
   }
 
   /**
@@ -418,7 +417,7 @@ public abstract class NarySupport<T> implements Nary<T> {
    * @return The created nary
    */
   protected Nary<T> returningNaryDo(Optional<T> nativeOptional) {
-    return Narys.from(nativeOptional);
+    return Nary.from(nativeOptional);
   }
 
 }

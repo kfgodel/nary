@@ -1,7 +1,6 @@
 package ar.com.kfgodel.nary;
 
 import ar.com.kfgodel.nary.api.Nary;
-import ar.com.kfgodel.nary.api.Narys;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 import com.google.common.collect.Sets;
 import info.kfgodel.jspek.api.JavaSpec;
@@ -36,15 +35,15 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
     describe("a stream based nary", () -> {
 
       it("behaves like an empty nary when the stream is empty", () -> {
-        Nary<Object> nary = Narys.from(Stream.empty());
-        assertThat((Object) nary).isEqualTo(Narys.empty());
+        Nary<Object> nary = Nary.from(Stream.empty());
+        assertThat((Object) nary).isEqualTo(Nary.empty());
       });
 
       describe("when having exactly 1 element", () -> {
-        context().nary(() -> Narys.from(Stream.of(3)));
+        context().nary(() -> Nary.from(Stream.of(3)));
 
         it("behaves like an optional based nary", () -> {
-          assertThat((Object) context().nary()).isEqualTo(Narys.from(Optional.of(3)));
+          assertThat((Object) context().nary()).isEqualTo(Nary.from(Optional.of(3)));
         });
 
         describe("as non empty optional", () -> {
@@ -104,15 +103,15 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           });
           describe("#equals", () -> {
             it("is true if other optional has the same value", () -> {
-              boolean result = context().nary().equals(Narys.ofNonNullable(3));
+              boolean result = context().nary().equals(Nary.ofNonNullable(3));
               assertThat(result).isTrue();
             });
             it("is false if the other optional has different value", () -> {
-              boolean result = context().nary().equals(Narys.ofNonNullable(1));
+              boolean result = context().nary().equals(Nary.ofNonNullable(1));
               assertThat(result).isFalse();
             });
             it("is false if the other optional is empty", () -> {
-              boolean result = context().nary().equals(Narys.empty());
+              boolean result = context().nary().equals(Nary.empty());
               assertThat(result).isFalse();
             });
           });
@@ -132,12 +131,12 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           });
           describe("#concat(Stream)", () -> {
             it("returns a one element nary if the stream is empty", () -> {
-              List<Integer> result = context().nary().concat(Narys.empty())
+              List<Integer> result = context().nary().concat(Nary.empty())
                 .collect(Collectors.toList());
               assertThat(result).isEqualTo(Lists.newArrayList(3));
             });
             it("returns a nary with the value and the stream elements if the stream is not empty", () -> {
-              List<Integer> result = context().nary().concat(Narys.ofNonNullable(1, 2, 3))
+              List<Integer> result = context().nary().concat(Nary.ofNonNullable(1, 2, 3))
                 .collect(Collectors.toList());
               assertThat(result).isEqualTo(Lists.newArrayList(3, 1, 2, 3));
             });
@@ -181,7 +180,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
       });
 
       describe("when having more than one element", () -> {
-        context().nary(() -> Narys.from(Stream.of(3, 2, 1, 3)));
+        context().nary(() -> Nary.from(Stream.of(3, 2, 1, 3)));
 
         describe("as overflowed optional", () -> {
           it("throws an exception when get() is called", () -> {
@@ -274,19 +273,19 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           });
           describe("#equals", () -> {
             it("is true if other stream has the same values and order", () -> {
-              boolean result = context().nary().equals(Narys.ofNonNullable(3, 2, 1, 3));
+              boolean result = context().nary().equals(Nary.ofNonNullable(3, 2, 1, 3));
               assertThat(result).isTrue();
             });
             it("is false if the other stream has different values", () -> {
-              boolean result = context().nary().equals(Narys.ofNonNullable(4, 5));
+              boolean result = context().nary().equals(Nary.ofNonNullable(4, 5));
               assertThat(result).isFalse();
             });
             it("is false if the other stream has different order", () -> {
-              boolean result = context().nary().equals(Narys.ofNonNullable(1, 2, 3, 3));
+              boolean result = context().nary().equals(Nary.ofNonNullable(1, 2, 3, 3));
               assertThat(result).isFalse();
             });
             it("is false if the other optional is empty", () -> {
-              boolean result = context().nary().equals(Narys.empty());
+              boolean result = context().nary().equals(Nary.empty());
               assertThat(result).isFalse();
             });
           });
@@ -316,12 +315,12 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           });
           describe("#concat(Stream)", () -> {
             it("returns itself if the stream is empty", () -> {
-              List<Integer> result = context().nary().concat(Narys.empty())
+              List<Integer> result = context().nary().concat(Nary.empty())
                 .collect(Collectors.toList());
               assertThat(result).isEqualTo(Lists.newArrayList(3, 2, 1, 3));
             });
             it("returns a nary with concatenated elements if the stream is not empty", () -> {
-              List<Integer> result = context().nary().concat(Narys.ofNonNullable(4, 5, 6))
+              List<Integer> result = context().nary().concat(Nary.ofNonNullable(4, 5, 6))
                 .collect(Collectors.toList());
               assertThat(result).isEqualTo(Lists.newArrayList(3, 2, 1, 3, 4, 5, 6));
             });
@@ -402,7 +401,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
             assertThat(result).isEqualTo(Lists.newArrayList(7.0, 6.0, 5.0, 7.0));
           });
           it("transforms the values when #flatMap() is called", () -> {
-            List<Integer> result = context().nary().flatMap((value) -> Narys.ofNonNullable(8))
+            List<Integer> result = context().nary().flatMap((value) -> Nary.ofNonNullable(8))
               .collect(Collectors.toList());
 
             assertThat(result).isEqualTo(Lists.newArrayList(8, 8, 8, 8));
@@ -568,19 +567,19 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           });
           it("honors the contract when #findFirst() is called", () -> {
             Nary<Integer> result = context().nary().findFirstNary();
-            assertThat((Object) result).isEqualTo(Narys.ofNonNullable(3));
+            assertThat((Object) result).isEqualTo(Nary.ofNonNullable(3));
           });
           it("honors the contract when #findAny() is called", () -> {
             Nary<Integer> result = context().nary().findAnyNary();
-            assertThat((Object) result).isEqualTo(Narys.ofNonNullable(3));
+            assertThat((Object) result).isEqualTo(Nary.ofNonNullable(3));
           });
           it("honors the contract when #minNary() is called", () -> {
             Nary<Integer> result = context().nary().minNary(Integer::compareTo);
-            assertThat((Object) result).isEqualTo(Narys.ofNonNullable(1));
+            assertThat((Object) result).isEqualTo(Nary.ofNonNullable(1));
           });
           it("honors the contract when #maxNary() is called", () -> {
             Nary<Integer> result = context().nary().maxNary(Integer::compareTo);
-            assertThat((Object) result).isEqualTo(Narys.ofNonNullable(3));
+            assertThat((Object) result).isEqualTo(Nary.ofNonNullable(3));
           });
 
         });
