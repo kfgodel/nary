@@ -70,6 +70,10 @@ public class StreamBasedNary<T> extends NarySupport<T>  {
 
   @Override
   public Stream<T> asStream() {
+    if(cachedOptional != null){
+      // Once coerced, it can only be reused as optional
+      return cachedOptional;
+    }
     return sourceStream;
   }
 
