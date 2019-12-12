@@ -29,4 +29,7 @@ public interface NaryTestContext extends TestContext {
   Spliterator<Integer> spliterator();
   void spliterator(Supplier<Spliterator<Integer>> definition);
 
+  Supplier<Integer> supplier();
+  void supplier(Supplier<Supplier<Integer>> definition);
+
 }

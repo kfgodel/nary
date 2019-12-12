@@ -17,11 +17,13 @@ import java.util.function.Supplier;
  * when there are similar methods between {@link java.util.stream.Stream} and {@link Optional} but they have
  * different semantics.<br>
  * <br>
- * Date: 12/10/19 - 21:21
+ * Because a {@link MonoElement} can contain an element, it can be used as {@link Supplier}.<br>
+ * Depending on its content it will fail if its empty, or deliver the element if not.
  *
+ * Date: 12/10/19 - 21:21
  * @param <T> Type of contained element
  */
-public interface MonoElement<T> {
+public interface MonoElement<T> extends Supplier<T> {
 
   /**
    * If only one value is present in this {@code Nary}, returns the value,

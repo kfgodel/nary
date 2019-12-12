@@ -63,8 +63,10 @@ public class StreamBasedNary<T> extends NarySupport<T> {
     }
     T onlyElement = iterator.next();
     if (iterator.hasNext()) {
-      throw new MoreThanOneElementException("Expecting 1 element in the stream to create an optional but " +
-        "found at least 2: " + Arrays.asList(onlyElement, iterator.next()));
+      throw new MoreThanOneElementException("Expecting only 1 element in the stream to " +
+        "treat it as an optional but found at least 2: "
+        + Arrays.asList(onlyElement, iterator.next())
+      );
     }
     return Nary.of(onlyElement);
   }
