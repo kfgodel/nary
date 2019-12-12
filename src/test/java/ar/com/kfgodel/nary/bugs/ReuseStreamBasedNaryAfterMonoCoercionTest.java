@@ -35,6 +35,24 @@ public class ReuseStreamBasedNaryAfterMonoCoercionTest extends JavaSpec<NaryTest
         });
       });
 
+      describe("after being mapped", () -> {
+        beforeEach(() -> {
+          final List<Integer> mapped = test().nary()
+            .map(num -> num + 1)
+            .collectToList();
+          assertThat(mapped).containsExactly(2);
+        });
+
+        itThrows(IllegalStateException.class, "because it was not coerced first",()->{
+          test().nary()
+            .map(num -> num + 2)
+            .collectToList();
+        }, e ->{
+          assertThat(e).hasMessage("stream has already been operated upon or closed");
+        });
+      });
+
+
     });
 
   }
