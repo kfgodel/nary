@@ -188,7 +188,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
               context().nary().get();
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             } catch (MoreThanOneElementException e) {
-              assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
+              assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");
             }
           });
           it("throws an exception when #isPresent() is called", () -> {
@@ -196,7 +196,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
               context().nary().isPresent();
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             } catch (MoreThanOneElementException e) {
-              assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
+              assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");
             }
           });
           it("throws an exception when #isAbsent() is called", () -> {
@@ -204,7 +204,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
               context().nary().isAbsent();
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             } catch (MoreThanOneElementException e) {
-              assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
+              assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");
             }
           });
           it("throws an exception when #ifPresent() is called", () -> {
@@ -214,7 +214,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
               });
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             } catch (MoreThanOneElementException e) {
-              assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
+              assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");
             }
           });
           it("throws an exception when #ifAbsent() is called", () -> {
@@ -224,7 +224,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
               });
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             } catch (MoreThanOneElementException e) {
-              assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
+              assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");
             }
           });
           it("throws an exception when #orElse() is called", () -> {
@@ -232,7 +232,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
               context().nary().orElse(200);
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             } catch (MoreThanOneElementException e) {
-              assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
+              assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");
             }
           });
           it("throws an exception when #orElseGet() is called", () -> {
@@ -242,7 +242,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
               });
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             } catch (MoreThanOneElementException e) {
-              assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
+              assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");
             }
           });
           it("throws an exception when #orElseUse() is called", () -> {
@@ -252,7 +252,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
               });
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             } catch (MoreThanOneElementException e) {
-              assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
+              assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");
             }
           });
           it("throws an exception when #orElseThrow() is called", () -> {
@@ -260,7 +260,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
               context().nary().orElseThrow(() -> new RuntimeException("never happens"));
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             } catch (MoreThanOneElementException e) {
-              assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
+              assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");
             }
           });
           it("throws an exception when #orElseThrowRuntime() is called", () -> {
@@ -268,7 +268,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
               context().nary().orElseThrowRuntime(() -> new RuntimeException("never happens"));
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             } catch (MoreThanOneElementException e) {
-              assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
+              assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");
             }
           });
           describe("#equals", () -> {
@@ -302,7 +302,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
               context().nary().asOptional();
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             } catch (MoreThanOneElementException e) {
-              assertThat(e).hasMessage("Expecting 1 element in the stream to create an optional but found at least 2: [3, 2]");
+              assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");
             }
           });
           it("returns a container with the values when #collect(supplier, accumulator) is called", () -> {

@@ -125,6 +125,12 @@ public class NaryCreationTest extends JavaSpec<NaryTestContext> {
         assertThat(elements).containsExactly("text123");
       });
 
+      it("can be created from a supplier",()->{
+        final Nary<Integer> nary = Nary.from(() -> 34);
+        // it's treated as a single element nary. The supplier will be called lazily
+        assertThat(nary.count()).isEqualTo(1);
+      });
+
     });
 
   }

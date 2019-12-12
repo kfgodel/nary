@@ -6,6 +6,7 @@ import ar.com.kfgodel.nary.impl.EmptyNary;
 import ar.com.kfgodel.nary.impl.OneElementNary;
 import ar.com.kfgodel.nary.impl.StreamBasedNary;
 import ar.com.kfgodel.nary.impl.others.EnumerationSpliterator;
+import ar.com.kfgodel.nary.impl.others.OneElementSupplierSpliterator;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -182,6 +184,18 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
   static <T> Nary<T> from(Iterable<T> iterable) {
     final Spliterator<T> spliterator = iterable.spliterator();
     return from(spliterator);
+  }
+
+  /**
+   * Creates a new Nary instance from the given supplier that will contain only 1 element.<br>
+   * The supplier will be called the first time the value is needed on a terminal operation
+   *
+   * @param supplier the lambda to the get only element of this instance
+   * @param <T>      The type of produced element
+   * @return A single element Nary
+   */
+  static <T> Nary<T> from(Supplier<T> supplier) {
+    return from(OneElementSupplierSpliterator.create(supplier));
   }
 
   /**
