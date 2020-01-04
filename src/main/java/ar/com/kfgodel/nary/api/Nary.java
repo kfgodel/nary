@@ -20,7 +20,9 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- * This type represents an uncertain amount of elements<br>
+ * This type represents an uncertain amount of elements. It may be 0, 1 or more and offers and api
+ * richer than {@link Stream} to interact with them.<br>
+ * <br>
  * A {@link Nary} is a type to be used when we don't know how many elements it will contain in runtime, but at the same time
  * we want to allow programmers to manipulate them as a {@link Stream} or an {@link Optional} if they somehow
  * know that is only 1 element that may be contained.<br>

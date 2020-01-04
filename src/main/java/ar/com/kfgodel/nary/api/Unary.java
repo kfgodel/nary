@@ -8,7 +8,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * This interface extends the operations of a {@link Nary} when it only contains 1 or 0 elements.<br>
+ * This type represents an unknown amount of elements but with the certainty that is either 0 or 1.
+ * It reduces uncertainty over {@link Nary} by putting an upper bound on the possible quantity of elements and thus
+ * allowing to offer more operations as part of the api.<br>
  * It can be seen as an extended {@link java.util.Optional} api including {@link java.util.stream.Stream} operations.<br>
  * <br>
  * This interface allows using the concept of {@link java.util.Optional} but integrating it better with
