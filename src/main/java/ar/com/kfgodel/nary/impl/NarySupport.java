@@ -3,7 +3,6 @@ package ar.com.kfgodel.nary.impl;
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.Unary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
-import ar.com.kfgodel.nary.api.exceptions.NaryException;
 import com.google.common.collect.Iterators;
 
 import java.util.Comparator;
@@ -36,18 +35,6 @@ import java.util.stream.Stream;
  */
 public abstract class NarySupport<T> implements Nary<T> {
 
-  /**
-   * Forces this instance to contain only 1 element (or none).<br>
-   * If this nary contains more than one element the coercion fails. This method
-   * helps on checking the constraints that a mono element nary needs to have, that the user may
-   * unintentionally violate
-   *
-   * @return an empty nary if this is empty, a non empty optional if this
-   * has only one element
-   * @throws MoreThanOneElementException If this nary has more than 1 element
-   */
-  protected abstract Unary<T> coerceToMonoElement() throws MoreThanOneElementException;
-
   @Override
   public Nary<T> concat(Stream<? extends T> other) {
     return returningNaryDo(Stream.concat(this, other));
@@ -73,11 +60,6 @@ public abstract class NarySupport<T> implements Nary<T> {
   public <U> Nary<U> flatMapOptional(Function<? super T, Optional<U>> mapper) throws MoreThanOneElementException {
     return map(mapper)
       .flatMap(Nary::from);
-  }
-
-  @Override
-  public Unary<T> asUni() throws NaryException {
-    return coerceToMonoElement();
   }
 
   @Override

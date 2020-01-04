@@ -72,11 +72,6 @@ public class OneElementNary<T> extends NarySupport<T> implements Unary<T> {
   }
 
   @Override
-  public Unary<T> coerceToMonoElement() throws MoreThanOneElementException {
-    return this;
-  }
-
-  @Override
   public <R, A> R collect(Collector<? super T, A, R> collector) {
     // Combiner can be ignored when there's 1 element bc there's no combination
     A container = collect(collector.supplier(), collector.accumulator());

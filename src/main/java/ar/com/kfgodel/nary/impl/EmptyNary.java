@@ -75,11 +75,6 @@ public class EmptyNary extends NarySupport<Object> implements Unary<Object> {
   }
 
   @Override
-  public Unary<Object> coerceToMonoElement() throws MoreThanOneElementException {
-    return this;
-  }
-
-  @Override
   public <R, A> R collect(Collector<? super Object, A, R> collector) {
     A container = collector.supplier().get();
     R result = collector.finisher().apply(container);

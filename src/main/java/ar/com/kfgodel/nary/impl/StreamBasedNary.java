@@ -31,7 +31,7 @@ public class StreamBasedNary<T> extends NarySupport<T> {
    * Because optionals are not consumed, we can cache it to reuse everytime.
    * In this way, once the stream is consumed we still can act as an optional
    */
-  private Unary<T> cachedOptional;
+  private Unary<T> cachedUnary;
 
   public static <T> StreamBasedNary<T> create(Stream<? extends T> source) {
     StreamBasedNary<T> nary = new StreamBasedNary<>();
@@ -40,11 +40,11 @@ public class StreamBasedNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public Unary<T> coerceToMonoElement() throws MoreThanOneElementException {
-    if (cachedOptional == null) {
-      this.cachedOptional = reduceStreamToOptional();
+  public Unary<T> asUni() throws MoreThanOneElementException {
+    if (cachedUnary == null) {
+      this.cachedUnary = reduceStreamToUnary();
     }
-    return cachedOptional;
+    return cachedUnary;
   }
 
   @Override
@@ -57,7 +57,7 @@ public class StreamBasedNary<T> extends NarySupport<T> {
     return collect(Collectors.toSet());
   }
 
-  private Unary<T> reduceStreamToOptional() {
+  private Unary<T> reduceStreamToUnary() {
     Iterator<T> iterator = asStream().iterator();
     if (!iterator.hasNext()) {
       return Nary.empty();
@@ -75,9 +75,9 @@ public class StreamBasedNary<T> extends NarySupport<T> {
   // Given the stream produces subtypes of T AND its read only it's safe to cast
   @SuppressWarnings("unchecked") //NOSONAR squid:S1309 as T is not reified there's no way to check on runtime
   protected Stream<T> asStream() {
-    if(cachedOptional != null){
+    if(cachedUnary != null){
       // Once coerced, it can only be reused as optional
-      return cachedOptional;
+      return cachedUnary;
     }
     return (Stream<T>) sourceStream;
   }
@@ -86,7 +86,7 @@ public class StreamBasedNary<T> extends NarySupport<T> {
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(this)
-      .add("cachedOptional", cachedOptional)
+      .add("cachedOptional", cachedUnary)
       .add("sourceStream", sourceStream)
       .toString();
   }
