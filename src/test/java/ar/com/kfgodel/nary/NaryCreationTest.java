@@ -1,6 +1,7 @@
 package ar.com.kfgodel.nary;
 
 import ar.com.kfgodel.nary.api.Nary;
+import ar.com.kfgodel.nary.api.Unary;
 import info.kfgodel.jspek.api.JavaSpec;
 import info.kfgodel.jspek.api.JavaSpecRunner;
 import org.assertj.core.util.Lists;
@@ -63,7 +64,7 @@ public class NaryCreationTest extends JavaSpec<NaryTestContext> {
       });
 
       it("can be done from an optional", () -> {
-        Nary<Integer> nary = Nary.from(Optional.of(1));
+        Unary<Integer> nary = Nary.from(Optional.of(1));
 
         List<Integer> list = nary.collect(Collectors.toList());
         assertThat(list).isEqualTo(Lists.newArrayList(1));

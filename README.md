@@ -37,7 +37,7 @@ and collect them to a list.
 - **As an Optional:**
 ```java
 Integer result = integersUpTo(1) 
-  .get() // Assume there's only one element
+  .asUni().get() // Assume there's only one element
 ```
 Again in this example we call previous method `integersUpTo()` but
 because we used `1` as argument, we know we know at compile time

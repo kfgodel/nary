@@ -1,6 +1,5 @@
 package ar.com.kfgodel.nary.api;
 
-import ar.com.kfgodel.nary.api.arity.MonoElement;
 import ar.com.kfgodel.nary.api.arity.MultiElement;
 import ar.com.kfgodel.nary.impl.EmptyNary;
 import ar.com.kfgodel.nary.impl.OneElementNary;
@@ -45,7 +44,7 @@ import java.util.stream.StreamSupport;
  *
  * @param <T> Type of contained elements
  */
-public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
+public interface Nary<T> extends MultiElement<T> {
 
   /**
    * This method is redefined so two instances of {@link Nary} are equal only if they contain

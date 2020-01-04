@@ -244,6 +244,11 @@ public class EmptyNary extends NarySupport<Object> implements Unary<Object> {
   }
 
   @Override
+  public boolean isAbsent() throws MoreThanOneElementException {
+    return !isPresent();
+  }
+
+  @Override
   public Iterator<Object> iterator() {
     return EmptyIterator.instance();
   }
@@ -330,6 +335,11 @@ public class EmptyNary extends NarySupport<Object> implements Unary<Object> {
   @Override
   public <X extends Throwable> Object orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
     throw exceptionSupplier.get();
+  }
+
+  @Override
+  public <X extends RuntimeException> Object orElseThrowRuntime(Supplier<? extends X> exceptionSupplier) throws X, MoreThanOneElementException {
+    return orElseThrow(exceptionSupplier);
   }
 
   @Override

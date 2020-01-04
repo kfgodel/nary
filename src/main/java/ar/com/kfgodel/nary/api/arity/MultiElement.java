@@ -104,7 +104,7 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
    * the state of the result rather than by replacing the result.  This
    * produces a result equivalent to:
    * <pre>{@code
-   *     R result = supplier.get();
+   *     R result = supplier.asUni().get();
    *     for (T element : this stream)
    *         accumulator.accept(result, element);
    *     return result;

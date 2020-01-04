@@ -100,7 +100,7 @@ public interface MonoElement<T> extends Supplier<T> {
    *
    * @param other a {@code Supplier} whose result is returned if no value
    *              is present
-   * @return the value if present otherwise the result of {@code other.get()}
+   * @return the value if present otherwise the result of {@code other.asUni().get()}
    * @throws MoreThanOneElementException if there are more than one
    */
   T orElseGet(Supplier<? extends T> other) throws MoreThanOneElementException;

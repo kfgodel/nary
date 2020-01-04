@@ -209,6 +209,11 @@ public class OneElementNary<T> extends NarySupport<T> implements Unary<T> {
   }
 
   @Override
+  public boolean isAbsent() throws MoreThanOneElementException {
+    return !isPresent();
+  }
+
+  @Override
   public Iterator<T> iterator() {
     return OneElementIterator.create(element);
   }
@@ -266,6 +271,11 @@ public class OneElementNary<T> extends NarySupport<T> implements Unary<T> {
   @Override
   public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) {
     return element;
+  }
+
+  @Override
+  public <X extends RuntimeException> T orElseThrowRuntime(Supplier<? extends X> exceptionSupplier) throws X, MoreThanOneElementException {
+    return orElseThrow(exceptionSupplier);
   }
 
   @Override

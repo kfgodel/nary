@@ -1,6 +1,7 @@
 package ar.com.kfgodel.nary;
 
 import ar.com.kfgodel.nary.api.Nary;
+import ar.com.kfgodel.nary.api.Unary;
 import info.kfgodel.jspek.api.contexts.TestContext;
 
 import java.util.Iterator;
@@ -16,6 +17,9 @@ public interface NaryTestContext extends TestContext {
 
   Nary<Integer> nary();
   void nary(Supplier<Nary<Integer>> definition);
+
+  Unary<Integer> unary();
+  void unary(Supplier<Unary<Integer>> definition);
 
   Stream<Integer> stream();
   void stream(Supplier<Stream<Integer>> definition);

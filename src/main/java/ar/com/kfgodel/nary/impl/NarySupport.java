@@ -8,7 +8,6 @@ import com.google.common.collect.Iterators;
 
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Spliterator;
@@ -65,26 +64,6 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public T get() throws NoSuchElementException {
-    return coerceToMonoElement().get();
-  }
-
-  @Override
-  public boolean isPresent() {
-    return coerceToMonoElement().isPresent();
-  }
-
-  @Override
-  public Unary<T> ifPresent(Consumer<? super T> consumer) throws MoreThanOneElementException {
-    return coerceToMonoElement().ifPresent(consumer);
-  }
-
-  @Override
-  public Unary<T> ifAbsent(Runnable runnable) {
-    return coerceToMonoElement().ifAbsent(runnable);
-  }
-
-  @Override
   public <U> Nary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper) {
     return returningNaryDo(
       this.<U>map(mapper)
@@ -98,36 +77,6 @@ public abstract class NarySupport<T> implements Nary<T> {
       map(mapper)
         .flatMap(Nary::from)
     );
-  }
-
-  @Override
-  public T orElse(T other) throws MoreThanOneElementException {
-    return coerceToMonoElement().orElse(other);
-  }
-
-  @Override
-  public T orElseGet(Supplier<? extends T> other) throws MoreThanOneElementException {
-    return coerceToMonoElement().orElseGet(other);
-  }
-
-  @Override
-  public Unary<T> orElseUse(Supplier<? extends T> mapper) throws MoreThanOneElementException {
-    return coerceToMonoElement().orElseUse(mapper);
-  }
-
-  @Override
-  public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
-    return coerceToMonoElement().orElseThrow(exceptionSupplier);
-  }
-
-  @Override
-  public <X extends RuntimeException> T orElseThrowRuntime(Supplier<? extends X> exceptionSupplier) {
-    return orElseThrow(exceptionSupplier);
-  }
-
-  @Override
-  public Optional<T> asOptional() throws MoreThanOneElementException {
-    return coerceToMonoElement().asOptional();
   }
 
   @Override

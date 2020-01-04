@@ -1,6 +1,7 @@
 package ar.com.kfgodel.nary;
 
 import ar.com.kfgodel.nary.api.Nary;
+import ar.com.kfgodel.nary.api.Unary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 import com.google.common.collect.Sets;
 import info.kfgodel.jspek.api.JavaSpec;
@@ -48,57 +49,57 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
 
         describe("as non empty optional", () -> {
           it("returns the value when get() is called", () -> {
-            Integer result = context().nary().get();
+            Integer result = context().nary().asUni().get();
             assertThat(result).isEqualTo(3);
           });
           it("answers true to #isPresent()", () -> {
-            assertThat(context().nary().isPresent()).isTrue();
+            assertThat(context().nary().asUni().isPresent()).isTrue();
           });
           it("answers false to #isAbsent()", () -> {
-            assertThat(context().nary().isAbsent()).isFalse();
+            assertThat(context().nary().asUni().isAbsent()).isFalse();
           });
           it("executes the #ifPresent() argument", () -> {
             Variable<Boolean> executed = Variable.of(false);
 
-            context().nary().ifPresent((value) -> executed.set(true));
+            context().nary().asUni().ifPresent((value) -> executed.set(true));
 
             assertThat(executed.get()).isTrue();
           });
           it("never executes the #ifAbsent() argument", () -> {
             Variable<Boolean> executed = Variable.of(false);
 
-            context().nary().ifAbsent(() -> executed.set(true));
+            context().nary().asUni().ifAbsent(() -> executed.set(true));
 
             assertThat(executed.get()).isFalse();
           });
           it("transforms the value when called to #mapFilteringNullResult()", () -> {
             Nary<Integer> result = context().nary().mapFilteringNullResult((value) -> value + 1);
 
-            assertThat(result.get()).isEqualTo(4);
+            assertThat(result.asUni().get()).isEqualTo(4);
           });
           it("transforms  the value when called to #flatmapOptional()", () -> {
             Nary<Integer> result = context().nary().flatMapOptional((value) -> Optional.of(5));
 
-            assertThat(result.get()).isEqualTo(5);
+            assertThat(result.asUni().get()).isEqualTo(5);
           });
           it("never returns the alternative value when #orElse() is called", () -> {
-            Integer result = context().nary().orElse(4);
+            Integer result = context().nary().asUni().orElse(4);
             assertThat(result).isEqualTo(3);
           });
           it("never executes the supplier argument when #orElseGet() is called", () -> {
-            Integer result = context().nary().orElseGet(() -> 4);
+            Integer result = context().nary().asUni().orElseGet(() -> 4);
             assertThat(result).isEqualTo(3);
           });
           it("never executes the supplier argument when #orElseUse() is called", () -> {
-            final Nary<Integer> result = context().nary().orElseUse(() -> 4);
-            assertThat(result.get()).isEqualTo(3);
+            final Nary<Integer> result = context().nary().asUni().orElseUse(() -> 4);
+            assertThat(result.asUni().get()).isEqualTo(3);
           });
           it("never throws the exception when #orElseThrow() is called", () -> {
-            Integer result = context().nary().orElseThrow(() -> new RuntimeException("Kaboom"));
+            Integer result = context().nary().asUni().orElseThrow(() -> new RuntimeException("Kaboom"));
             assertThat(result).isEqualTo(3);
           });
           it("never throws the exception when #orElseThrowRuntime() is called", () -> {
-            Integer result = context().nary().orElseThrowRuntime(() -> new RuntimeException("Kaboom"));
+            Integer result = context().nary().asUni().orElseThrowRuntime(() -> new RuntimeException("Kaboom"));
             assertThat(result).isEqualTo(3);
           });
           describe("#equals", () -> {
@@ -119,7 +120,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
             assertThat(context().nary().hashCode()).isEqualTo(Lists.newArrayList(3).hashCode());
           });
           it("returns an equivalent optional when asOptional() is called", () -> {
-            assertThat(context().nary().asOptional()).isEqualTo(Optional.of(3));
+            assertThat(context().nary().asUni().asOptional()).isEqualTo(Optional.of(3));
           });
           it("returns an equivalent unary when asUni() is called", () -> {
             assertThat((Stream)context().nary().asUni()).containsExactly(3);
@@ -188,7 +189,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
         describe("as overflowed optional", () -> {
           it("throws an exception when get() is called", () -> {
             try {
-              context().nary().get();
+              context().nary().asUni().get();
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             } catch (MoreThanOneElementException e) {
               assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");
@@ -196,7 +197,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           });
           it("throws an exception when #isPresent() is called", () -> {
             try {
-              context().nary().isPresent();
+              context().nary().asUni().isPresent();
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             } catch (MoreThanOneElementException e) {
               assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");
@@ -204,7 +205,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           });
           it("throws an exception when #isAbsent() is called", () -> {
             try {
-              context().nary().isAbsent();
+              context().nary().asUni().isAbsent();
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             } catch (MoreThanOneElementException e) {
               assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");
@@ -212,7 +213,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           });
           it("throws an exception when #ifPresent() is called", () -> {
             try {
-              context().nary().ifPresent((value) -> {
+              context().nary().asUni().ifPresent((value) -> {
                 throw new RuntimeException("never happens");
               });
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
@@ -222,7 +223,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           });
           it("throws an exception when #ifAbsent() is called", () -> {
             try {
-              context().nary().ifAbsent(() -> {
+              context().nary().asUni().ifAbsent(() -> {
                 throw new RuntimeException("never happens");
               });
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
@@ -232,7 +233,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           });
           it("throws an exception when #orElse() is called", () -> {
             try {
-              context().nary().orElse(200);
+              context().nary().asUni().orElse(200);
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             } catch (MoreThanOneElementException e) {
               assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");
@@ -240,7 +241,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           });
           it("throws an exception when #orElseGet() is called", () -> {
             try {
-              context().nary().orElseGet(() -> {
+              context().nary().asUni().orElseGet(() -> {
                 throw new RuntimeException("never happens");
               });
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
@@ -250,7 +251,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           });
           it("throws an exception when #orElseUse() is called", () -> {
             try {
-              context().nary().orElseUse(() -> {
+              context().nary().asUni().orElseUse(() -> {
                 throw new RuntimeException("never happens");
               });
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
@@ -260,7 +261,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           });
           it("throws an exception when #orElseThrow() is called", () -> {
             try {
-              context().nary().orElseThrow(() -> new RuntimeException("never happens"));
+              context().nary().asUni().orElseThrow(() -> new RuntimeException("never happens"));
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             } catch (MoreThanOneElementException e) {
               assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");
@@ -268,7 +269,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           });
           it("throws an exception when #orElseThrowRuntime() is called", () -> {
             try {
-              context().nary().orElseThrowRuntime(() -> new RuntimeException("never happens"));
+              context().nary().asUni().orElseThrowRuntime(() -> new RuntimeException("never happens"));
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             } catch (MoreThanOneElementException e) {
               assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");
@@ -302,7 +303,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           });
           it("throws an exception when asOptional() is called", () -> {
             try {
-              context().nary().asOptional();
+              context().nary().asUni().asOptional();
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             } catch (MoreThanOneElementException e) {
               assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");
@@ -573,15 +574,15 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
             assertThat(result).isEqualTo(Lists.newArrayList(3));
           });
           it("honors the contract when #reduceNary(accumulator) is called", () -> {
-            Nary<Integer> result = context().nary().reduceNary((a, b) -> a + b);
+            Unary<Integer> result = context().nary().reduceNary((a, b) -> a + b);
             assertThat(result.get()).isEqualTo(3 + 2 + 1 + 3);
           });
           it("honors the contract when #findFirst() is called", () -> {
-            Nary<Integer> result = context().nary().findFirstNary();
+            Unary<Integer> result = context().nary().findFirstNary();
             assertThat((Object) result).isEqualTo(Nary.ofNonNullable(3));
           });
           it("honors the contract when #findAny() is called", () -> {
-            Nary<Integer> result = context().nary().findAnyNary();
+            Unary<Integer> result = context().nary().findAnyNary();
             assertThat((Object) result).isEqualTo(Nary.ofNonNullable(3));
           });
           it("honors the contract when #minNary() is called", () -> {
