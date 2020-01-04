@@ -1,6 +1,7 @@
 package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
+import ar.com.kfgodel.nary.api.Unary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 import com.google.common.base.MoreObjects;
 
@@ -30,7 +31,7 @@ public class StreamBasedNary<T> extends NarySupport<T> {
    * Because optionals are not consumed, we can cache it to reuse everytime.
    * In this way, once the stream is consumed we still can act as an optional
    */
-  private Nary<T> cachedOptional;
+  private Unary<T> cachedOptional;
 
   public static <T> StreamBasedNary<T> create(Stream<? extends T> source) {
     StreamBasedNary<T> nary = new StreamBasedNary<>();
@@ -39,7 +40,7 @@ public class StreamBasedNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public Nary<T> coerceToMonoElement() throws MoreThanOneElementException {
+  public Unary<T> coerceToMonoElement() throws MoreThanOneElementException {
     if (cachedOptional == null) {
       this.cachedOptional = reduceStreamToOptional();
     }
@@ -56,7 +57,7 @@ public class StreamBasedNary<T> extends NarySupport<T> {
     return collect(Collectors.toSet());
   }
 
-  private Nary<T> reduceStreamToOptional() {
+  private Unary<T> reduceStreamToOptional() {
     Iterator<T> iterator = asStream().iterator();
     if (!iterator.hasNext()) {
       return Nary.empty();

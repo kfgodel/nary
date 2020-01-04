@@ -121,6 +121,9 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           it("returns an equivalent optional when asOptional() is called", () -> {
             assertThat(context().nary().asOptional()).isEqualTo(Optional.of(3));
           });
+          it("returns an equivalent unary when asUni() is called", () -> {
+            assertThat((Stream)context().nary().asUni()).containsExactly(3);
+          });
           it("returns a one element container when #collect(supplier, accumulator) is called", () -> {
             List<Integer> result = context().nary().collect(ArrayList::new, ArrayList::add);
             assertThat(result).isEqualTo(Lists.newArrayList(3));
@@ -300,6 +303,14 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           it("throws an exception when asOptional() is called", () -> {
             try {
               context().nary().asOptional();
+              failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
+            } catch (MoreThanOneElementException e) {
+              assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");
+            }
+          });
+          it("throws an exception when asUni() is called", () -> {
+            try {
+              context().nary().asUni();
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             } catch (MoreThanOneElementException e) {
               assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");

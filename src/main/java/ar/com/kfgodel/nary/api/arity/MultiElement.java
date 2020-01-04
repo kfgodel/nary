@@ -2,6 +2,7 @@ package ar.com.kfgodel.nary.api.arity;
 
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.Unary;
+import ar.com.kfgodel.nary.api.exceptions.NaryException;
 
 import java.util.Comparator;
 import java.util.List;
@@ -228,4 +229,14 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
    * function to the elements of this instance which may be 0, 1, or more elements
    */
   <U> Nary<U> flatMapOptional(Function<? super T, Optional<U>> mapper);
+
+  /**
+   * Treats this instance as having a single element. The returned object can be used to extend the operations
+   * available once we know there are not more elements than 1.<br>
+   * If this instance has more than 1 element then this method will fail when trying to return
+   *
+   * @return The extended api for mono element
+   * @throws NaryException If this instance has more than one element
+   */
+  Unary<T> asUni() throws NaryException;
 }

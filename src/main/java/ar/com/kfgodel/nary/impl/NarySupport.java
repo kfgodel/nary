@@ -3,6 +3,7 @@ package ar.com.kfgodel.nary.impl;
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.Unary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
+import ar.com.kfgodel.nary.api.exceptions.NaryException;
 import com.google.common.collect.Iterators;
 
 import java.util.Comparator;
@@ -46,7 +47,7 @@ public abstract class NarySupport<T> implements Nary<T> {
    * has only one element
    * @throws MoreThanOneElementException If this nary has more than 1 element
    */
-  protected abstract Nary<T> coerceToMonoElement() throws MoreThanOneElementException;
+  protected abstract Unary<T> coerceToMonoElement() throws MoreThanOneElementException;
 
   @Override
   public Nary<T> concat(Stream<? extends T> other) {
@@ -127,6 +128,11 @@ public abstract class NarySupport<T> implements Nary<T> {
   @Override
   public Optional<T> asOptional() throws MoreThanOneElementException {
     return coerceToMonoElement().asOptional();
+  }
+
+  @Override
+  public Unary<T> asUni() throws NaryException {
+    return coerceToMonoElement();
   }
 
   @Override

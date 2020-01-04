@@ -3,6 +3,7 @@ package ar.com.kfgodel.nary.impl;
 import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.Unary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
+import ar.com.kfgodel.nary.api.exceptions.NaryException;
 import ar.com.kfgodel.nary.impl.others.OneElementIterator;
 import ar.com.kfgodel.nary.impl.others.OneElementSpliterator;
 
@@ -51,6 +52,11 @@ public class OneElementNary<T> extends NarySupport<T> implements Unary<T> {
   }
 
   @Override
+  public Unary<T> asUni() throws NaryException {
+    return this;
+  }
+
+  @Override
   public Stream<T> asStream() {
     return Stream.of(this.element);
   }
@@ -61,7 +67,7 @@ public class OneElementNary<T> extends NarySupport<T> implements Unary<T> {
   }
 
   @Override
-  public Nary<T> coerceToMonoElement() throws MoreThanOneElementException {
+  public Unary<T> coerceToMonoElement() throws MoreThanOneElementException {
     return this;
   }
 

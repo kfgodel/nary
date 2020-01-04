@@ -5,8 +5,8 @@ import info.kfgodel.jspek.api.JavaSpec;
 import info.kfgodel.jspek.api.JavaSpecRunner;
 import org.junit.runner.RunWith;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,15 +20,15 @@ public class ReadmeExampleTest extends JavaSpec<ReadmeExampleTestContext> {
     describe("a nary ", () -> {
 
       it("can be used as a stream of results", () -> {
-        final List<Integer> even = integersUpTo(4)
+        final List<Integer> even = naryWithIntegersUpTo(4)
           .filter(number -> number % 2 == 0)
           .collectToList();
         assertThat(even).containsExactly(2, 4);
       });
 
       it("can be used as an Optional", () -> {
-        final Integer result = integersUpTo(1)
-          .get();  // Assume there's only one element
+        final Integer result = naryWithIntegersUpTo(1)
+          .asUni().get();  // Assume there's only one element
         assertThat(result).isEqualTo(1);
       });
 
@@ -36,11 +36,10 @@ public class ReadmeExampleTest extends JavaSpec<ReadmeExampleTestContext> {
 
   }
 
-  private Nary<Integer> integersUpTo(int number) {
-    List<Integer> returned = new ArrayList<>();
-    for (int i = 1; i <= number; i++) {
-      returned.add(i);
-    }
-    return Nary.from(returned);
+  private Nary<Integer> naryWithIntegersUpTo(int number) {
+    return Nary.from(
+      IntStream.range(1, number + 1)
+        .boxed()
+    );
   }
 }
