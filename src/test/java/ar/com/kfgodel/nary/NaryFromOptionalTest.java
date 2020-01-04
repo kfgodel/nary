@@ -92,10 +92,6 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
           Integer result = context().unary().orElseThrow(() -> new RuntimeException("Kaboom"));
           assertThat(result).isEqualTo(3);
         });
-        it("never throws the exception when #orElseThrowRuntime() is called", () -> {
-          Integer result = context().unary().orElseThrowRuntime(() -> new RuntimeException("Kaboom"));
-          assertThat(result).isEqualTo(3);
-        });
         describe("#equals", () -> {
           it("is true if other optional has the same value", () -> {
             boolean result = context().unary().equals(Nary.ofNonNullable(3));

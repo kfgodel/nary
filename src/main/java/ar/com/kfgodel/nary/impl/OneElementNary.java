@@ -279,11 +279,6 @@ public class OneElementNary<T> extends NarySupport<T> implements Unary<T> {
   }
 
   @Override
-  public <X extends RuntimeException> T orElseThrowRuntime(Supplier<? extends X> exceptionSupplier) throws X, MoreThanOneElementException {
-    return orElseThrow(exceptionSupplier);
-  }
-
-  @Override
   public Unary<T> orElseUse(Supplier<? extends T> mapper) throws MoreThanOneElementException {
     return this;
   }

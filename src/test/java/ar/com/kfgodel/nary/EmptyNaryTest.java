@@ -101,14 +101,6 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
             assertThat(e).hasMessage("Kaboom");
           }
         });
-        it("always throws the exception when #orElseThrowRuntime() is called", () -> {
-          try {
-            context().unary().orElseThrowRuntime(() -> new RuntimeException("Kaboom"));
-            failBecauseExceptionWasNotThrown(RuntimeException.class);
-          } catch (RuntimeException e) {
-            assertThat(e).hasMessage("Kaboom");
-          }
-        });
         describe("#equals", () -> {
           it("is true if other empty optional is passed", () -> {
             boolean result = context().unary().equals(Nary.empty());

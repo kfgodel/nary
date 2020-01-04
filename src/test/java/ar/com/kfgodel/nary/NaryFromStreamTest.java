@@ -98,10 +98,6 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
             Integer result = context().nary().asUni().orElseThrow(() -> new RuntimeException("Kaboom"));
             assertThat(result).isEqualTo(3);
           });
-          it("never throws the exception when #orElseThrowRuntime() is called", () -> {
-            Integer result = context().nary().asUni().orElseThrowRuntime(() -> new RuntimeException("Kaboom"));
-            assertThat(result).isEqualTo(3);
-          });
           describe("#equals", () -> {
             it("is true if other optional has the same value", () -> {
               boolean result = context().nary().equals(Nary.ofNonNullable(3));
@@ -262,14 +258,6 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
           it("throws an exception when #orElseThrow() is called", () -> {
             try {
               context().nary().asUni().orElseThrow(() -> new RuntimeException("never happens"));
-              failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
-            } catch (MoreThanOneElementException e) {
-              assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");
-            }
-          });
-          it("throws an exception when #orElseThrowRuntime() is called", () -> {
-            try {
-              context().nary().asUni().orElseThrowRuntime(() -> new RuntimeException("never happens"));
               failBecauseExceptionWasNotThrown(MoreThanOneElementException.class);
             } catch (MoreThanOneElementException e) {
               assertThat(e).hasMessage("Expecting only 1 element in the stream to treat it as an optional but found at least 2: [3, 2]");

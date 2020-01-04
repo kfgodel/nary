@@ -133,22 +133,6 @@ public interface MonoElement<T> extends Supplier<T> {
   <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X, MoreThanOneElementException;
 
   /**
-   * Variant of {@link MonoElement#orElseThrow(Supplier)} that bounds type parameter X to be a {@link RuntimeException}
-   * and avoid having to catch the exception if used inside a lambda block with bad inference.
-   *
-   * @param <X>               Type of the exception to be thrown
-   * @param exceptionSupplier The supplier which will return the exception to
-   *                          be thrown
-   * @return the present value
-   * @throws X                           if there is no value present
-   * @throws NullPointerException        if no value is present and
-   *                                     {@code exceptionSupplier} is null
-   * @throws MoreThanOneElementException if there are more than one
-   */
-  <X extends RuntimeException> T orElseThrowRuntime(Supplier<? extends X> exceptionSupplier)
-    throws X, MoreThanOneElementException;
-
-  /**
    * Returns a native Optional instance to be used with Nary unaware code
    *
    * @return The native instance that represents this Nary content

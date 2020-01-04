@@ -338,11 +338,6 @@ public class EmptyNary extends NarySupport<Object> implements Unary<Object> {
   }
 
   @Override
-  public <X extends RuntimeException> Object orElseThrowRuntime(Supplier<? extends X> exceptionSupplier) throws X, MoreThanOneElementException {
-    return orElseThrow(exceptionSupplier);
-  }
-
-  @Override
   public Unary<Object> orElseUse(Supplier<?> replacer) throws MoreThanOneElementException {
     final Object element = replacer.get();
     return Nary.of(element);
