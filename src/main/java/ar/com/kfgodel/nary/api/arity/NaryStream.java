@@ -9,9 +9,11 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
- * This type represents the extended api from {@link java.util.stream.Stream} modified to return {@link ar.com.kfgodel.nary.api.Nary}.<br>
- * The purpose of this type is to group all and only the methods from {@link java.util.stream.Stream} so they are separated
- * from the ones added to {@link java.util.stream.Stream} api (just for organization purpose).<br>
+ * This type represents the extended api from {@link java.util.stream.Stream} modified to return
+ * instances of {@link ar.com.kfgodel.nary.api.Nary}.<br>
+ * The purpose of this type is just to organize code so the methods from {@link java.util.stream.Stream}
+ * that have covariant return types are separated from the ones added by {@link Nary}.<br>
+ *
  * Date: 13/10/19 - 14:35
  *
  * @param <T> Type of contained elements

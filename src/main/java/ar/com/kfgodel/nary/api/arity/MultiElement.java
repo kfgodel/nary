@@ -17,7 +17,8 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
- * This type defines the protocol that {@link Nary} offers to manipulate its elements beyond those of {@link Stream}
+ * This type defines the protocol that {@link Nary} offers to manipulate its elements beyond those of
+ * {@link Stream}. This is the extended api that Nary offers over a native {@link Stream}.
  * <br>
  * Date: 12/10/19 - 21:42
  *
@@ -179,7 +180,7 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
    * or an empty if there are no elements
    * @throws NullPointerException if the maximum element is null
    */
-  Nary<T> maxNary(Comparator<? super T> comparator);
+  Unary<T> maxNary(Comparator<? super T> comparator);
 
   /**
    * Alternative to {@link Stream#findFirst()} that returns {@link Nary} instead of {@link java.util.Optional}

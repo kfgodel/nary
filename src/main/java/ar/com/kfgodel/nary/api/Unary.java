@@ -2,6 +2,11 @@ package ar.com.kfgodel.nary.api;
 
 import ar.com.kfgodel.nary.api.arity.MonoElement;
 
+import java.util.Comparator;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 /**
  * This interface extends the operations of a {@link Nary} when it only contains 1 or 0 elements.<br>
  * It can be seen as an extended {@link java.util.Optional} api including {@link java.util.stream.Stream} operations.<br>
@@ -13,16 +18,31 @@ import ar.com.kfgodel.nary.api.arity.MonoElement;
  */
 public interface Unary<T> extends Nary<T>, MonoElement<T> {
 
-  /**
-   * Creates a unary from an element whose absence is represented by null.<br>
-   * If null is passed then an empty {@link Unary} is returned.<br>
-   * This method is an alias for {@link Nary#of(Object)}
-   *
-   * @param nullableElement An value that may be null
-   * @param <T>             The expected element type
-   * @return A unary with the given element or empty if null was passed
-   */
-  static <T> Unary<T> of(T nullableElement) {
-    return Nary.of(nullableElement);
-  }
+  @Override
+  Unary<T> distinct();
+
+  @Override
+  Unary<T> sorted();
+
+  @Override
+  Unary<T> sorted(Comparator<? super T> comparator);
+
+  @Override
+  Unary<T> limit(long maxSize);
+
+  @Override
+  Unary<T> skip(long n);
+
+  @Override
+  Unary<T> peek(Consumer<? super T> action);
+
+  @Override
+  Unary<T> filter(Predicate<? super T> predicate);
+
+  @Override
+  <R> Unary<R> map(Function<? super T, ? extends R> mapper);
+
+  @Override
+  <U> Unary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper);
+
 }

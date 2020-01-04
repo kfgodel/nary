@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.Spliterator;
@@ -44,6 +45,11 @@ public class OneElementNary<T> extends NarySupport<T> implements Unary<T> {
   @Override
   public boolean anyMatch(Predicate<? super T> predicate) {
     return predicate.test(element);
+  }
+
+  @Override
+  public Unary<T> peek(Consumer<? super T> action) {
+    return super.peek(action).asUni();
   }
 
   @Override
@@ -123,7 +129,7 @@ public class OneElementNary<T> extends NarySupport<T> implements Unary<T> {
   }
 
   @Override
-  public Nary<T> distinct() {
+  public Unary<T> distinct() {
     return this;
   }
 
@@ -219,7 +225,7 @@ public class OneElementNary<T> extends NarySupport<T> implements Unary<T> {
   }
 
   @Override
-  public Nary<T> limit(long maxSize) {
+  public Unary<T> limit(long maxSize) {
     if (maxSize > 0) {
       return this;
     } else {
@@ -228,9 +234,9 @@ public class OneElementNary<T> extends NarySupport<T> implements Unary<T> {
   }
 
   @Override
-  public <U> Nary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper) {
-    U mapped = mapper.apply(element);
-    return Nary.of(mapped);
+  public <U> Unary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper) {
+    return this.<U>map(mapper)
+      .filter(obj -> !Objects.isNull(obj));
   }
 
   @Override
@@ -239,7 +245,7 @@ public class OneElementNary<T> extends NarySupport<T> implements Unary<T> {
   }
 
   @Override
-  public Nary<T> maxNary(Comparator<? super T> comparator) {
+  public Unary<T> maxNary(Comparator<? super T> comparator) {
     return this;
   }
 
@@ -316,7 +322,7 @@ public class OneElementNary<T> extends NarySupport<T> implements Unary<T> {
   }
 
   @Override
-  public Nary<T> skip(long n) {
+  public Unary<T> skip(long n) {
     if (n > 0) {
       return Nary.empty();
     } else {
@@ -325,12 +331,12 @@ public class OneElementNary<T> extends NarySupport<T> implements Unary<T> {
   }
 
   @Override
-  public Nary<T> sorted(Comparator<? super T> comparator) {
+  public Unary<T> sorted(Comparator<? super T> comparator) {
     return this;
   }
 
   @Override
-  public Nary<T> sorted() {
+  public Unary<T> sorted() {
     return this;
   }
 
@@ -362,14 +368,22 @@ public class OneElementNary<T> extends NarySupport<T> implements Unary<T> {
   }
 
   @Override
+  public Unary<T> filter(Predicate<? super T> predicate) {
+    return super.filter(predicate).asUni();
+  }
+
+  @Override
+  public <R> Unary<R> map(Function<? super T, ? extends R> mapper) {
+    return super.<R>map(mapper).asUni();
+  }
+
+
+  @Override
   public Stream<T> unordered() {
     return this;
   }
 
   public static <T> OneElementNary<T> create(T element) {
-    if (element == null) {
-      throw new IllegalArgumentException("Element can't be null");
-    }
     OneElementNary<T> nary = new OneElementNary<>();
     nary.element = element;
     return nary;

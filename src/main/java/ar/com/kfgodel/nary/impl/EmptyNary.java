@@ -121,7 +121,7 @@ public class EmptyNary extends NarySupport<Object> implements Unary<Object> {
   }
 
   @Override
-  public Nary<Object> distinct() {
+  public Unary<Object> distinct() {
     return this;
   }
 
@@ -140,7 +140,7 @@ public class EmptyNary extends NarySupport<Object> implements Unary<Object> {
   }
 
   @Override
-  public Nary<Object> filter(Predicate<? super Object> predicate) {
+  public Unary<Object> filter(Predicate<? super Object> predicate) {
     // Ignore the argument, return an empty nary
     return this;
   }
@@ -254,18 +254,18 @@ public class EmptyNary extends NarySupport<Object> implements Unary<Object> {
   }
 
   @Override
-  public Nary<Object> limit(long maxSize) {
+  public Unary<Object> limit(long maxSize) {
     return this;
   }
 
   @Override
-  public <R> Nary<R> map(Function<? super Object, ? extends R> mapper) {
+  public <R> Unary<R> map(Function<? super Object, ? extends R> mapper) {
     // Ignore the argument, return an empty nary
     return instance();
   }
 
   @Override
-  public <U> Nary<U> mapFilteringNullResult(Function<? super Object, ? extends U> mapper) {
+  public <U> Unary<U> mapFilteringNullResult(Function<? super Object, ? extends U> mapper) {
     // Ignore the argument
     return instance();
   }
@@ -294,7 +294,7 @@ public class EmptyNary extends NarySupport<Object> implements Unary<Object> {
   }
 
   @Override
-  public Nary<Object> maxNary(Comparator<? super Object> comparator) {
+  public Unary<Object> maxNary(Comparator<? super Object> comparator) {
     return this;
   }
 
@@ -354,7 +354,7 @@ public class EmptyNary extends NarySupport<Object> implements Unary<Object> {
   }
 
   @Override
-  public Nary<Object> peek(Consumer<? super Object> action) {
+  public Unary<Object> peek(Consumer<? super Object> action) {
     return this;
   }
 
@@ -384,17 +384,17 @@ public class EmptyNary extends NarySupport<Object> implements Unary<Object> {
   }
 
   @Override
-  public Nary<Object> skip(long n) {
+  public Unary<Object> skip(long n) {
     return this;
   }
 
   @Override
-  public Nary<Object> sorted() {
+  public Unary<Object> sorted() {
     return this;
   }
 
   @Override
-  public Nary<Object> sorted(Comparator<? super Object> comparator) {
+  public Unary<Object> sorted(Comparator<? super Object> comparator) {
     return this;
   }
 

@@ -69,7 +69,7 @@ public class StreamBasedNary<T> extends NarySupport<T> {
         + Arrays.asList(onlyElement, iterator.next())
       );
     }
-    return Nary.of(onlyElement);
+    return OneElementNary.create(onlyElement); // Null is a valid value
   }
 
   @Override

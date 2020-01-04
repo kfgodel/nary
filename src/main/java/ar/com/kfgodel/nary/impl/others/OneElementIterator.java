@@ -9,17 +9,19 @@ import java.util.NoSuchElementException;
  */
 public class OneElementIterator<T> implements Iterator<T> {
 
+  private boolean iterated;
   private T element;
 
   public static <T> OneElementIterator<T> create(T element) {
     OneElementIterator iterator = new OneElementIterator();
+    iterator.iterated = false;
     iterator.element = element;
     return iterator;
   }
 
   @Override
   public boolean hasNext() {
-    return element != null;
+    return !iterated;
   }
 
   @Override
@@ -27,8 +29,7 @@ public class OneElementIterator<T> implements Iterator<T> {
     if (!hasNext()) {
       throw new NoSuchElementException("This one element iterator was already iterated");
     }
-    T iterated = element;
-    this.element = null;
-    return iterated;
+    iterated = true;
+    return element;
   }
 }

@@ -318,7 +318,7 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public Nary<T> maxNary(Comparator<? super T> comparator) {
+  public Unary<T> maxNary(Comparator<? super T> comparator) {
     return returningNaryDo(max(comparator));
   }
 

@@ -1,6 +1,5 @@
 package ar.com.kfgodel.nary.api.arity;
 
-import ar.com.kfgodel.nary.api.Nary;
 import ar.com.kfgodel.nary.api.Unary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 
@@ -10,7 +9,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
- * This type defines the protocol that {@link Nary} has to be used as an {@link Optional}.
+ * This type defines the protocol that {@link Unary} offers as a replacement for {@link Optional}.<br>
  * Operations defined in this type makes sense when we know there's only 1 element on this instance.<br>
  * It's based on {@link Optional} to be as compatible and intuitive as possible but it departs
  * from its concepts adding own variants to simplify o complete use cases. Also makes explicit differences
@@ -18,7 +17,7 @@ import java.util.function.Supplier;
  * different semantics.<br>
  * <br>
  * Because a {@link MonoElement} can contain an element, it can be used as {@link Supplier}.<br>
- * Depending on its content it will fail if its empty, or deliver the element if not.
+ * Depending on its content it supply the element, or fail if its empty.
  *
  * Date: 12/10/19 - 21:21
  * @param <T> Type of contained element
