@@ -65,18 +65,14 @@ public abstract class NarySupport<T> implements Nary<T> {
 
   @Override
   public <U> Nary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper) {
-    return returningNaryDo(
-      this.<U>map(mapper)
-        .filter(Objects::nonNull)
-    );
+    return this.<U>map(mapper)
+      .filter(Objects::nonNull);
   }
 
   @Override
   public <U> Nary<U> flatMapOptional(Function<? super T, Optional<U>> mapper) throws MoreThanOneElementException {
-    return returningNaryDo(
-      map(mapper)
-        .flatMap(Nary::from)
-    );
+    return map(mapper)
+      .flatMap(Nary::from);
   }
 
   @Override
