@@ -66,14 +66,6 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
   Set<T> collectToSet();
 
   /**
-   * Returns a stream representation of this {@link Nary}.<br>
-   * Once the stream is consumed, this {@link Nary} may be useless
-   *
-   * @return A stream containing all the elements from this Nary
-   */
-  Stream<T> asStream();
-
-  /**
    * Creates another nary that will contain the elements of this instance and the given stream
    *
    * @param other The stream to combine after this

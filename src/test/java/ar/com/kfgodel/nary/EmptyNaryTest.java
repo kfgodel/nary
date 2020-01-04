@@ -136,7 +136,7 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
           assertThat(result).isEmpty();
         });
         it("returns an empty stream when #asStream() is called", () -> {
-          List<Integer> result = context().unary().asStream().collect(Collectors.toList());
+          List<Integer> result = context().unary().collect(Collectors.toList());
           assertThat(result).isEmpty();
         });
         describe("#concat(Stream)", () -> {

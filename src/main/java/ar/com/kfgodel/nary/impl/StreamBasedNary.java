@@ -72,10 +72,9 @@ public class StreamBasedNary<T> extends NarySupport<T> {
     return OneElementNary.create(onlyElement); // Null is a valid value
   }
 
-  @Override
   // Given the stream produces subtypes of T AND its read only it's safe to cast
   @SuppressWarnings("unchecked") //NOSONAR squid:S1309 as T is not reified there's no way to check on runtime
-  public Stream<T> asStream() {
+  protected Stream<T> asStream() {
     if(cachedOptional != null){
       // Once coerced, it can only be reused as optional
       return cachedOptional;

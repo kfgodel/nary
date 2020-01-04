@@ -62,8 +62,7 @@ public class OneElementNary<T> extends NarySupport<T> implements Unary<T> {
     return this;
   }
 
-  @Override
-  public Stream<T> asStream() {
+  protected Stream<T> asStream() {
     return Stream.of(this.element);
   }
 

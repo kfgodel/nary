@@ -130,7 +130,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
             assertThat(result).isEqualTo(Lists.newArrayList(3));
           });
           it("returns a one element stream when #asStream() is called", () -> {
-            List<Integer> result = context().nary().asStream().collect(Collectors.toList());
+            List<Integer> result = context().nary().collect(Collectors.toList());
             assertThat(result).isEqualTo(Lists.newArrayList(3));
           });
           describe("#concat(Stream)", () -> {
@@ -322,7 +322,7 @@ public class NaryFromStreamTest extends JavaSpec<NaryTestContext> {
             assertThat(result).isEqualTo(Lists.newArrayList(3, 2, 1, 3));
           });
           it("returns the native stream when #asStream() is called", () -> {
-            List<Integer> result = context().nary().asStream().collect(Collectors.toList());
+            List<Integer> result = context().nary().collect(Collectors.toList());
             assertThat(result).isEqualTo(Lists.newArrayList(3, 2, 1, 3));
           });
           describe("#concat(Stream)", () -> {

@@ -89,6 +89,13 @@ public abstract class NarySupport<T> implements Nary<T> {
     return container;
   }
 
+  /**
+   * Gets a stream with the elements of this instance. If the stream is already consumed, any
+   * operation added to it may fail
+   * @return The stream representation of this instance to delegate native operations
+   */
+  protected abstract Stream<T> asStream();
+
   @Override
   public Nary<T> filter(Predicate<? super T> predicate) {
     return returningNaryDo(asStream().filter(predicate));

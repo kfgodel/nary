@@ -65,7 +65,7 @@ public class EmptyNary extends NarySupport<Object> implements Unary<Object> {
   }
 
   @Override
-  public Stream<Object> asStream() {
+  protected Stream<Object> asStream() {
     return this;
   }
 

@@ -127,7 +127,7 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
           assertThat(result).isEqualTo(Lists.newArrayList(3));
         });
         it("returns a one element stream when #asStream() is called", () -> {
-          List<Integer> result = context().unary().asStream().collect(Collectors.toList());
+          List<Integer> result = context().unary().collect(Collectors.toList());
           assertThat(result).isEqualTo(Lists.newArrayList(3));
         });
         describe("#concat(Stream)", () -> {
