@@ -1,6 +1,7 @@
 package ar.com.kfgodel.nary.api.arity;
 
 import ar.com.kfgodel.nary.api.Nary;
+import ar.com.kfgodel.nary.api.Unary;
 
 import java.util.Comparator;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Spliterator;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -70,11 +72,10 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
   Stream<T> asStream();
 
   /**
-   * Creates a concatenated stream of the element of this optional, and the given stream
+   * Creates another nary that will contain the elements of this instance and the given stream
    *
    * @param other The stream to combine after this
-   * @return An empty nary if both are empty, a nary with the argument stream if this optional
-   * is empty, a nary with this element plus the stream elements
+   * @return A nary with these elements first and the one on the stream later. Or empty if both are empty
    */
   Nary<T> concat(Stream<? extends T> other);
 
@@ -144,16 +145,16 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
    *
    * @return The optional last element
    */
-  Nary<T> findLast();
+  Unary<T> findLast();
 
   /**
-   * Alternative to {@link Stream#reduce(BinaryOperator)} that returns {@link Nary} instead of {@link java.util.Optional}
+   * Alternative to {@link Stream#reduce(BinaryOperator)} that returns {@link Unary} instead of {@link java.util.Optional}
    *
    * @param accumulator The associative function to reduce the elements of this nary to a result of the same type
    * @return The optional result of the reduction (or an empty nary)
    * @see Stream#reduce(BinaryOperator) for a complete reference
    */
-  Nary<T> reduceNary(BinaryOperator<T> accumulator);
+  Unary<T> reduceNary(BinaryOperator<T> accumulator);
 
   /**
    * Alternative to {@link Stream#min(Comparator)} that returns {@link Nary} instead of {@link java.util.Optional}
@@ -165,7 +166,7 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
    * or an empty if there are no elements
    * @throws NullPointerException if the minimum element is null
    */
-  Nary<T> minNary(Comparator<? super T> comparator);
+  Unary<T> minNary(Comparator<? super T> comparator);
 
   /**
    * Alternative to {@link Stream#max(Comparator)} that returns {@link Nary} instead of {@link java.util.Optional}
@@ -186,7 +187,7 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
    * or an empty {@code Nary} if the stream is empty
    * @throws NullPointerException if the element selected is null
    */
-  Nary<T> findFirstNary();
+  Unary<T> findFirstNary();
 
   /**
    * Alternative to {@link Stream#findAny()} that returns {@link Nary} instead of {@link java.util.Optional}
@@ -196,5 +197,35 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
    * @throws NullPointerException if the element selected is null
    * @see #findFirst()
    */
-  Nary<T> findAnyNary();
+  Unary<T> findAnyNary();
+
+  /**
+   * Map each element on this instance and filter null results out.<br>
+   * If the result of mapping an element produces {@code null}, then it's skipped, reducing the
+   * amount of elements contained in the returned Nary.<br>
+   * <br>
+   * This is semantically equivalent to {@link Optional#map(Function)} and
+   * different from {@link java.util.stream.Stream#map(Function)} that takes null
+   * as valid results
+   *
+   * @param <U>    The type of the result of the mapping function
+   * @param mapper a mapping function to apply to the value, if present
+   * @return a Nary with the mapped results excluding the ones that returned null
+   */
+  <U> Nary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper);
+
+  /**
+   * Makes a normal {@link java.util.stream.Stream#flatMap(Function)} transformation but accepts {@link Optional}
+   * as result for the mapper instead of {@link java.util.stream.Stream}.<br>
+   * This method is the semantic equivalent of {@link Optional#flatMap(Function)} but it can be applied to more
+   * than one element.<br>
+   * <br>
+   *
+   * @param <U>    The type parameter to the {@code Optional} returned by
+   * @param mapper a mapping function to apply to the value, if present
+   *               the mapping function
+   * @return the result of applying an {@code Optional}-bearing mapping
+   * function to the elements of this instance which may be 0, 1, or more elements
+   */
+  <U> Nary<U> flatMapOptional(Function<? super T, Optional<U>> mapper);
 }

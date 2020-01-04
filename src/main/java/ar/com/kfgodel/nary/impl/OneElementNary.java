@@ -1,6 +1,7 @@
 package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
+import ar.com.kfgodel.nary.api.Unary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 import ar.com.kfgodel.nary.impl.others.OneElementIterator;
 import ar.com.kfgodel.nary.impl.others.OneElementSpliterator;
@@ -29,7 +30,7 @@ import java.util.stream.Stream;
  * This type represents a nary
  * Created by kfgodel on 07/03/16.
  */
-public class OneElementNary<T> extends NarySupport<T> {
+public class OneElementNary<T> extends NarySupport<T> implements Unary<T> {
 
   private T element;
 
@@ -139,7 +140,7 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public Nary<T> findAnyNary() {
+  public Unary<T> findAnyNary() {
     return this;
   }
 
@@ -149,12 +150,12 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public Nary<T> findFirstNary() {
+  public Unary<T> findFirstNary() {
     return this;
   }
 
   @Override
-  public Nary<T> findLast() {
+  public Unary<T> findLast() {
     return this;
   }
 
@@ -180,13 +181,13 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public Nary<T> ifAbsent(Runnable runnable) {
+  public Unary<T> ifAbsent(Runnable runnable) {
     // Nothing to do
     return this;
   }
 
   @Override
-  public Nary<T> ifPresent(Consumer<? super T> consumer) throws MoreThanOneElementException {
+  public Unary<T> ifPresent(Consumer<? super T> consumer) throws MoreThanOneElementException {
     consumer.accept(element);
     return this;
   }
@@ -237,7 +238,7 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public Nary<T> minNary(Comparator<? super T> comparator) {
+  public Unary<T> minNary(Comparator<? super T> comparator) {
     return this;
   }
 
@@ -262,7 +263,7 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public Nary<T> orElseUse(Supplier<? extends T> mapper) throws MoreThanOneElementException {
+  public Unary<T> orElseUse(Supplier<? extends T> mapper) throws MoreThanOneElementException {
     return this;
   }
 
@@ -289,7 +290,7 @@ public class OneElementNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public Nary<T> reduceNary(BinaryOperator<T> accumulator) {
+  public Unary<T> reduceNary(BinaryOperator<T> accumulator) {
     return this;
   }
 

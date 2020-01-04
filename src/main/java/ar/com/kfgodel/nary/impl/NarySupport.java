@@ -1,6 +1,7 @@
 package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
+import ar.com.kfgodel.nary.api.Unary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 import com.google.common.collect.Iterators;
 
@@ -73,13 +74,12 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public Nary<T> ifPresent(Consumer<? super T> consumer) throws MoreThanOneElementException {
-    coerceToMonoElement().ifPresent(consumer);
-    return this;
+  public Unary<T> ifPresent(Consumer<? super T> consumer) throws MoreThanOneElementException {
+    return coerceToMonoElement().ifPresent(consumer);
   }
 
   @Override
-  public Nary<T> ifAbsent(Runnable runnable) {
+  public Unary<T> ifAbsent(Runnable runnable) {
     return coerceToMonoElement().ifAbsent(runnable);
   }
 
@@ -110,7 +110,7 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public Nary<T> orElseUse(Supplier<? extends T> mapper) throws MoreThanOneElementException {
+  public Unary<T> orElseUse(Supplier<? extends T> mapper) throws MoreThanOneElementException {
     return coerceToMonoElement().orElseUse(mapper);
   }
 
@@ -310,7 +310,7 @@ public abstract class NarySupport<T> implements Nary<T> {
 
 
   @Override
-  public Nary<T> findLast() {
+  public Unary<T> findLast() {
     return reduceNary(this::keepLast);
   }
 
@@ -353,12 +353,12 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public Nary<T> reduceNary(BinaryOperator<T> accumulator) {
+  public Unary<T> reduceNary(BinaryOperator<T> accumulator) {
     return returningNaryDo(reduce(accumulator));
   }
 
   @Override
-  public Nary<T> minNary(Comparator<? super T> comparator) {
+  public Unary<T> minNary(Comparator<? super T> comparator) {
     return returningNaryDo(min(comparator));
   }
 
@@ -368,12 +368,12 @@ public abstract class NarySupport<T> implements Nary<T> {
   }
 
   @Override
-  public Nary<T> findFirstNary() {
+  public Unary<T> findFirstNary() {
     return returningNaryDo(findFirst());
   }
 
   @Override
-  public Nary<T> findAnyNary() {
+  public Unary<T> findAnyNary() {
     return returningNaryDo(findAny());
   }
 
@@ -416,7 +416,7 @@ public abstract class NarySupport<T> implements Nary<T> {
    * @param nativeOptional The native optional
    * @return The created nary
    */
-  protected Nary<T> returningNaryDo(Optional<T> nativeOptional) {
+  protected Unary<T> returningNaryDo(Optional<T> nativeOptional) {
     return Nary.from(nativeOptional);
   }
 

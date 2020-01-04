@@ -22,18 +22,24 @@ import java.util.stream.StreamSupport;
 
 /**
  * This type represents an uncertain amount of elements<br>
- * A Nary is the compile time type that can be used in runtime as a {@link Stream} or an {@link Optional}, allowing you
- * to switch from one to the other in runtime.<br>
+ * A {@link Nary} is a type to be used when we don't know how many elements it will contain in runtime, but at the same time
+ * we want to allow programmers to manipulate them as a {@link Stream} or an {@link Optional} if they somehow
+ * know that is only 1 element that may be contained.<br>
  * <br>
- * Union of a stream and an optional, offers an interface that is the mix of both (with minor modifications).<br>
- * It represents an object that can contain 0, 1, or N elements, and can be accessed assuming one of the scenarios.<br>
- * Allows a method to behave as returning Optional or Stream depending on the arguments
- * (specially useful for query methods).<br>
+ * A {@link Nary} can be thought as an extended {@link Stream} api that given the necessary conditions on runtime
+ * can be further extended to a  {@link Unary} and include the api of an {@link Optional}.<br>
+ * By doing this, we allow our client code to manipulate the elements in it with more flexibility at compile time
+ * withouty having to do conversions in-between (specially useful for query methods).<br>
  * <br>
- * When used as an Optional, because this object may contain more than one element, it is coerced and an exception
- * could be thrown. If the method returning this instance doesn't guarantee how many elements it contains,
- * this instance should be used as a Stream.<br>
+ * For instance if you have a Nary of numbers from the range 1-10 then you know, at compile time, that
+ * it may contain 0 or at most, 10 elements.<br>
+ * If you filter the numbers to keep only the ones that are smaller than 2, then you know at compile time
+ * that you will have in runtime 0 or at most 1 element (the number 1). <br>
+ * In scenario you can treat the {@link Nary} as a {@link Unary} and use it as an {@link Optional} to better represent
+ * the compile time semantics of the possible runtime results.<br>
  * <br>
+ *  As with {@link Stream} the api for {@link Optional} is extended to include some operations that complete original
+ *  api and makes it similar to streams (like the laziness of non terminal operations)
  * <p>
  * Created by kfgodel on 06/11/14.
  *
@@ -72,7 +78,7 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
    * @param <T> Expected type of elements
    * @return The empty instance
    */
-  static <T> Nary<T> empty() {
+  static <T> Unary<T> empty() {
     return EmptyNary.instance(); // NOSONAR Circular dep with empty is necessary to facilitate users experience
   }
 
@@ -99,7 +105,7 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
    * @param <T>     The type of expected nary content
    * @return The non empty created nary
    */
-  static <T> Nary<T> ofNonNullable(T element) {
+  static <T> Unary<T> ofNonNullable(T element) {
     return OneElementNary.create(element);
   }
 
@@ -129,7 +135,7 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
    * @param <T>             The expected element type
    * @return A nary with the given element or empty if null was passed
    */
-  static <T> Nary<T> of(T nullableElement) {
+  static <T> Unary<T> of(T nullableElement) {
     if (nullableElement == null) {
       return empty();
     } else {
@@ -144,9 +150,9 @@ public interface Nary<T> extends MonoElement<T>, MultiElement<T> {
    * @param <T>            The expected element type
    * @return A reusable nary
    */
-  static <T> Nary<T> from(Optional<? extends T> nativeOptional) {
+  static <T> Unary<T> from(Optional<? extends T> nativeOptional) {
     return nativeOptional
-      .<Nary<T>>map(Nary::ofNonNullable)
+      .<Unary<T>>map(Nary::ofNonNullable)
       .orElseGet(Nary::empty);
   }
 

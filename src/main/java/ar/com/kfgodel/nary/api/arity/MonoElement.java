@@ -1,12 +1,12 @@
 package ar.com.kfgodel.nary.api.arity;
 
 import ar.com.kfgodel.nary.api.Nary;
+import ar.com.kfgodel.nary.api.Unary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -70,7 +70,7 @@ public interface MonoElement<T> extends Supplier<T> {
    * @throws MoreThanOneElementException if there are more than one
    * @see Optional#ifPresent(Consumer)
    */
-  Nary<T> ifPresent(Consumer<? super T> consumer) throws MoreThanOneElementException;
+  Unary<T> ifPresent(Consumer<? super T> consumer) throws MoreThanOneElementException;
 
   /**
    * If the only value is absent invoke the given lambda, or else do nothing
@@ -80,7 +80,7 @@ public interface MonoElement<T> extends Supplier<T> {
    * @return this for easy method chaining
    * @throws MoreThanOneElementException if there are more than one
    */
-  Nary<T> ifAbsent(Runnable runnable) throws MoreThanOneElementException;
+  Unary<T> ifAbsent(Runnable runnable) throws MoreThanOneElementException;
 
   /**
    * Return the only value if present, otherwise return {@code other}.
@@ -115,7 +115,7 @@ public interface MonoElement<T> extends Supplier<T> {
    * @return A non empty nary with this instance element or the one given by the supplier
    * @throws MoreThanOneElementException If this instance has more than 1 element
    */
-  Nary<T> orElseUse(Supplier<? extends T> mapper) throws MoreThanOneElementException;
+  Unary<T> orElseUse(Supplier<? extends T> mapper) throws MoreThanOneElementException;
 
 
   /**
@@ -157,33 +157,4 @@ public interface MonoElement<T> extends Supplier<T> {
    */
   Optional<T> asOptional() throws MoreThanOneElementException;
 
-  /**
-   * Map each element on this instance and filter null results out.<br>
-   * If the result of mapping an element produces {@code null}, then it's skipped, reducing the
-   * amount of elements contained in the returned Nary.<br>
-   * <br>
-   * This is semantically equivalent to {@link Optional#map(Function)} and
-   * different from {@link java.util.stream.Stream#map(Function)} that takes null
-   * as valid results
-   *
-   * @param <U>    The type of the result of the mapping function
-   * @param mapper a mapping function to apply to the value, if present
-   * @return a Nary with the mapped results excluding the ones that returned null
-   */
-  <U> Nary<U> mapFilteringNullResult(Function<? super T, ? extends U> mapper);
-
-  /**
-   * Makes a normal {@link java.util.stream.Stream#flatMap(Function)} transformation but accepts {@link Optional}
-   * as result for the mapper instead of {@link java.util.stream.Stream}.<br>
-   * This method is the semantic equivalent of {@link Optional#flatMap(Function)} but it can be applied to more
-   * than one element.<br>
-   * <br>
-   *
-   * @param <U>    The type parameter to the {@code Optional} returned by
-   * @param mapper a mapping function to apply to the value, if present
-   *               the mapping function
-   * @return the result of applying an {@code Optional}-bearing mapping
-   * function to the elements of this instance which may be 0, 1, or more elements
-   */
-  <U> Nary<U> flatMapOptional(Function<? super T, Optional<U>> mapper);
 }

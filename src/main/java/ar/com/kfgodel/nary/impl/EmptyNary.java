@@ -1,6 +1,7 @@
 package ar.com.kfgodel.nary.impl;
 
 import ar.com.kfgodel.nary.api.Nary;
+import ar.com.kfgodel.nary.api.Unary;
 import ar.com.kfgodel.nary.api.exceptions.MoreThanOneElementException;
 import ar.com.kfgodel.nary.impl.others.EmptyArray;
 import ar.com.kfgodel.nary.impl.others.EmptyIterator;
@@ -36,7 +37,7 @@ import java.util.stream.Stream;
  * <br>
  * Created by kfgodel on 07/03/16.
  */
-public class EmptyNary extends NarySupport<Object> {
+public class EmptyNary extends NarySupport<Object> implements Unary<Object> {
 
   private static final EmptyNary INSTANCE = new EmptyNary();
 
@@ -144,7 +145,7 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public Nary<Object> findAnyNary() {
+  public Unary<Object> findAnyNary() {
     return this;
   }
 
@@ -154,12 +155,12 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public Nary<Object> findFirstNary() {
+  public Unary<Object> findFirstNary() {
     return this;
   }
 
   @Override
-  public Nary<Object> findLast() {
+  public Unary<Object> findLast() {
     return this;
   }
 
@@ -215,13 +216,13 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public Nary<Object> ifAbsent(Runnable runnable) {
+  public Unary<Object> ifAbsent(Runnable runnable) {
     runnable.run();
     return this;
   }
 
   @Override
-  public Nary<Object> ifPresent(Consumer<? super Object> consumer) throws MoreThanOneElementException {
+  public Unary<Object> ifPresent(Consumer<? super Object> consumer) throws MoreThanOneElementException {
     //Ignore the consumer
     return this;
   }
@@ -292,7 +293,7 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public Nary<Object> minNary(Comparator<? super Object> comparator) {
+  public Unary<Object> minNary(Comparator<? super Object> comparator) {
     return this;
   }
 
@@ -326,7 +327,7 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public Nary<Object> orElseUse(Supplier<?> replacer) throws MoreThanOneElementException {
+  public Unary<Object> orElseUse(Supplier<?> replacer) throws MoreThanOneElementException {
     final Object element = replacer.get();
     return Nary.of(element);
   }
@@ -357,7 +358,7 @@ public class EmptyNary extends NarySupport<Object> {
   }
 
   @Override
-  public Nary<Object> reduceNary(BinaryOperator<Object> accumulator) {
+  public Unary<Object> reduceNary(BinaryOperator<Object> accumulator) {
     return this;
   }
 
@@ -414,7 +415,7 @@ public class EmptyNary extends NarySupport<Object> {
    * @param <T> The expected element type
    * @return The empty instance
    */
-  public static <T> Nary<T> instance() {
-    return (Nary<T>) INSTANCE;
+  public static <T> Unary<T> instance() {
+    return (Unary<T>) INSTANCE;
   }
 }
