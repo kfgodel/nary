@@ -224,7 +224,7 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
   <U> Nary<U> flatMapOptional(Function<? super T, Optional<U>> mapper);
 
   /**
-   * Treats this instance as having a single element. The returned object can be used to extend the operations
+   * Treats this instance as having a single element. Returns an object that can be used to extend the operations
    * available once we know there are not more elements than 1.<br>
    * If this instance has more than 1 element then this method will fail when trying to return a {@link Unary}
    * because expectations between runtime and compile time won't match
@@ -232,5 +232,5 @@ public interface MultiElement<T> extends Iterable<T>, NaryStream<T> {
    * @return The extended api for mono element
    * @throws MoreThanOneElementException If this instance has more than one element
    */
-  Unary<T> asUni() throws MoreThanOneElementException;
+  Unary<T> unique() throws MoreThanOneElementException;
 }

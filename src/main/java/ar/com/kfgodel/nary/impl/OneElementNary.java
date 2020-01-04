@@ -49,7 +49,7 @@ public class OneElementNary<T> extends NarySupport<T> implements Unary<T> {
 
   @Override
   public Unary<T> peek(Consumer<? super T> action) {
-    return super.peek(action).asUni();
+    return super.peek(action).unique();
   }
 
   @Override
@@ -58,7 +58,7 @@ public class OneElementNary<T> extends NarySupport<T> implements Unary<T> {
   }
 
   @Override
-  public Unary<T> asUni() throws NaryException {
+  public Unary<T> unique() throws NaryException {
     return this;
   }
 
@@ -358,12 +358,12 @@ public class OneElementNary<T> extends NarySupport<T> implements Unary<T> {
 
   @Override
   public Unary<T> filter(Predicate<? super T> predicate) {
-    return super.filter(predicate).asUni();
+    return super.filter(predicate).unique();
   }
 
   @Override
   public <R> Unary<R> map(Function<? super T, ? extends R> mapper) {
-    return super.<R>map(mapper).asUni();
+    return super.<R>map(mapper).unique();
   }
 
 

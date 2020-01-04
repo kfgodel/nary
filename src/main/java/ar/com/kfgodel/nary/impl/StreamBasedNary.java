@@ -40,7 +40,7 @@ public class StreamBasedNary<T> extends NarySupport<T> {
   }
 
   @Override
-  public Unary<T> asUni() throws MoreThanOneElementException {
+  public Unary<T> unique() throws MoreThanOneElementException {
     if (cachedUnary == null) {
       this.cachedUnary = reduceStreamToUnary();
     }

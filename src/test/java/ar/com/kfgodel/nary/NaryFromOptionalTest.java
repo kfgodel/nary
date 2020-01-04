@@ -43,7 +43,7 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
 
       describe("as non empty optional", () -> {
         it("returns the value when get() is called", () -> {
-          Integer result = context().unary().asUni().get();
+          Integer result = context().unary().unique().get();
           assertThat(result).isEqualTo(3);
         });
         it("answers true to #isPresent()", () -> {
@@ -69,12 +69,12 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
         it("transforms the value when called to #mapFilteringNullResult()", () -> {
           Nary<Integer> result = context().unary().mapFilteringNullResult((value) -> value + 1);
 
-          assertThat(result.asUni().get()).isEqualTo(4);
+          assertThat(result.unique().get()).isEqualTo(4);
         });
         it("transforms  the value when called to #flatmapOptional()", () -> {
           Nary<Integer> result = context().unary().flatMapOptional((value) -> Optional.of(5));
 
-          assertThat(result.asUni().get()).isEqualTo(5);
+          assertThat(result.unique().get()).isEqualTo(5);
         });
         it("never returns the alternative value when #orElse() is called", () -> {
           Integer result = context().unary().orElse(4);
@@ -86,7 +86,7 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
         });
         it("never executes the supplier argument when #orElseUse() is called", () -> {
           final Nary<Integer> result = context().unary().orElseUse(() -> 4);
-          assertThat(result.asUni().get()).isEqualTo(3);
+          assertThat(result.unique().get()).isEqualTo(3);
         });
         it("never throws the exception when #orElseThrow() is called", () -> {
           Integer result = context().unary().orElseThrow(() -> new RuntimeException("Kaboom"));
@@ -116,7 +116,7 @@ public class NaryFromOptionalTest extends JavaSpec<NaryTestContext> {
           assertThat(context().unary().asOptional()).isEqualTo(Optional.of(3));
         });
         it("returns an non empty unary when asUni() is called", () -> {
-          assertThat((Stream)context().unary().asUni()).containsExactly(3);
+          assertThat((Stream)context().unary().unique()).containsExactly(3);
         });
         it("returns a one element container when #collect(supplier, accumulator) is called", () -> {
           List<Integer> result = context().unary().collect(ArrayList::new, ArrayList::add);

@@ -22,7 +22,7 @@ public class NaryAsSupplierTest extends JavaSpec<NaryTestContext> {
       test().nary(() -> Nary.of(10));
 
       describe("as supplier", () -> {
-        test().supplier(() -> test().nary().asUni());
+        test().supplier(() -> test().nary().unique());
 
         it("is coerced as optional and returns its only value", () -> {
           assertThat(test().supplier().get()).isEqualTo(10);

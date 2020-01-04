@@ -60,7 +60,7 @@ public class EmptyNary extends NarySupport<Object> implements Unary<Object> {
   }
 
   @Override
-  public Unary<Object> asUni() throws NaryException {
+  public Unary<Object> unique() throws NaryException {
     return this;
   }
 

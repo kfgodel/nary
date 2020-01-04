@@ -26,7 +26,7 @@ public class ReuseStreamBasedNaryAfterMonoCoercionTest extends JavaSpec<NaryTest
 
       describe("after being coerced to a mono nary", () -> {
         beforeEach(() -> {
-          test().nary().asUni(); // We force it to be evaluated as an optional and coerced
+          test().nary().unique(); // We force it to be evaluated as an optional and coerced
         });
 
         it("can still be used as a stream", () -> {

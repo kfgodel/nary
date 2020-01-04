@@ -28,7 +28,7 @@ public class ReadmeExampleTest extends JavaSpec<ReadmeExampleTestContext> {
 
       it("can be used as an Optional", () -> {
         final Integer result = naryWithIntegersUpTo(1)
-          .asUni().get();  // Assume there's only one element
+          .unique().get();  // Assume there's only one element
         assertThat(result).isEqualTo(1);
       });
 
