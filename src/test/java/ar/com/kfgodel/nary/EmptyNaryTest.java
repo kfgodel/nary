@@ -33,7 +33,7 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
       describe("as optional", () -> {
         it("throws an exception if get() is called", () -> {
           try {
-            context().unary().unique().get();
+            context().unary().get();
             failBecauseExceptionWasNotThrown(NoSuchElementException.class);
           } catch (NoSuchElementException e) {
             assertThat(e).hasMessage("Can't call get() on an empty nary: No value present");
@@ -48,7 +48,7 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
         it("nevers executes the #ifPresent() argument", () -> {
           Variable<Boolean> executed = Variable.of(false);
 
-          context().unary().unique().ifPresent((value) -> executed.set(true));
+          context().unary().ifPresent((value) -> executed.set(true));
 
           assertThat(executed.get()).isFalse();
         });
@@ -60,9 +60,9 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
           assertThat(executed.get()).isTrue();
         });
         it("always returns an empty optional when called to #mapFilteringNullResult()", () -> {
-          Nary<Integer> result = context().unary().mapFilteringNullResult((value) -> value);
+          Unary<Integer> result = context().unary().mapFilteringNullResult((value) -> value);
 
-          assertThat(result.unique().isAbsent()).isTrue();
+          assertThat(result.isAbsent()).isTrue();
         });
         it("returns an empty stream when #map() is called", () -> {
           List<Integer> result = context().unary().map((value) -> value)
@@ -90,8 +90,8 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
           assertThat(result).isEqualTo(4);
         });
         it("always uses the supplier argument when #orElseUse() is called", () -> {
-          Nary<Integer> result = context().unary().orElseUse(() -> 4);
-          assertThat(result.unique().get()).isEqualTo(4);
+          Unary<Integer> result = context().unary().orElseUse(() -> 4);
+          assertThat(result.get()).isEqualTo(4);
         });
         it("always throws the exception when #orElseThrow() is called", () -> {
           try {
@@ -121,7 +121,7 @@ public class EmptyNaryTest extends JavaSpec<NaryTestContext> {
           assertThat(context().unary().asOptional()).isEqualTo(Optional.empty());
         });
         it("always returns the empty unary when asUni() is called", () -> {
-          assertThat((Stream)context().unary().unique()).isEmpty();
+          assertThat((Stream)context().unary()).isEmpty();
         });
         it("always returns an empty container when #collect(supplier, accumulator) is called", () -> {
           List<Object> result = context().unary().collect(ArrayList::new, ArrayList::add);
