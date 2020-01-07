@@ -11,7 +11,7 @@
 
   <groupId>info.kfgodel</groupId>
   <artifactId>nary</artifactId>
-  <version>3.0.0-SNAPSHOT</version>
+  <version>3.0.0</version>
 
   <name>Nary</name>
   <description>Small project that captures the concept of N-Ary an element that can reference 0, 1 or N elements  </description>
